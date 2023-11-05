@@ -3,14 +3,13 @@ import React, { useEffect, useState } from "react";
 import Home from './components/Home';
 import { NativeRouter, Route, Routes } from 'react-router-native';
 import Activitys from './components/Activitys';
-import Pauly from './components/Pauly';
-import UTT from './components/UTT';
 import Coding from './components/Coding';
 import { initializeApp } from "firebase/app";
 import AdminPanel from './components/AdminPanel';
 import { Provider, useDispatch } from 'react-redux';
 import { dimentionsSlice } from './redux/dimentionsReducer';
 import store from './redux/store';
+import Contact from './components/Contact';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDdP7PccSIrlOVKzuqCahZAe5yyt_rmsQc",
@@ -43,10 +42,9 @@ function AppCore() {
         <Routes>
           <Route path='/' element={<Home />}/>
           <Route path='/coding' element={<Coding />} />
-          <Route path='/coding/pauly' element={<Pauly />}/>
-          <Route path='/coding/utt' element={<UTT />}/>
-          <Route path='/activitys' element={<Activitys />}/>
+          <Route path='/activities' element={<Activitys />}/>
           <Route path='/admin' element={<AdminPanel />}/>
+          <Route path='/contact' element={<Contact />}/>
           <Route path='*' element={<Home />}/>
         </Routes>
       </NativeRouter>

@@ -1,18 +1,20 @@
-import { getDownloadURL, getStorage, listAll, ref, uploadBytesResumable } from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { loadingStateEnum } from "../Types";
 import * as DocumentPicker from 'expo-document-picker';
-import { addDoc, collection, doc, getDocs, getFirestore, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, getFirestore, getDoc, query, orderBy, startAt } from "firebase/firestore";
 
 export async function listStorageItems(): Promise<{result: loadingStateEnum.failed}|{result: loadingStateEnum.success, data: storageItem[]}> {
   const db = getFirestore();
   //TODO error handel paginate
   let resultData: storageItem[] = []
-  const querySnapshot = await getDocs(collection(db, "Files"));
+  const q = query(collection(db, "Files"), orderBy('updated'), startAt(0));
+  const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     const data = doc.data()
     resultData.push({
       name: data.name,
-      fileType: data.fileType
+      fileType: data.fileType,
+      loadingState: loadingStateEnum.loading
     })
   });
   return {result: loadingStateEnum.success, data: resultData};
@@ -64,4 +66,11 @@ export async function uploadFile() {
 
     }
   }
+}
+
+export async function getAssest(item: string): Promise<string> {
+  const storage = getStorage()
+  const result = await ref(storage, item)
+  const url = await getDownloadURL(result)
+  return url
 }

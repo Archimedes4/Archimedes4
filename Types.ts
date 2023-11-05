@@ -8,10 +8,12 @@ declare global {
   type storageItem = {
     name: string;
     fileType: string;
+    loadingState: loadingStateEnum;
+    url?: undefined|string;
   }
   type post = {
     title: string;
-    cover: string;
+    cover: storageItem;
     assests: storageItem[];
     content: string;
     date: string;

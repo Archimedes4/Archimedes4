@@ -5,6 +5,8 @@ import { StatusBar } from 'expo-status-bar';
 import { useNavigate } from 'react-router-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
+import { ActivityIcon, CodingIcon, ContactIcon, HomeIcon, SettingIcon } from './Icons';
+import Header from './Header';
 
 export default function Home() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
@@ -12,28 +14,12 @@ export default function Home() {
   return (
     <View style={{width: width, height: height, backgroundColor: "#1c93ba"}}>
       <StatusBar style="auto" />
-      <Text>Andrew Mainella</Text>
+      <Header />
       <View style={{height: 40}}>
         <HelloComponet />
       </View>
       <Text style={{color: "white"}}>My Name is Andrew Mainella, I am a student, curler, coder and most important faithful.</Text>
-      <View style={{flexDirection: "row"}}>
-        <Pressable onPress={() => navigate('/')}>
-          <Text>Home</Text>
-        </Pressable>
-        <Pressable onPress={() => navigate('/coding')}>
-          <Text>Coding</Text>
-        </Pressable>
-        <Pressable onPress={() => navigate('/activitys')}>
-          <Text>Activities</Text>
-        </Pressable>
-        <Pressable onPress={() => navigate('/admin')}>
-          <Text>Admin</Text>
-        </Pressable>
-      </View>
-      <Pressable>
-        <Text>Contact Me!</Text>
-      </Pressable>
+      
     </View>
   )
 }

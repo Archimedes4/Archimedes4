@@ -4,12 +4,12 @@ import Header from './Header'
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 
-export default function Activitys() {
+export default function Contact() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
   return (
-    <View style={{width: width, height: height, backgroundColor: "#1c93ba"}}>
+    <View style={{width: width, height: height}}>
       <Header />
-      <Text>Activitys</Text>
+
     </View>
   )
 }
