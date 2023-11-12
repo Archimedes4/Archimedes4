@@ -18,5 +18,6 @@ declare global {
     content: string;
     date: string;
     type: string;
+    id: string
   }
 }

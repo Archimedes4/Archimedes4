@@ -1,13 +1,15 @@
-import { View, Text, TextInput, Pressable, Modal, FlatList } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, Text, TextInput, Pressable, Modal, FlatList, ScrollView, NativeSyntheticEvent, TextInputKeyPressEventData } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import { SegmentedButtons } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { listStorageItems, uploadFile } from '../ulti/storageFunctions';
 import { loadingStateEnum } from '../Types';
-import { addPost } from '../ulti/postFunctions';
+import { addPost, listPosts } from '../ulti/postFunctions';
 import { useNavigate } from 'react-router-native';
 import Header from './Header';
+import MarkdownCross from './MarkdownCross';
+import TextEditor from './TextEditor';
 
 function SelectFile({onClose, onSelect}:{onClose: () => void, onSelect: (item: storageItem) => void}) {
   const [fileState, setFileState] = useState<loadingStateEnum>(loadingStateEnum.loading);
@@ -61,7 +63,7 @@ function SelectFile({onClose, onSelect}:{onClose: () => void, onSelect: (item: s
   )
 }
 
-export default function AdminPanel() {
+function EditPost({onBack}:{onBack: () => void}) {
   //View
   const navigate = useNavigate()
   const { height, width } = useSelector((state: RootState) => state.dimentions);
@@ -71,7 +73,7 @@ export default function AdminPanel() {
 
   //New Item
   const [newPost, setNewPost] = useState<post>({
-    title: '',
+    title: 'Create New Post',
     cover: {
       name: '',
       fileType: '',
@@ -80,15 +82,18 @@ export default function AdminPanel() {
     content: '',
     assests: [],
     date: '',
-    type: ''
+    type: '',
+    id: 'Create'
   })
   return (
-    <View style={{width: width, height: height}}>
+    <View>
       <Modal visible={isAssest || isCover}>
         <SelectFile onClose={() => {setIsAssest(false); setIsCover(false)}} onSelect={(e) => {if (isCover) setNewPost({...newPost, cover: e}); else setNewPost({...newPost, assests: [...newPost.assests, e]})}}/>
       </Modal>
-      <Header />
-      <Text style={{marginLeft: 'auto', marginRight: 'auto'}}>AdminPanel</Text>
+      <Pressable onPress={() => {onBack()}} style={{pointerEvents: "none"}}>
+        <Text>Back</Text>
+      </Pressable>
+      <Text>Title</Text>
       <TextInput value={newPost.title} onChangeText={(e) => setNewPost({...newPost, title: e})}/>
       <Text>Cover</Text>
       <Pressable onPress={() => setIsCover(true)}>
@@ -109,7 +114,12 @@ export default function AdminPanel() {
           },
         ]}
       />
-      <TextInput value={newPost.content} onChangeText={(e) => setNewPost({...newPost, content: e})} multiline={true} style={{textAlign: "left", lineHeight: 16, width: 100000 }}/>
+      <ScrollView style={{width: width, height: height}}>
+        {isPreview === 'P' ?
+          <MarkdownCross markdown={newPost.content}/>:
+          <TextEditor text={newPost.content} onChangeText={(e) => {console.log(e); setNewPost({...newPost, content: e})}} />
+        }
+      </ScrollView>
       <Text>Assests</Text>
       <Pressable onPress={() => setIsAssest(true)}>
         <Text>Add Asset</Text>
@@ -117,6 +127,54 @@ export default function AdminPanel() {
       <Pressable onPress={() => {addPost(newPost)}}>
         <Text>Create Post</Text>
       </Pressable>
+    </View>
+  )
+}
+
+export default function AdminPanel() {
+  //View
+  const { height, width } = useSelector((state: RootState) => state.dimentions);
+  const [posts, setPosts] = useState<post[]>([]);
+  const [selectedPost, setSeletedPost] = useState<post | undefined>(undefined)
+
+  async function loadPost() {
+    const result = await listPosts();
+    if (result.result === loadingStateEnum.success) {
+      setPosts([...result.data, {
+        title: 'Create New Post',
+        cover: {
+          name: '',
+          fileType: '',
+          loadingState: loadingStateEnum.failed
+        },
+        content: '',
+        assests: [],
+        date: '',
+        type: '',
+        id: 'Create'
+      }])
+    }
+  }
+
+  useEffect(() => {
+    loadPost()
+  }, [])
+
+  return (
+    <View style={{width: width, height: height}}>
+      <Header />
+      <Text style={{marginLeft: 'auto', marginRight: 'auto'}}>AdminPanel</Text>
+      { selectedPost !== undefined ?
+        <EditPost onBack={() => setSeletedPost(undefined)} />:
+        <FlatList 
+          data={posts}
+          renderItem={(post) => (
+            <Pressable key={post.item.id} onPress={() => setSeletedPost(post.item)}>
+              <Text>{post.item.title}</Text>
+            </Pressable>
+          )}
+        />
+      }
     </View>
   )
 }

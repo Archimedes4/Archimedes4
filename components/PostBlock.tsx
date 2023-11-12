@@ -1,9 +1,9 @@
-import { ListRenderItemInfo, View, Text, Image } from "react-native";
+import { ListRenderItemInfo, View, Text, Image, Pressable } from "react-native";
 import { getAssest } from "../ulti/storageFunctions";
 import { useEffect } from "react";
 import { loadingStateEnum } from "../Types";
 
-export default function PostBlock({item, setPost}:{item: ListRenderItemInfo<post>, setPost: (item: post) => void}) {
+export default function PostBlock({item, setPost, onSelect}:{item: ListRenderItemInfo<post>, setPost: (item: post) => void, onSelect: () => void}) {
   async function loadCover() {
     setPost({...item.item, cover: {...item.item.cover, loadingState: loadingStateEnum.loading}})
     const result = await getAssest(item.item.cover.name);
@@ -17,7 +17,7 @@ export default function PostBlock({item, setPost}:{item: ListRenderItemInfo<post
   }, [])
   
   return (
-    <View>
+    <Pressable onPress={() => onSelect()}>
       { (item.item.cover.loadingState === loadingStateEnum.loading) ?
         <View>
           <Text>Loading</Text>
@@ -30,6 +30,6 @@ export default function PostBlock({item, setPost}:{item: ListRenderItemInfo<post
         </>
       }
       <Text>{item.item.title}</Text>
-    </View>
+    </Pressable>
   )
 }

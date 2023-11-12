@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { ActivityIcon, CodingIcon, ContactIcon, HomeIcon, SettingIcon } from './Icons';
 import Header from './Header';
+import MarkdownCross from './MarkdownCross';
 
 export default function Home() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
@@ -19,7 +20,7 @@ export default function Home() {
         <HelloComponet />
       </View>
       <Text style={{color: "white"}}>My Name is Andrew Mainella, I am a student, curler, coder and most important faithful.</Text>
-      
+      <Text style={{color: "white"}}>Copyright &#169; 2023 Andrew Mainella</Text>
     </View>
   )
 }
