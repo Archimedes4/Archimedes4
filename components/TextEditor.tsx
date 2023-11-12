@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { NativeSyntheticEvent, Pressable, TextInput, TextInputKeyPressEventData, Text, View, ScrollView, Keyboard } from "react-native";
 import createUUID from "../ulti/createUUID";
+import * as Clipboard from 'expo-clipboard';
 
 function getPositionChar(position: number, text: textCharType[]): textCharType | undefined {
   if (position < text.length) {
@@ -234,8 +235,23 @@ export default function TextEditor({text, onChangeText}:{text: string, onChangeT
     id: createUUID()
   }]);
 
+  async function pasteItem() {
+    let result = "";
+    let lastLine = 0;
+    for (let index = 0; index < textChar.length; index += 1) {
+      result += textChar[index].char
+      if (textChar[index].position === position) {
+        result += await Clipboard.getStringAsync();
+      }
+      if (lastLine !== textChar[index].line) {
+        result += "\n"
+        lastLine += 1;
+      }
+    }
+    setTextChar(convertTextToType(result));
+  }
+
   useEffect(() => {
-    console.log(textChar);
     let result = "";
     let lastLine = 0;
     for (let index = 0; index < textChar.length; index += 1) {
@@ -247,15 +263,14 @@ export default function TextEditor({text, onChangeText}:{text: string, onChangeT
     }
     onChangeText(result);
   }, [textChar])
-
+  
   useEffect(() => {
-    console.log(Math.floor(Math.random() * (5)));
     setTextChar(convertTextToType(text));
   }, [])
 
   return (
     <>
-      <Pressable>
+      <Pressable onPress={() => pasteItem()}>
         <Text>Paste</Text>
       </Pressable>
       <Pressable onPress={() => {
