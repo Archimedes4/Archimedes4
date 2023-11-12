@@ -1,11 +1,11 @@
-import { View, Text, Pressable, ScaledSize } from 'react-native'
+import { View, Text, Pressable, ScaledSize, ScrollView } from 'react-native'
 import React, { useEffect } from 'react'
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigate } from 'react-router-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { ActivityIcon, CodingIcon, ContactIcon, HomeIcon, SettingIcon } from './Icons';
+import { ActivityIcon, AzureIcon, CodingIcon, ContactIcon, FirebaseIcon, GitIcon, HomeIcon, JavaIcon, ProcessingIcon, PythonIcon, ReactIcon, SettingIcon, SwiftIcon } from './Icons';
 import Header from './Header';
 import MarkdownCross from './MarkdownCross';
 
@@ -13,15 +13,35 @@ export default function Home() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
   const navigate = useNavigate()
   return (
-    <View style={{width: width, height: height, backgroundColor: "#1c93ba"}}>
+    <ScrollView style={{width: width, height: height, backgroundColor: "#1c93ba"}}>
       <StatusBar style="auto" />
       <Header />
       <View style={{height: 40}}>
         <HelloComponet />
       </View>
       <Text style={{color: "white"}}>My Name is Andrew Mainella, I am a student, curler, coder and most important faithful.</Text>
+      <View>
+        <Text>What I am using</Text>
+        <View style={{flexDirection: "row"}}>
+          <ReactIcon width={100} height={100} />
+          <ReactIcon width={100} height={100} />
+          {/* <AzureIcon width={100} height={100}/> */}
+        </View>
+        <Text>What I am learning</Text>
+        <View style={{flexDirection: "row"}}>
+          <JavaIcon width={100} height={100}/>
+          <ProcessingIcon width={100} height={100}/>
+          <PythonIcon width={100} height={100}/>
+        </View>
+        <Text>What I have used</Text>
+        <View style={{flexDirection: "row"}}>
+          <FirebaseIcon width={100} height={100}/>
+          <SwiftIcon width={100} height={100} />
+          <GitIcon width={100} height={100} />
+        </View>
+      </View>
       <Text style={{color: "white"}}>Copyright &#169; 2023 Andrew Mainella</Text>
-    </View>
+    </ScrollView>
   )
 }
 

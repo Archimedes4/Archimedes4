@@ -248,21 +248,16 @@ export default function TextEditor({text, onChangeText}:{text: string, onChangeT
     onChangeText(result);
   }, [textChar])
 
-  function keyboardStuff() {
-    Keyboard.addListener(('keyboardDidShow'), (e) => {
-      console.log(e)
-    })
-  }
-
   useEffect(() => {
     console.log(Math.floor(Math.random() * (5)));
     setTextChar(convertTextToType(text));
-    keyboardStuff();
   }, [])
 
   return (
     <>
-      <Text>Position: {position}</Text>
+      <Pressable>
+        <Text>Paste</Text>
+      </Pressable>
       <Pressable onPress={() => {
         mainRef.current.focus()
         setPosition(textChar[textChar.length - 1].position)
