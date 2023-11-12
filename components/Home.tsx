@@ -22,25 +22,27 @@ export default function Home() {
       <Text style={{color: "white"}}>My Name is Andrew Mainella, I am a student, curler, coder and most important faithful.</Text>
       <View>
         <Text>What I am using</Text>
-        <View style={{flexDirection: "row"}}>
+        <View style={{flexDirection: "row", marginLeft: 'auto', marginRight: 'auto'}}>
           <ReactIcon width={100} height={100} />
           <ReactIcon width={100} height={100} />
           {/* <AzureIcon width={100} height={100}/> */}
         </View>
         <Text>What I am learning</Text>
-        <View style={{flexDirection: "row"}}>
+        <View style={{flexDirection: "row", marginLeft: 'auto', marginRight: 'auto'}}>
           <JavaIcon width={100} height={100}/>
           <ProcessingIcon width={100} height={100}/>
           <PythonIcon width={100} height={100}/>
         </View>
         <Text>What I have used</Text>
-        <View style={{flexDirection: "row"}}>
+        <View style={{flexDirection: "row", marginLeft: 'auto', marginRight: 'auto'}}>
           <FirebaseIcon width={100} height={100}/>
           <SwiftIcon width={100} height={100} />
           <GitIcon width={100} height={100} />
         </View>
       </View>
-      <Text style={{color: "white"}}>Copyright &#169; 2023 Andrew Mainella</Text>
+      <View>
+        <Text style={{color: "white"}}>Copyright &#169; 2023 Andrew Mainella</Text>
+      </View>
     </ScrollView>
   )
 }
