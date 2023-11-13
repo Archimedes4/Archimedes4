@@ -16,7 +16,7 @@ export default function Contact() {
       <Pressable>
         <Text>Send</Text>
       </Pressable>
-      <Pressable onPress={() => {Linking.openURL('mailto:support@example.com')}}>
+      <Pressable onPress={() => {Linking.openURL('mailto:andrewmainellacontact@gmail.com')}}>
         <Text>Write an email</Text>
       </Pressable>
       <Pressable onPress={() => {Linking.openURL('https://github.com/Archimedes4')}}>

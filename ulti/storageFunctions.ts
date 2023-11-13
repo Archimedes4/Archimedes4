@@ -7,7 +7,7 @@ export async function listStorageItems(): Promise<{result: loadingStateEnum.fail
   const db = getFirestore();
   //TODO error handel paginate
   let resultData: storageItem[] = []
-  const q = query(collection(db, "Files"), orderBy('updated'), startAt(0));
+  const q = query(collection(db, "Files"), orderBy('name'));
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     const data = doc.data()

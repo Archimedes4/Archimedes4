@@ -18,7 +18,7 @@ export default function Home() {
     return {
       transform: [
         {
-          translateX: progress.value - nameWidth,
+          translateX: (progress.value - nameWidth < width/2) ? (progress.value - nameWidth):width/2,
         },
       ],
     };
@@ -28,7 +28,7 @@ export default function Home() {
     return {
       transform: [
         {
-          translateX: width-progress.value,
+          translateX: ((width - nameWidth/2)-progress.value > width/2) ? (width - nameWidth/2)-progress.value:(width - nameWidth/2)/2,
         },
       ],
     };
@@ -40,8 +40,13 @@ export default function Home() {
     }
   })
 
+  const innerStyle = useAnimatedStyle(() => {
+    return {
+      top: ((width - nameWidth/2) > progress.value) ? 0:-(progress.value - (width - nameWidth/2))
+    }
+  })
+
   const scrollHandler = useAnimatedScrollHandler((event) => {
-    console.log(event.contentOffset.y)
     progress.value = event.contentOffset.y * 0.1;
   });
   return (
@@ -49,7 +54,7 @@ export default function Home() {
       <Animated.ScrollView scrollEventThrottle={16} style={{width: width, height: height, zIndex: 10}} onScroll={scrollHandler}
         stickyHeaderIndices={[0]}
       >
-        <View style={{width: width, height: height, position: 'absolute', backgroundColor: "#1c93ba"}}>
+        <Animated.View style={[{width: width, height: height, position: 'absolute', backgroundColor: "#1c93ba"}, innerStyle]}>
           <Text onLayout={(e) => {setNameWidth(e.nativeEvent.layout.width)}} style={{opacity: 0, position: 'absolute', fontSize: 30}}>Andrew</Text>
           <StatusBar style="auto" />
           <View style={{zIndex: 12}}>
@@ -60,8 +65,14 @@ export default function Home() {
           </View>
           <View style={{height: 400}}>
             <Animated.Image source={require('../assets/Smoke.png')} style={[{position: 'absolute', width: width * 2, marginLeft: -width/2, height: 400, zIndex: 10}, smokeStyle]} height={100}/>
-            <Animated.Text style={[leftStyle, {fontSize: 30}]}>Andrew</Animated.Text>
-            <Animated.Text style={[rightStyle, {fontSize: 30}]}>Mainella</Animated.Text>
+            <Animated.View style={leftStyle}>
+              <Image source={require('../assets/F16.png')} style={{width: 200, height: 50, zIndex: 2}}/>
+              <Text style={{fontSize: 30, position: 'absolute'}}>Andrew</Text>
+            </Animated.View>
+            <Animated.View style={rightStyle}>
+              <Image source={require('../assets/CF-18_Hornet.png')} style={{width: 200, height: 50, zIndex: 2}}/>
+              <Text style={{fontSize: 30, position: 'absolute'}}>Mainella</Text>
+            </Animated.View>
           </View>
           <Text style={{color: "white"}}>My Name is Andrew Mainella, I am a student, curler, coder. I am a born and raised Manitoban</Text>
           <View>
@@ -87,8 +98,8 @@ export default function Home() {
           <View>
             <Text style={{color: "white"}}>Copyright &#169; 2023 Andrew Mainella</Text>
           </View>
-        </View>
-        <View style={{height: width * 10}} pointerEvents='none'>
+        </Animated.View>
+        <View style={{height: width * 20, backgroundColor: "#1c93ba"}} pointerEvents='none'>
 
         </View>
       </Animated.ScrollView>

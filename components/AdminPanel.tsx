@@ -5,19 +5,20 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { listStorageItems, uploadFile } from '../ulti/storageFunctions';
 import { loadingStateEnum } from '../Types';
-import { addPost, listPosts } from '../ulti/postFunctions';
+import { addPost, listPosts, updatePost } from '../ulti/postFunctions';
 import { useNavigate } from 'react-router-native';
 import Header from './Header';
 import MarkdownCross from './MarkdownCross';
 import TextEditor from './TextEditor';
 
-function SelectFile({onClose, onSelect}:{onClose: () => void, onSelect: (item: storageItem) => void}) {
+function SelectFile({onClose, onSelect, selectedFile}:{onClose: () => void, onSelect: (item: storageItem) => void, selectedFile: undefined|storageItem}) {
   const [fileState, setFileState] = useState<loadingStateEnum>(loadingStateEnum.loading);
   const [files, setFiles] = useState<storageItem[]>([]);
 
   async function loadFiles() {
     const result = await listStorageItems();
     if (result.result === loadingStateEnum.success) {
+      console.log(result.data)
       setFiles(result.data)
       setFileState(loadingStateEnum.success)
     } else {
@@ -43,7 +44,15 @@ function SelectFile({onClose, onSelect}:{onClose: () => void, onSelect: (item: s
             <FlatList
               data={files}
               renderItem={(item) => (
-                <Pressable onPress={() => onSelect(item.item)}>
+                <Pressable onPress={() => onSelect(item.item)} style={{
+                  backgroundColor: (item.item.name === selectedFile.name) ? "#d3d3d3":"white",
+                  shadowColor: 'black',
+                  shadowOffset: { width: 1, height: 1 },
+                  shadowOpacity: 1,
+                  shadowRadius: 5,
+                  margin: 4,
+                  padding: 4, borderRadius: 15
+                }}>
                   <Text>{item.item.name}</Text>
                 </Pressable>
               )}
@@ -63,7 +72,7 @@ function SelectFile({onClose, onSelect}:{onClose: () => void, onSelect: (item: s
   )
 }
 
-function EditPost({onBack}:{onBack: () => void}) {
+function EditPost({onBack, newPost, setNewPost}:{onBack: () => void, newPost: post, setNewPost: (item: post) => void}) {
   //View
   const navigate = useNavigate()
   const { height, width } = useSelector((state: RootState) => state.dimentions);
@@ -72,26 +81,15 @@ function EditPost({onBack}:{onBack: () => void}) {
   const [isPreview, setIsPreview] = useState<'C'|'P'>('C');
   const [isCard, setIsCard] = useState<'C'|'B'>('C');
 
-  //New Item
-  const [newPost, setNewPost] = useState<post>({
-    title: 'Create New Post',
-    cover: {
-      name: '',
-      fileType: '',
-      loadingState: loadingStateEnum.failed
-    },
-    content: '',
-    assests: [],
-    date: '',
-    type: '',
-    id: 'Create'
-  })
   return (
     <View>
-      <Modal visible={isAssest || isPickingCover}>
-        <SelectFile onClose={() => {setIsAssest(false); setIsPickingCover(false)}} onSelect={(e) => {if (isPickingCover) setNewPost({...newPost, cover: e}); else setNewPost({...newPost, assests: [...newPost.assests, e]})}}/>
+      <Modal visible={isAssest}>
+        <SelectFile selectedFile={newPost.cover} onClose={() => {setIsAssest(false)}} onSelect={(e) => {setNewPost({...newPost, assests: [...newPost.assests, e]})}}/>
       </Modal>
-      <Pressable onPress={() => {onBack()}} style={{pointerEvents: "none"}}>
+      <Modal visible={isPickingCover}>
+        <SelectFile selectedFile={newPost.cover} onClose={() => {setIsPickingCover(false)}} onSelect={(e) => {setNewPost({...newPost, cover: e})}}/>
+      </Modal>
+      <Pressable onPress={() => {onBack()}}>
         <Text>Back</Text>
       </Pressable>
       <SegmentedButtons
@@ -110,17 +108,21 @@ function EditPost({onBack}:{onBack: () => void}) {
       />
       { isCard === 'C' ?
         (
-          <>
+          <View style={{margin: 5}}>
             <Text>Title</Text>
-            <TextInput value={newPost.title} onChangeText={(e) => setNewPost({...newPost, title: e})}/>
+            <TextInput style={{marginTop: 2, marginBottom: 4}} value={newPost.title} onChangeText={(e) => setNewPost({...newPost, title: e})}/>
             <Text>Cover</Text>
             <Pressable onPress={() => setIsPickingCover(true)}>
               <Text>Pick Cover</Text>
             </Pressable>
             <Text>Technologies</Text>
             <Text>Url</Text>
+            <TextInput style={{marginTop: 2, marginBottom: 4}} value={newPost.url} onChangeText={(e) => {setNewPost({...newPost, url: e})}}/>
             <Text>Status</Text>
-          </>
+            <TextInput style={{marginTop: 2, marginBottom: 4}} value={newPost.status} onChangeText={(e) => {setNewPost({...newPost, status: e})}}/>
+            <Text style={{borderBottomColor: "black", borderBottomWidth: 2}}>Github Url</Text>
+            <TextInput style={{marginTop: 2, marginBottom: 4}} value={newPost.githubUrl} onChangeText={(e) => {setNewPost({...newPost, githubUrl: e})}}/>
+          </View>
         ):
         (
           <>
@@ -152,8 +154,8 @@ function EditPost({onBack}:{onBack: () => void}) {
           </>
         )
       }
-      <Pressable onPress={() => {addPost(newPost)}}>
-        <Text>Create Post</Text>
+      <Pressable onPress={() => {(newPost.id === 'Create') ? addPost(newPost):updatePost(newPost)}}>
+        <Text>{(newPost.id === 'Create') ? 'Create Post':'Edit Post'}</Text>
       </Pressable>
     </View>
   )
@@ -177,9 +179,13 @@ export default function AdminPanel() {
         },
         content: '',
         assests: [],
-        date: '',
+        updated: '',
         type: '',
-        id: 'Create'
+        id: 'Create',
+        status: 'inProgress',
+        url: '',
+        technologies: [],
+        githubUrl: ''
       }])
     }
   }
@@ -193,7 +199,7 @@ export default function AdminPanel() {
       <Header />
       <Text style={{marginLeft: 'auto', marginRight: 'auto'}}>AdminPanel</Text>
       { selectedPost !== undefined ?
-        <EditPost onBack={() => setSeletedPost(undefined)} />:
+        <EditPost newPost={selectedPost} setNewPost={setSeletedPost} onBack={() => setSeletedPost(undefined)} />:
         <FlatList 
           data={posts}
           renderItem={(post) => (
@@ -203,6 +209,12 @@ export default function AdminPanel() {
           )}
         />
       }
+      <Pressable>
+        <Text>Messages</Text>
+      </Pressable>
+      <Pressable>
+        <Text>Technologies</Text>
+      </Pressable>
     </View>
   )
 }
