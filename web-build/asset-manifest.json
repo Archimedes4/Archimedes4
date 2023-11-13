@@ -1,19 +1,20 @@
 {
   "files": {
-    "main.js": "/static/js/main.e8fe7011.js",
-    "static/js/658.1347398d.js": "/static/js/658.1347398d.js",
-    "static/media/MaterialCommunityIcons.ttf": "/static/media/MaterialCommunityIcons.5d42b4e60858731e7b65.ttf",
-    "favicon.ico": "/favicon.ico",
-    "index.html": "/index.html",
-    "favicon-32.png": "/favicon-32.png",
-    "favicon-16.png": "/favicon-16.png",
-    "manifest.json": "/manifest.json",
-    "serve.json": "/serve.json",
-    "main.e8fe7011.js.map": "/static/js/main.e8fe7011.js.map",
-    "658.1347398d.js.map": "/static/js/658.1347398d.js.map"
+    "main.js": "/Andrew_Mainella_About/static/js/main.131c5f69.js",
+    "static/js/120.bb34ee87.js": "/Andrew_Mainella_About/static/js/120.bb34ee87.js",
+    "static/media/MaterialCommunityIcons.ttf": "/Andrew_Mainella_About/static/media/MaterialCommunityIcons.5d42b4e60858731e7b65.ttf",
+    "static/media/Smoke.png": "/Andrew_Mainella_About/static/media/Smoke.b59827136082106a8545.png",
+    "favicon.ico": "/Andrew_Mainella_About/favicon.ico",
+    "index.html": "/Andrew_Mainella_About/index.html",
+    "favicon-32.png": "/Andrew_Mainella_About/favicon-32.png",
+    "favicon-16.png": "/Andrew_Mainella_About/favicon-16.png",
+    "manifest.json": "/Andrew_Mainella_About/manifest.json",
+    "serve.json": "/Andrew_Mainella_About/serve.json",
+    "main.131c5f69.js.map": "/Andrew_Mainella_About/static/js/main.131c5f69.js.map",
+    "120.bb34ee87.js.map": "/Andrew_Mainella_About/static/js/120.bb34ee87.js.map"
   },
   "entrypoints": [
-    "static/js/658.1347398d.js",
-    "static/js/main.e8fe7011.js"
+    "static/js/120.bb34ee87.js",
+    "static/js/main.131c5f69.js"
   ]
 }

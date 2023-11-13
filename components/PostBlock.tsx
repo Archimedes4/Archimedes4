@@ -17,14 +17,14 @@ export default function PostBlock({item, setPost, onSelect, width, height}:{item
   }, [])
   
   return (
-    <Pressable onPress={() => onSelect()} style={{width: width, height: height, borderRadius: 15}}>
+    <Pressable onPress={() => onSelect()} style={{width: width, height: height, borderRadius: 15, backgroundColor: '#FFFFFF', marginLeft: 'auto', marginRight: 'auto', overflow: 'hidden'}}>
       { (item.item.cover.loadingState === loadingStateEnum.loading) ?
         <View>
           <Text>Loading</Text>
         </View>:
         <>
           { (item.item.cover.loadingState === loadingStateEnum.success) ?
-            <Image source={{uri: item.item.cover.url}} style={{width: 100, height: 100}}/>:
+            <Image source={{uri: item.item.cover.url}} style={{width: width, height: height * 0.9}}/>:
             <Text>Failed</Text>
           }
         </>

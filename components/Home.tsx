@@ -1,49 +1,98 @@
-import { View, Text, Pressable, ScaledSize, ScrollView } from 'react-native'
-import React, { useEffect } from 'react'
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import { View, Text, ScrollView, Image } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigate } from 'react-router-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { ActivityIcon, AzureIcon, CodingIcon, ContactIcon, FirebaseIcon, GitIcon, HomeIcon, JavaIcon, ProcessingIcon, PythonIcon, ReactIcon, SettingIcon, SwiftIcon } from './Icons';
+import { AzureIcon, FirebaseIcon, GitIcon, JavaIcon, ProcessingIcon, PythonIcon, ReactIcon, SwiftIcon } from './Icons';
 import Header from './Header';
-import MarkdownCross from './MarkdownCross';
+//import MarkdownCross from './MarkdownCross';
 
 export default function Home() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
-  const navigate = useNavigate()
+  const [nameWidth, setNameWidth] = useState<number>(0);
+  const progress = useSharedValue(0);
+
+  const leftStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: progress.value - nameWidth,
+        },
+      ],
+    };
+  });
+
+  const rightStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: width-progress.value,
+        },
+      ],
+    };
+  });
+
+  const smokeStyle = useAnimatedStyle(() => {
+    return {
+      opacity: 1 - progress.value/(width)
+    }
+  })
+
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    console.log(event.contentOffset.y)
+    progress.value = event.contentOffset.y * 0.1;
+  });
   return (
-    <ScrollView style={{width: width, height: height, backgroundColor: "#1c93ba"}}>
-      <StatusBar style="auto" />
-      <Header />
-      <View style={{height: 40}}>
-        <HelloComponet />
-      </View>
-      <Text style={{color: "white"}}>My Name is Andrew Mainella, I am a student, curler, coder and most important faithful.</Text>
-      <View>
-        <Text>What I am using</Text>
-        <View style={{flexDirection: "row", marginLeft: 'auto', marginRight: 'auto'}}>
-          <ReactIcon width={100} height={100} />
-          <ReactIcon width={100} height={100} />
-          {/* <AzureIcon width={100} height={100}/> */}
+    <>
+      <Animated.ScrollView scrollEventThrottle={16} style={{width: width, height: height, zIndex: 10}} onScroll={scrollHandler}
+        stickyHeaderIndices={[0]}
+      >
+        <View style={{width: width, height: height, position: 'absolute', backgroundColor: "#1c93ba"}}>
+          <Text onLayout={(e) => {setNameWidth(e.nativeEvent.layout.width)}} style={{opacity: 0, position: 'absolute', fontSize: 30}}>Andrew</Text>
+          <StatusBar style="auto" />
+          <View style={{zIndex: 12}}>
+            <Header />
+          </View>
+          <View style={{height: 40}}>
+            <HelloComponet />
+          </View>
+          <View style={{height: 400}}>
+            <Animated.Image source={require('../assets/Smoke.png')} style={[{position: 'absolute', width: width * 2, marginLeft: -width/2, height: 400, zIndex: 10}, smokeStyle]} height={100}/>
+            <Animated.Text style={[leftStyle, {fontSize: 30}]}>Andrew</Animated.Text>
+            <Animated.Text style={[rightStyle, {fontSize: 30}]}>Mainella</Animated.Text>
+          </View>
+          <Text style={{color: "white"}}>My Name is Andrew Mainella, I am a student, curler, coder. I am a born and raised Manitoban</Text>
+          <View>
+            <Text>What I am using</Text>
+            <View style={{flexDirection: "row", marginLeft: 'auto', marginRight: 'auto'}}>
+              <ReactIcon width={100} height={100} />
+              <ReactIcon width={100} height={100} />
+              <AzureIcon width={100} height={100}/>
+            </View>
+            <Text>What I am learning</Text>
+            <View style={{flexDirection: "row", marginLeft: 'auto', marginRight: 'auto'}}>
+              <JavaIcon width={100} height={100}/>
+              <ProcessingIcon width={100} height={100}/>
+              <PythonIcon width={100} height={100}/>
+            </View>
+            <Text>What I have used</Text>
+            <View style={{flexDirection: "row", marginLeft: 'auto', marginRight: 'auto'}}>
+              <FirebaseIcon width={100} height={100}/>
+              <SwiftIcon width={100} height={100} />
+              <GitIcon width={100} height={100} />
+            </View>
+          </View>
+          <View>
+            <Text style={{color: "white"}}>Copyright &#169; 2023 Andrew Mainella</Text>
+          </View>
         </View>
-        <Text>What I am learning</Text>
-        <View style={{flexDirection: "row", marginLeft: 'auto', marginRight: 'auto'}}>
-          <JavaIcon width={100} height={100}/>
-          <ProcessingIcon width={100} height={100}/>
-          <PythonIcon width={100} height={100}/>
+        <View style={{height: width * 10}} pointerEvents='none'>
+
         </View>
-        <Text>What I have used</Text>
-        <View style={{flexDirection: "row", marginLeft: 'auto', marginRight: 'auto'}}>
-          <FirebaseIcon width={100} height={100}/>
-          <SwiftIcon width={100} height={100} />
-          <GitIcon width={100} height={100} />
-        </View>
-      </View>
-      <View>
-        <Text style={{color: "white"}}>Copyright &#169; 2023 Andrew Mainella</Text>
-      </View>
-    </ScrollView>
+      </Animated.ScrollView>
+    </>
   )
 }
 

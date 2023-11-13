@@ -68,8 +68,9 @@ function EditPost({onBack}:{onBack: () => void}) {
   const navigate = useNavigate()
   const { height, width } = useSelector((state: RootState) => state.dimentions);
   const [isAssest, setIsAssest] = useState<boolean>(false);
-  const [isCover, setIsCover] = useState<boolean>(false);
+  const [isPickingCover, setIsPickingCover] = useState<boolean>(false);
   const [isPreview, setIsPreview] = useState<'C'|'P'>('C');
+  const [isCard, setIsCard] = useState<'C'|'B'>('C');
 
   //New Item
   const [newPost, setNewPost] = useState<post>({
@@ -87,43 +88,70 @@ function EditPost({onBack}:{onBack: () => void}) {
   })
   return (
     <View>
-      <Modal visible={isAssest || isCover}>
-        <SelectFile onClose={() => {setIsAssest(false); setIsCover(false)}} onSelect={(e) => {if (isCover) setNewPost({...newPost, cover: e}); else setNewPost({...newPost, assests: [...newPost.assests, e]})}}/>
+      <Modal visible={isAssest || isPickingCover}>
+        <SelectFile onClose={() => {setIsAssest(false); setIsPickingCover(false)}} onSelect={(e) => {if (isPickingCover) setNewPost({...newPost, cover: e}); else setNewPost({...newPost, assests: [...newPost.assests, e]})}}/>
       </Modal>
       <Pressable onPress={() => {onBack()}} style={{pointerEvents: "none"}}>
         <Text>Back</Text>
       </Pressable>
-      <Text>Title</Text>
-      <TextInput value={newPost.title} onChangeText={(e) => setNewPost({...newPost, title: e})}/>
-      <Text>Cover</Text>
-      <Pressable onPress={() => setIsCover(true)}>
-        <Text>Pick Cover</Text>
-      </Pressable>
-      <Text>Mark down is used</Text>
       <SegmentedButtons
-        value={isPreview}
-        onValueChange={(e) => {if (e === 'C') {setIsPreview('C')} else {setIsPreview('P')}}}
+        value={isCard}
+        onValueChange={(e) => {if (e === 'C') {setIsCard('C')} else {setIsCard('B')}}}
         buttons={[
           {
             value: 'C',
-            label: 'Code',
+            label: 'Card',
           },
           {
-            value: 'P',
-            label: 'Preview',
+            value: 'B',
+            label: 'Blog',
           },
         ]}
       />
-      <ScrollView style={{width: width, height: height}}>
-        {isPreview === 'P' ?
-          <MarkdownCross markdown={newPost.content}/>:
-          <TextEditor text={newPost.content} onChangeText={(e) => {console.log(e); setNewPost({...newPost, content: e})}} />
-        }
-      </ScrollView>
-      <Text>Assests</Text>
-      <Pressable onPress={() => setIsAssest(true)}>
-        <Text>Add Asset</Text>
-      </Pressable>
+      { isCard === 'C' ?
+        (
+          <>
+            <Text>Title</Text>
+            <TextInput value={newPost.title} onChangeText={(e) => setNewPost({...newPost, title: e})}/>
+            <Text>Cover</Text>
+            <Pressable onPress={() => setIsPickingCover(true)}>
+              <Text>Pick Cover</Text>
+            </Pressable>
+            <Text>Technologies</Text>
+            <Text>Url</Text>
+            <Text>Status</Text>
+          </>
+        ):
+        (
+          <>
+            <Text>Mark down is used</Text>
+            <SegmentedButtons
+              value={isPreview}
+              onValueChange={(e) => {if (e === 'C') {setIsPreview('C')} else {setIsPreview('P')}}}
+              buttons={[
+                {
+                  value: 'C',
+                  label: 'Code',
+                },
+                {
+                  value: 'P',
+                  label: 'Preview',
+                },
+              ]}
+            />
+            <ScrollView style={{width: width, height: height}}>
+              {isPreview === 'P' ?
+                <MarkdownCross markdown={newPost.content}/>:
+                <TextEditor text={newPost.content} onChangeText={(e) => {console.log(e); setNewPost({...newPost, content: e})}} />
+              }
+            </ScrollView>
+            <Text>Assests</Text>
+            <Pressable onPress={() => setIsAssest(true)}>
+              <Text>Add Asset</Text>
+            </Pressable>
+          </>
+        )
+      }
       <Pressable onPress={() => {addPost(newPost)}}>
         <Text>Create Post</Text>
       </Pressable>
