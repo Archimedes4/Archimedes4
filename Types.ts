@@ -29,4 +29,11 @@ declare global {
     content: string;
     time: string;
   }
+  type technology = {
+    content: string;
+    name: string;
+    firstUsed: string;
+    lastUsed: string;
+    displayTechnology: string;
+  }
 }

@@ -10,6 +10,8 @@ import { Provider, useDispatch } from 'react-redux';
 import { dimentionsSlice } from './redux/dimentionsReducer';
 import store from './redux/store';
 import Contact from './components/Contact';
+import AdminTechnologies from './components/AdminTechnologies';
+import AdminMessages from './components/AdminMessages';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDdP7PccSIrlOVKzuqCahZAe5yyt_rmsQc",
@@ -44,6 +46,8 @@ function AppCore() {
           <Route path='/coding' element={<Coding />} />
           <Route path='/activities' element={<Activitys />}/>
           <Route path='/admin' element={<AdminPanel />}/>
+          <Route path='/admin/tech' element={<AdminTechnologies />}/>
+          <Route path='/admin/message' element={<AdminMessages />}/>
           <Route path='/contact' element={<Contact />}/>
           <Route path='*' element={<Home />}/>
         </Routes>

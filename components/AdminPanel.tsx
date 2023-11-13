@@ -166,6 +166,7 @@ export default function AdminPanel() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
   const [posts, setPosts] = useState<post[]>([]);
   const [selectedPost, setSeletedPost] = useState<post | undefined>(undefined)
+  const navigate = useNavigate()
 
   async function loadPost() {
     const result = await listPosts();
@@ -209,10 +210,10 @@ export default function AdminPanel() {
           )}
         />
       }
-      <Pressable>
+      <Pressable onPress={() => navigate('/admin/message')}>
         <Text>Messages</Text>
       </Pressable>
-      <Pressable>
+      <Pressable onPress={() => navigate('/admin/tech')}>
         <Text>Technologies</Text>
       </Pressable>
     </View>
