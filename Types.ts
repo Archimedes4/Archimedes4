@@ -8,8 +8,12 @@ declare global {
   type storageItem = {
     name: string;
     fileType: string;
-    loadingState: loadingStateEnum;
-    url?: undefined|string;
+    loadingState: loadingStateEnum.failed | loadingStateEnum.loading | loadingStateEnum.notStarted;
+  } | {
+    name: string;
+    fileType: string;
+    loadingState: loadingStateEnum.success;
+    url: string;
   }
   type post = {
     title: string;
@@ -20,7 +24,7 @@ declare global {
     type: string;
     id: string
     url: string;
-    technologies: string[];
+    technologies: technology[];
     status: string;
     githubUrl: string;
   }

@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs, getFirestore, orderBy, query, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, getFirestore, orderBy, query, serverTimestamp, updateDoc } from "firebase/firestore";
 import { app } from "../App";
 import { loadingStateEnum } from "../Types";
 
@@ -18,11 +18,27 @@ export async function addTechnology(item: technology): Promise<loadingStateEnum>
   }
 }
 
+export async function updateTechnology(item: technology): Promise<loadingStateEnum> {
+  const db = getFirestore(app);
+  try {
+    await updateDoc(doc(db, 'Technologies', item.id), {
+      contact: item.content,
+      name: item.name,
+      displayTechnology: item.displayTechnology,
+      firstUsed: item.firstUsed,
+      lastUsed: item.lastUsed,
+    })
+    return loadingStateEnum.success;
+  } catch {
+    return loadingStateEnum.failed;
+  }
+}
+
 export async function listTechnologies() {
   const db = getFirestore();
   //TODO error handel paginate
   let resultData: technology[] = []
-  const q = query(collection(db, "Technologies"), orderBy('time'));
+  const q = query(collection(db, "Technologies"), orderBy('lastUsed'));
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     const data = doc.data()
@@ -30,8 +46,8 @@ export async function listTechnologies() {
       content: data.content,
       name: data.name,
       displayTechnology: data.displayTechnology,
-      firstUsed: data.time.toDate().toISOString(),
-      lastUsed: data.time.toDate().toISOString(),
+      firstUsed: data.firstUsed.toDate().toISOString(),
+      lastUsed: data.lastUsed.toDate().toISOString(),
       id: doc.id,
     })
   });

@@ -14,7 +14,7 @@ export async function listStorageItems(): Promise<{result: loadingStateEnum.fail
     resultData.push({
       name: data.name,
       fileType: data.fileType,
-      loadingState: loadingStateEnum.loading
+      loadingState: loadingStateEnum.notStarted
     })
   });
   return {result: loadingStateEnum.success, data: resultData};
@@ -68,9 +68,13 @@ export async function uploadFile() {
   }
 }
 
-export async function getAssest(item: string): Promise<string> {
-  const storage = getStorage()
-  const result = await ref(storage, item)
-  const url = await getDownloadURL(result)
-  return url
+export async function getAssest(item: string): Promise<{result: loadingStateEnum.success, data: string}|{result: loadingStateEnum.failed}> {
+  try {
+    const storage = getStorage()
+    const result = await ref(storage, item)
+    const url = await getDownloadURL(result)
+    return {result: loadingStateEnum.success, data: url}
+  } catch {
+    return {result: loadingStateEnum.failed}
+  }
 }

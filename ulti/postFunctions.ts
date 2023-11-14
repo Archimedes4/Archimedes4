@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDocs, getFirestore, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { app } from "../App";
 import { loadingStateEnum } from "../Types";
 
@@ -22,15 +22,6 @@ export async function addPost(item: post) {
 
 export async function updatePost(item: post) {
   const db = getFirestore(app);
-  console.log( {
-    title: item.title,
-    cover: item.cover.name,
-    content: item.content,
-    url: item.url,
-    githubUrl: item.githubUrl,
-    status: item.status,
-    technologies: item.technologies
-  })
   await updateDoc(doc(db, 'Posts', item.id), {
     title: item.title,
     cover: item.cover.name,
@@ -40,6 +31,11 @@ export async function updatePost(item: post) {
     status: item.status,
     technologies: item.technologies
   })
+}
+
+export async function deletePost(id: string) {
+  const db = getFirestore(app);
+  await deleteDoc(doc(db, 'Posts', id))
 }
 
 export async function listPosts(): Promise<{result: loadingStateEnum.failed}|{result: loadingStateEnum.success, data: post[]}> {

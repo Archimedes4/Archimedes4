@@ -4,10 +4,10 @@ import SVGXml from './SVGXml/SVGXml';
 import { useNavigate } from 'react-router-native';
 import Header from './Header';
 import { loadingStateEnum } from '../Types';
-import { listTechnologies } from '../ulti/technologyFunctions';
+import { addTechnology, listTechnologies, updateTechnology } from '../ulti/technologyFunctions';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
+import { DatePickerModal, TimePickerModal, it } from 'react-native-paper-dates';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 function EditTechnology({item, onChange, onBack}:{item: technology, onChange: (item: technology) => void, onBack: () => void}) {
@@ -16,15 +16,34 @@ function EditTechnology({item, onChange, onBack}:{item: technology, onChange: (i
   const [isPickingFirstDate, setIsPickingFirstDate] = useState<boolean>(false);
   const [isLastDateHover, setIsLastDateHover] = useState<boolean>(false);
   const [isFirstDateHover, setIsFirstDateHover] = useState<boolean>(false);
+  const [editState, setEditState] = useState<loadingStateEnum>();
+
+  async function EditTechnology() {
+    if (item.id === 'Create') {
+      const result = await addTechnology(item)
+      if (result === loadingStateEnum.success) {
+        setEditState(loadingStateEnum.success)
+      } else [
+        setEditState(loadingStateEnum.failed)
+      ]
+    } else {
+      const result = await updateTechnology(item);
+      if (result === loadingStateEnum.success) {
+        setEditState(loadingStateEnum.success)
+      } else {
+        setEditState(loadingStateEnum.failed)
+      }
+    }
+  }
 
   return (
     <SafeAreaProvider>
       <View>
         <SVGXml xml={item.content} width={100} height={100} />
         <Text>Content</Text>
-        <TextInput value={item.content} onChangeText={(e) => {onChange({...item, content: e})}}/>
+        <TextInput style={{backgroundColor: '#d3d3d3'}} value={item.content} onChangeText={(e) => {onChange({...item, content: e})}}/>
         <Text>Name</Text>
-        <TextInput value={item.name} onChangeText={(e) => {onChange({...item, name: e})}}/>
+        <TextInput style={{backgroundColor: '#d3d3d3'}} value={item.name} onChangeText={(e) => {onChange({...item, name: e})}}/>
         <Text>First Date</Text>
         <View style={{flexDirection: 'row'}}>
           <DatePickerModal
@@ -71,8 +90,8 @@ function EditTechnology({item, onChange, onBack}:{item: technology, onChange: (i
         </View>
         <Text>Include On Homepage</Text>
 
-        <Pressable onHoverIn={() => setIsCreateHover(true)} onHoverOut={() => setIsCreateHover(false)} style={{backgroundColor: isCreateHover ? '#d3d3d3':'white', flexDirection: 'row', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, margin: 10}}>
-          <Text style={{margin: 10}}>Create</Text>
+        <Pressable onPress={() => {EditTechnology()}} onHoverIn={() => setIsCreateHover(true)} onHoverOut={() => setIsCreateHover(false)} style={{backgroundColor: isCreateHover ? '#d3d3d3':'white', flexDirection: 'row', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, margin: 10}}>
+          <Text style={{margin: 10}}>{editState === loadingStateEnum.notStarted ? (item.id === 'Create' ? 'Create Technology':'Edit Technology'):editState === loadingStateEnum.loading ? 'Loading':editState === loadingStateEnum.success ? 'Success':'Failed'}</Text>
         </Pressable>
       </View>
     </SafeAreaProvider>

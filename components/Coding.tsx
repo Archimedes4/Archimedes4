@@ -44,11 +44,13 @@ export default function Coding() {
                 <FlatList 
                   data={posts}
                   renderItem={(item) => (
-                    <PostBlock width={width * 0.9} height={height * 0.4} item={item} setPost={(e) => {
-                      let newPosts = posts;
-                      newPosts[item.index] = e
-                      setPosts([...newPosts])
-                    }} onSelect={() => setSelectedPost(item.item)}/>
+                    <View style={{marginBottom: 20}}>
+                      <PostBlock width={width * 0.9} height={height * 0.4} item={item} setPost={(e) => {
+                        let newPosts = posts;
+                        newPosts[item.index] = e
+                        setPosts([...newPosts])
+                      }} onSelect={() => setSelectedPost(item.item)}/>
+                    </View>
                   )}
                 />:
                 <View>
