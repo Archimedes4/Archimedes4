@@ -20,7 +20,7 @@ export async function listMessages() {
   const db = getFirestore();
   //TODO error handel paginate
   let resultData: message[] = []
-  const q = query(collection(db, "Files"), orderBy('time'));
+  const q = query(collection(db, "Messages"), orderBy('time'));
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     const data = doc.data()

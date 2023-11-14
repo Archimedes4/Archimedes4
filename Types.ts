@@ -35,5 +35,6 @@ declare global {
     firstUsed: string;
     lastUsed: string;
     displayTechnology: string;
+    id: string;
   }
 }

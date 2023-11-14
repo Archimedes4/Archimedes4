@@ -31,10 +31,10 @@ export default function Coding() {
   return (
     <View style={{width: width, height: height, backgroundColor: "#1c93ba"}}>
       <Header />
-      <Text>Coding</Text>
       { selectedPost !== undefined ?
         <MarkdownCross markdown={selectedPost.content} />:
         <>
+          <Text>Coding</Text>
           { (postState === loadingStateEnum.loading) ?
             <View>
               <Text>Loading</Text>
