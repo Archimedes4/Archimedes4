@@ -1,5 +1,5 @@
 import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
-import { app } from "../App";
+import { app } from "../app/_layout"
 import { loadingStateEnum } from "../Types";
 
 

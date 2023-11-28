@@ -1,6 +1,6 @@
 import { View, Text, Pressable, FlatList, ListRenderItemInfo, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import SVGXml from './SVGXml/SVGXml';
+import SVGXml from './SVGXml/SVGXml.d';
 import { useNavigate } from 'react-router-native';
 import Header from './Header';
 import { loadingStateEnum } from '../Types';

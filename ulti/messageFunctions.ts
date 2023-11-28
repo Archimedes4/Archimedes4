@@ -1,5 +1,5 @@
 import { addDoc, collection, getDocs, getFirestore, orderBy, query, serverTimestamp } from "firebase/firestore";
-import { app } from "../App";
+import { app } from "../app/_layout"
 import { loadingStateEnum } from "../Types";
 
 export async function sendMessage(email: string, content: string): Promise<loadingStateEnum> {

@@ -1,5 +1,5 @@
 import { addDoc, collection, doc, getDocs, getFirestore, orderBy, query, serverTimestamp, updateDoc } from "firebase/firestore";
-import { app } from "../App";
+import { app } from "../app/_layout"
 import { loadingStateEnum } from "../Types";
 
 export async function addTechnology(item: technology): Promise<loadingStateEnum> {

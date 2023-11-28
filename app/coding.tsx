@@ -4,9 +4,9 @@ import { listPosts } from '../ulti/postFunctions'
 import { loadingStateEnum } from '../Types'
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
-import PostBlock from './PostBlock'
-import Header from './Header'
-import MarkdownCross from './MarkdownCross'
+import PostBlock from '../components/PostBlock'
+import Header from '../components/Header'
+import MarkdownCross from '../components/MarkdownCross'
 
 export default function Coding() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);

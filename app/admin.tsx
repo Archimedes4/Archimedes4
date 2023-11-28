@@ -7,12 +7,12 @@ import { getAssest, listStorageItems, uploadFile } from '../ulti/storageFunction
 import { loadingStateEnum } from '../Types';
 import { addPost, deletePost, listPosts, updatePost } from '../ulti/postFunctions';
 import { useNavigate } from 'react-router-native';
-import Header from './Header';
-import MarkdownCross from './MarkdownCross';
-import TextEditor from './TextEditor';
+import Header from '../components/Header';
+import MarkdownCross from '../components/MarkdownCross';
+import TextEditor from '../components/TextEditor';
 import { listTechnologies } from '../ulti/technologyFunctions';
-import SVGXml from './SVGXml/SVGXml';
-import StyledButton from './StyledButton';
+import SVGXml from '../components/SVGXml/SVGXml';
+import StyledButton from '../components/StyledButton';
 
 function SelectFile({onClose, onSelect, selectedFile}:{onClose: () => void, onSelect: (item: storageItem) => void, selectedFile: undefined|storageItem}) {
   const [fileState, setFileState] = useState<loadingStateEnum>(loadingStateEnum.loading);

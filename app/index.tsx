@@ -1,13 +1,18 @@
-import { View, Text, ScrollView, Image } from 'react-native'
+/*
+  Andrew Mainella About
+  Andrew Mainella
+  28 November 2023
+  Home.tsx
+  The main home page
+*/
+import { View, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Animated, { Easing, SharedValue, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { StatusBar } from 'expo-status-bar';
-import { useNavigate } from 'react-router-native';
 import { useSelector } from 'react-redux';
 import store, { RootState } from '../redux/store';
-import { AzureIcon, FirebaseIcon, GitIcon, JavaIcon, ProcessingIcon, PythonIcon, ReactIcon, SwiftIcon } from './Icons';
-import Header from './Header';
-//import MarkdownCross from './MarkdownCross';
+import { AzureIcon, FirebaseIcon, GitIcon, JavaIcon, ProcessingIcon, PythonIcon, ReactIcon, SwiftIcon } from '../components/Icons';
+import Header from '../components/Header';
 
 function getRightValue(progress: number): number {
   const width = store.getState().dimentions.width
@@ -41,7 +46,7 @@ function NameComponent({progress}:{progress: SharedValue<number>}) {
     return {
       transform: [
         {
-          translateX: getLeftValue(progress.value, nameWidth),
+          translateX: getLeftValue(progress.value * 3, nameWidth),
         },
       ],
     };
@@ -51,7 +56,7 @@ function NameComponent({progress}:{progress: SharedValue<number>}) {
     return {
       transform: [
         {
-          translateX: getRightValue(progress.value),
+          translateX: getRightValue(progress.value * 3),
         },
       ],
     };
@@ -59,13 +64,13 @@ function NameComponent({progress}:{progress: SharedValue<number>}) {
 
   const smokeStyle = useAnimatedStyle(() => {
     return {
-      opacity: 1 - progress.value/(width)
+      opacity: 1 - progress.value/(width/2)
     }
   })
   return (
-    <View style={{height: 400}}>
+    <View style={{height: height}}>
       <Text onLayout={(e) => {setNameWidth(e.nativeEvent.layout.width)}} style={{opacity: 0, position: 'absolute', fontSize: height * 0.1}}>Andrew </Text>
-      <Animated.Image source={require('../assets/Smoke.png')} style={[{position: 'absolute', width: width * 2, marginLeft: -width/2, height: 400, zIndex: 10}, smokeStyle]} height={100}/>
+      <Animated.Image source={require('../assets/Smoke.png')} style={[{position: 'absolute', width: width * 2, marginLeft: -width/2, height: height, zIndex: 10}, smokeStyle]} height={100}/>
       <Animated.View style={leftStyle}>
         <Text style={{fontSize: height * 0.1, position: 'absolute'}}>Andrew</Text>
       </Animated.View>
@@ -104,28 +109,28 @@ export default function Home() {
       >
         <Animated.View style={[{width: width, height: height, position: 'absolute'}, innerStyle]}>
           <StatusBar style="auto" />
-          <Animated.View style={[{zIndex: 12, position: 'absolute', left: 'auto', right: 'auto'}, headerStyle]}>
+          <Animated.View style={[{zIndex: 12, width: width, position: 'absolute'}, headerStyle]}>
             <Header />
           </Animated.View>
+          <NameComponent progress={progress}/>
           <View style={{height: 40}}>
             <HelloComponet />
           </View>
-          <NameComponent progress={progress}/>
           <Text style={{color: "white", fontSize: 25}}>My Name is Andrew Mainella, I am a student, curler, coder. I am a born and raised Manitoban. I am a student at Saint Paul's High School</Text>
           <View>
-            <Text>What I am using</Text>
+            <Text adjustsFontSizeToFit style={{color: 'white', fontSize: 50, marginLeft: 20}}>What I am using</Text>
             <View style={{flexDirection: "row", marginLeft: 'auto', marginRight: 'auto'}}>
-              <ReactIcon width={100} height={100} />
-              <ReactIcon width={100} height={100} />
-              <AzureIcon width={100} height={100}/>
+              <ReactIcon width={width * 0.3} height={width * 0.3} style={{marginLeft: 'auto', marginRight: 'auto'}}/>
+              <ReactIcon width={width * 0.3} height={width * 0.3} style={{marginLeft: 'auto', marginRight: 'auto'}}/>
+              <AzureIcon width={width * 0.3} height={width * 0.3} style={{marginLeft: 'auto', marginRight: 'auto'}}/>
             </View>
-            <Text>What I am learning</Text>
+            <Text adjustsFontSizeToFit style={{color: 'white', fontSize: 50, marginLeft: 20}}>What I am learning</Text>
             <View style={{flexDirection: "row", marginLeft: 'auto', marginRight: 'auto'}}>
-              <JavaIcon width={100} height={100}/>
-              <ProcessingIcon width={100} height={100}/>
-              <PythonIcon width={100} height={100}/>
+              <JavaIcon width={width * 0.3} height={width * 0.3}/>
+              <ProcessingIcon width={width * 0.3} height={width * 0.3}/>
+              <PythonIcon width={width * 0.3} height={width * 0.3}/>
             </View>
-            <Text>What I have used</Text>
+            <Text adjustsFontSizeToFit numberOfLines={1} style={{color: 'white', fontSize: 50}}>What I have used</Text>
             <View style={{flexDirection: "row", marginLeft: 'auto', marginRight: 'auto'}}>
               <FirebaseIcon width={100} height={100}/>
               <SwiftIcon width={100} height={100} />
