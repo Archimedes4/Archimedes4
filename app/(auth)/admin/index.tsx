@@ -2,17 +2,17 @@ import { View, Text, TextInput, Pressable, Modal, FlatList, ScrollView, NativeSy
 import React, { useEffect, useRef, useState } from 'react'
 import { SegmentedButtons } from 'react-native-paper';
 import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
-import { getAssest, listStorageItems, uploadFile } from '../ulti/storageFunctions';
-import { loadingStateEnum } from '../Types';
-import { addPost, deletePost, listPosts, updatePost } from '../ulti/postFunctions';
+import { RootState } from '../../../redux/store';
+import { getAssest, listStorageItems, uploadFile } from '../../../ulti/storageFunctions';
+import { loadingStateEnum } from '../../../Types';
+import { addPost, deletePost, listPosts, updatePost } from '../../../ulti/postFunctions';
 import { useNavigate } from 'react-router-native';
-import Header from '../components/Header';
-import MarkdownCross from '../components/MarkdownCross';
-import TextEditor from '../components/TextEditor';
-import { listTechnologies } from '../ulti/technologyFunctions';
-import SVGXml from '../components/SVGXml/SVGXml';
-import StyledButton from '../components/StyledButton';
+import Header from '../../../components/Header';
+import MarkdownCross from '../../../components/MarkdownCross';
+import TextEditor from '../../../components/TextEditor';
+import { listTechnologies } from '../../../ulti/technologyFunctions';
+import SVGXml from '../../../components/SVGXml/SVGXml';
+import StyledButton from '../../../components/StyledButton';
 
 function SelectFile({onClose, onSelect, selectedFile}:{onClose: () => void, onSelect: (item: storageItem) => void, selectedFile: undefined|storageItem}) {
   const [fileState, setFileState] = useState<loadingStateEnum>(loadingStateEnum.loading);
@@ -76,7 +76,6 @@ function SelectFile({onClose, onSelect, selectedFile}:{onClose: () => void, onSe
 
 function EditPost({onBack, newPost, setNewPost}:{onBack: () => void, newPost: post, setNewPost: (item: post) => void}) {
   //View
-  const navigate = useNavigate()
   const { height, width } = useSelector((state: RootState) => state.dimentions);
   const [isAssest, setIsAssest] = useState<boolean>(false);
   const [isPickingCover, setIsPickingCover] = useState<boolean>(false);
@@ -260,7 +259,6 @@ export default function AdminPanel() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
   const [posts, setPosts] = useState<post[]>([]);
   const [selectedPost, setSelectedPost] = useState<post | undefined>(undefined)
-  const navigate = useNavigate()
   const [isMessageHover, setIsMessageHover] = useState<boolean>(false);
   const [isTechHover, setIsTechHover] = useState<boolean>(false);
   const [topHeight, setTopHeight] = useState<number>(0);
@@ -311,12 +309,12 @@ export default function AdminPanel() {
       }
       <View style={{flexDirection: 'row'}} onLayout={(e) => setBottomHeight(e.nativeEvent.layout.height)}>
         <View style={{width: width/2}}>
-          <Pressable onHoverIn={() => setIsMessageHover(true)} onHoverOut={() => setIsMessageHover(false)} onPress={() => navigate('/admin/message')} style={{backgroundColor: isMessageHover ? '#d3d3d3':'white', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 'auto', margin: 10}}>
+          <Pressable onHoverIn={() => setIsMessageHover(true)} onHoverOut={() => setIsMessageHover(false)} onPress={() => /*navigate('/admin/message')*/{}} style={{backgroundColor: isMessageHover ? '#d3d3d3':'white', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 'auto', margin: 10}}>
             <Text style={{marginLeft: 'auto', marginRight: 'auto', marginTop: 10, marginBottom: 10}}>Messages</Text>
           </Pressable>
         </View>
         <View style={{width: width/2}}>
-          <Pressable onHoverIn={() => setIsTechHover(true)} onHoverOut={() => setIsTechHover(false)} onPress={() => navigate('/admin/tech')} style={{backgroundColor: isTechHover ? '#d3d3d3':'white', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 'auto', margin: 10}}>
+          <Pressable onHoverIn={() => setIsTechHover(true)} onHoverOut={() => setIsTechHover(false)} onPress={() => /*navigate('/admin/tech') */{}} style={{backgroundColor: isTechHover ? '#d3d3d3':'white', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 'auto', margin: 10}}>
             <Text style={{marginLeft: 'auto', marginRight: 'auto', marginTop: 10, marginBottom: 10}}>Technologies</Text>
           </Pressable>
         </View>

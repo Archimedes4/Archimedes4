@@ -2,6 +2,7 @@
   "expo": {
     "name": "Andrew_Mainella",
     "slug": "Andrew_Mainella",
+    "scheme": "Andrew_Mainella",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

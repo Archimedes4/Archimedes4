@@ -4,6 +4,7 @@ import { ActivityIcon, CodingIcon, ContactIcon, HomeIcon, SettingIcon } from './
 import { useNavigate } from 'react-router-native'
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
+import { useRouter } from 'expo-router'
 
 function getWidth(width: number) {
   if (width/5 <= 100) {
@@ -26,24 +27,24 @@ function HeaderBlock({text, onPress, children, last}:{text: string, onPress: () 
 }
 
 export default function Header() {
-  const navigate = useNavigate()
+  const router = useRouter();
   const { width } = useSelector((state: RootState) => state.dimentions);
   return (
     <View style={{marginLeft: 'auto', marginRight: 'auto', paddingTop: 10, paddingBottom: 10}}>
       <View style={{flexDirection: "row", backgroundColor: "#93acb5", width: getWidth((width - 15))*5+getWidth((width - 15))/20 , borderRadius: 15, paddingTop: 5, paddingBottom: 5}}>
-        <HeaderBlock text='Home' onPress={() => navigate('/')}>
+        <HeaderBlock text='Home' onPress={() => router.replace('/')}>
           <HomeIcon width={14} height={14} style={{margin: 'auto', marginRight: 0}}/>
         </HeaderBlock>
-        <HeaderBlock text='Coding' onPress={() => navigate('/coding')}>
+        <HeaderBlock text='Coding' onPress={() => router.replace('/coding')}>
           <CodingIcon width={14} height={14} style={{margin: 'auto', marginRight: 0}}/>
         </HeaderBlock>
-        <HeaderBlock text='Activities' onPress={() => navigate('/activities')}>
+        <HeaderBlock text='Activities' onPress={() => router.replace('/activities')}>
           <ActivityIcon width={14} height={14} style={{margin: 'auto', marginRight: 0}}/>
         </HeaderBlock>
-        <HeaderBlock text='Admin' onPress={() => navigate('/admin')}>
+        <HeaderBlock text='Admin' onPress={() => router.replace('/admin')}>
           <SettingIcon width={14} height={ 14} style={{margin: 'auto', marginRight: 0}}/>
         </HeaderBlock>
-        <HeaderBlock text='Contact' onPress={() => navigate('/contact')} last={true}>
+        <HeaderBlock text='Contact' onPress={() => router.replace('/contact')} last={true}>
           <ContactIcon width={14} height={14} style={{margin: 'auto', marginRight: 0}}/>
         </HeaderBlock>
       </View>

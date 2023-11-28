@@ -1,6 +1,7 @@
 import { View, Text, TextInput, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import { getAuth } from "firebase/auth";
+import { signIn } from '../../ulti/authenticationFunctions';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState<string>("");
@@ -10,7 +11,7 @@ export default function AdminLogin() {
       <Text>AdminLogin</Text>
       <TextInput value={email} onChangeText={setEmail}/>
       <TextInput value={password} onChangeText={setPassword}/>
-      <Pressable>
+      <Pressable onPress={() => {signIn(email, password)}}>
         <Text style={{margin: 10}}>Login</Text>
       </Pressable>
     </View>
