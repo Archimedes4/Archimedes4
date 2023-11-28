@@ -1,24 +1,47 @@
 import { View, Text, ScrollView, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, SharedValue, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigate } from 'react-router-native';
 import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
+import store, { RootState } from '../redux/store';
 import { AzureIcon, FirebaseIcon, GitIcon, JavaIcon, ProcessingIcon, PythonIcon, ReactIcon, SwiftIcon } from './Icons';
 import Header from './Header';
 //import MarkdownCross from './MarkdownCross';
 
-export default function Home() {
+function getRightValue(progress: number): number {
+  const width = store.getState().dimentions.width
+  const progressValue = (progress - width > 0) ? progress - width:0;
+  if (progressValue === 0) {
+    return width
+  }
+  if (width - progressValue > width/2) {
+    return width - progressValue
+  }
+  return width/2
+}
+
+function getLeftValue(progress: number, nameWidth: number): number {
+  const width = store.getState().dimentions.width
+  const progressValue = (progress - width > 0) ? progress - width:0;
+  //(progress.value - nameWidth < (width/2 - nameWidth)) ? (progress.value - nameWidth):(width/2 -nameWidth)
+  if (progressValue === 0) {
+    return -nameWidth
+  }
+  if (progressValue - nameWidth < (width/2 - nameWidth)) {
+    return progressValue - nameWidth
+  }
+  return width/2 -nameWidth
+}
+
+function NameComponent({progress}:{progress: SharedValue<number>}) {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
   const [nameWidth, setNameWidth] = useState<number>(0);
-  const progress = useSharedValue(0);
-
   const leftStyle = useAnimatedStyle(() => {
     return {
       transform: [
         {
-          translateX: (progress.value - nameWidth < width/2) ? (progress.value - nameWidth):width/2,
+          translateX: getLeftValue(progress.value, nameWidth),
         },
       ],
     };
@@ -28,7 +51,7 @@ export default function Home() {
     return {
       transform: [
         {
-          translateX: ((width - nameWidth/2)-progress.value > width/2) ? (width - nameWidth/2)-progress.value:(width - nameWidth/2)/2,
+          translateX: getRightValue(progress.value),
         },
       ],
     };
@@ -39,42 +62,56 @@ export default function Home() {
       opacity: 1 - progress.value/(width)
     }
   })
+  return (
+    <View style={{height: 400}}>
+      <Text onLayout={(e) => {setNameWidth(e.nativeEvent.layout.width)}} style={{opacity: 0, position: 'absolute', fontSize: height * 0.1}}>Andrew </Text>
+      <Animated.Image source={require('../assets/Smoke.png')} style={[{position: 'absolute', width: width * 2, marginLeft: -width/2, height: 400, zIndex: 10}, smokeStyle]} height={100}/>
+      <Animated.View style={leftStyle}>
+        <Text style={{fontSize: height * 0.1, position: 'absolute'}}>Andrew</Text>
+      </Animated.View>
+      <Animated.View style={rightStyle}>
+        <Text style={{fontSize: height * 0.1, position: 'absolute'}}>Mainella</Text>
+      </Animated.View>
+    </View>
+  )
+}
+
+export default function Home() {
+  const { height, width } = useSelector((state: RootState) => state.dimentions);
+  const progress = useSharedValue(0);
 
   const innerStyle = useAnimatedStyle(() => {
     return {
-      top: ((width - nameWidth/2) > progress.value) ? 0:-(progress.value - (width - nameWidth/2))
+      top: ((width * 2) > progress.value) ? 0:-(progress.value - (width * 2))
+    }
+  })
+
+  const headerStyle = useAnimatedStyle(() => {
+    return {
+      opacity: ((width * 2) > progress.value) ? 0:(progress.value - (width * 2)),
+      top: ((width * 2) > progress.value) ? 0:(progress.value - (width * 2))
     }
   })
 
   const scrollHandler = useAnimatedScrollHandler((event) => {
     progress.value = event.contentOffset.y * 0.1;
   });
+
   return (
     <>
       <Animated.ScrollView scrollEventThrottle={16} style={{width: width, height: height, zIndex: 10}} onScroll={scrollHandler}
         stickyHeaderIndices={[0]}
       >
-        <Animated.View style={[{width: width, height: height, position: 'absolute', backgroundColor: "#1c93ba"}, innerStyle]}>
-          <Text onLayout={(e) => {setNameWidth(e.nativeEvent.layout.width)}} style={{opacity: 0, position: 'absolute', fontSize: 30}}>Andrew</Text>
+        <Animated.View style={[{width: width, height: height, position: 'absolute'}, innerStyle]}>
           <StatusBar style="auto" />
-          <View style={{zIndex: 12}}>
+          <Animated.View style={[{zIndex: 12, position: 'absolute', left: 'auto', right: 'auto'}, headerStyle]}>
             <Header />
-          </View>
+          </Animated.View>
           <View style={{height: 40}}>
             <HelloComponet />
           </View>
-          <View style={{height: 400}}>
-            <Animated.Image source={require('../assets/Smoke.png')} style={[{position: 'absolute', width: width * 2, marginLeft: -width/2, height: 400, zIndex: 10}, smokeStyle]} height={100}/>
-            <Animated.View style={leftStyle}>
-              <Image source={require('../assets/F16.png')} style={{width: 200, height: 50, zIndex: 2}}/>
-              <Text style={{fontSize: 30, position: 'absolute'}}>Andrew</Text>
-            </Animated.View>
-            <Animated.View style={rightStyle}>
-              <Image source={require('../assets/CF-18_Hornet.png')} style={{width: 200, height: 50, zIndex: 2}}/>
-              <Text style={{fontSize: 30, position: 'absolute'}}>Mainella</Text>
-            </Animated.View>
-          </View>
-          <Text style={{color: "white"}}>My Name is Andrew Mainella, I am a student, curler, coder. I am a born and raised Manitoban</Text>
+          <NameComponent progress={progress}/>
+          <Text style={{color: "white", fontSize: 25}}>My Name is Andrew Mainella, I am a student, curler, coder. I am a born and raised Manitoban. I am a student at Saint Paul's High School</Text>
           <View>
             <Text>What I am using</Text>
             <View style={{flexDirection: "row", marginLeft: 'auto', marginRight: 'auto'}}>
@@ -99,8 +136,8 @@ export default function Home() {
             <Text style={{color: "white"}}>Copyright &#169; 2023 Andrew Mainella</Text>
           </View>
         </Animated.View>
-        <View style={{height: width * 20, backgroundColor: "#1c93ba"}} pointerEvents='none'>
-
+        <View style={{height: width * 40, backgroundColor: "#1c93ba"}} pointerEvents='none'>
+          
         </View>
       </Animated.ScrollView>
     </>
@@ -126,8 +163,8 @@ function HelloComponet() {
 
   return (
     <View>
-      <Animated.Text style={[{position: "absolute", left: 0, top: 0, fontSize: 30, opacity: helloOpacity.value, color: "white"}, helloStyle]}>Hello,</Animated.Text>
-      <Animated.Text style={[{position: "absolute", left: 0, top: 0, fontSize: 30,  opacity: bonjourOpacity.value, color: "white"}, bonjourStyle]}>Bonjour,</Animated.Text>
+      <Animated.Text style={[{position: "absolute", left: 0, top: 0, fontSize: 30, opacity: helloOpacity.value, color: "white"}, helloStyle]}>Hello</Animated.Text>
+      <Animated.Text style={[{position: "absolute", left: 0, top: 0, fontSize: 30,  opacity: bonjourOpacity.value, color: "white"}, bonjourStyle]}>Bonjour</Animated.Text>
     </View>
   )
 }
