@@ -2,14 +2,14 @@
   "name": "andrew_mainella",
   "version": "1.0.0",
   "main": "expo-router/entry",
-  "homepage": "https://archimedes4.github.io/Andrew_Mainella_About/",
+  "homepage": ".",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "deploy": "gh-pages -d web-build",
-    "pre-deploy": "expo export:web"
+    "deploy": "gh-pages -d dist",
+    "pre-deploy": "expo export"
   },
   "dependencies": {
     "@expo/webpack-config": "^19.0.0",
@@ -27,7 +27,7 @@
     "firebase": "^10.5.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-native": "^0.72.7",
+    "react-native": "0.72.6",
     "react-native-gesture-handler": "~2.12.0",
     "react-native-paper": "^5.11.1",
     "react-native-paper-dates": "^0.20.4",
