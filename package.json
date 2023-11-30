@@ -17,14 +17,14 @@
     "@reduxjs/toolkit": "^1.9.7",
     "@types/react": "^18.2.31",
     "commonmark": "^0.30.0",
-    "expo": "~49.0.15",
+    "expo": "^49.0.21",
     "expo-clipboard": "~4.3.1",
     "expo-constants": "~14.4.2",
     "expo-document-picker": "~11.5.4",
     "expo-linking": "~5.0.2",
     "expo-router": "^2.0.0",
     "expo-status-bar": "~1.6.0",
-    "firebase": "^10.5.2",
+    "firebase": "^10.7.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.72.6",
@@ -43,7 +43,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "gh-pages": "^6.0.0"
+    "gh-pages": "^6.0.0",
+    "raf": "^3.4.1"
   },
   "private": true
 }

@@ -5,15 +5,16 @@ import { Provider, useDispatch } from 'react-redux';
 import { dimentionsSlice } from '../redux/dimentionsReducer';
 import store from '../redux/store';
 import { Slot } from "expo-router";
+import 'raf/polyfill';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDdP7PccSIrlOVKzuqCahZAe5yyt_rmsQc",
-  authDomain: "andrewmainellaabout.firebaseapp.com",
-  projectId: "andrewmainellaabout",
-  storageBucket: "andrewmainellaabout.appspot.com",
-  messagingSenderId: "1004421973192",
-  appId: "1:1004421973192:web:6dd2d30bf3b83c746f51fd",
-  measurementId: "G-L1QQBJNL1Q"
+  apiKey: process.env.APIKEY,
+  authDomain: process.env.AUTHDOMAIN,
+  projectId: process.env.PROJECTID,
+  storageBucket: process.env.STORAGEBUCKET,
+  messagingSenderId: process.env.MESSAGINGSENDERID,
+  appId: process.env.APPID,
+  measurementId: process.env.MEASUREMENTID
 };
 
 export const app = initializeApp(firebaseConfig);
