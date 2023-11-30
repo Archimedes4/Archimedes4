@@ -34,7 +34,7 @@ export default function Coding() {
       { selectedPost !== undefined ?
         <MarkdownCross markdown={selectedPost.content} />:
         <>
-          <Text>Coding</Text>
+          <Text style={{}}>Coding</Text>
           { (postState === loadingStateEnum.loading) ?
             <View>
               <Text>Loading</Text>

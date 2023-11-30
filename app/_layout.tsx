@@ -1,3 +1,8 @@
+/*
+  Andrew Mainella About
+  Andrew Mainella
+  30 November 2023
+*/
 import { Dimensions } from 'react-native';
 import React, { useEffect } from "react";
 import { initializeApp } from "firebase/app";
