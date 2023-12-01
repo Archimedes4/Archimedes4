@@ -8,30 +8,44 @@ import store, { RootState } from "../redux/store";
 import { useState } from "react";
 import { Text, View } from "react-native";
 
-
-function getRightValue(progress: number): number {
+function getNameProgress(progress: number) {
   const width = store.getState().dimentions.width
-  const progressValue = (progress - width > 0) ? progress - width:0;
+  if (progress < width/2) {
+    return 0;
+  }
+  return progress - width/2
+}
+
+function getRightValue(progress: number, nameWidth: number): number {
+  const width = store.getState().dimentions.width
+  const progressValue = getNameProgress(progress)
   if (progressValue === 0) {
     return width
   }
-  if (width - progressValue > width/2) {
-    return width - progressValue
+  if (width - progressValue > (width - nameWidth)/2) {
+    return width - progressValue - 5
   }
-  return width/2
+  return (width - nameWidth)/2
 }
 
 function getLeftValue(progress: number, nameWidth: number): number {
   const width = store.getState().dimentions.width
-  const progressValue = (progress - width > 0) ? progress - width:0;
-  //(progress.value - nameWidth < (width/2 - nameWidth)) ? (progress.value - nameWidth):(width/2 -nameWidth)
+  const progressValue = getNameProgress(progress)
   if (progressValue === 0) {
     return -nameWidth
   }
-  if (progressValue - nameWidth < (width/2 - nameWidth)) {
-    return progressValue - nameWidth
+  if (progressValue - nameWidth < ((width - nameWidth)/2 - 5)) {
+    return -nameWidth - 5 +  progressValue 
   }
-  return width/2 -nameWidth
+  return (width - nameWidth)/2
+}
+
+function getFontSize(width: number, height: number): number {
+  if (width > height) {
+    return height * 0.3
+  } else {
+    return width * 0.3
+  }
 }
 
 export default function NameComponent({progress}:{progress: SharedValue<number>}) {
@@ -42,7 +56,7 @@ export default function NameComponent({progress}:{progress: SharedValue<number>}
     return {
       transform: [
         {
-          translateX: getLeftValue(progress.value * 3, firstNameWidth)
+          translateX: getLeftValue(progress.value, firstNameWidth)
         },
       ],
     };
@@ -52,7 +66,7 @@ export default function NameComponent({progress}:{progress: SharedValue<number>}
     return {
       transform: [
         {
-          translateX: getRightValue(progress.value * 3)
+          translateX: getRightValue(progress.value, lastNameWidth)
         },
       ],
     };
@@ -66,14 +80,14 @@ export default function NameComponent({progress}:{progress: SharedValue<number>}
 
   return (
     <View style={{height: height}}>
-      <Text onLayout={(e) => {setFirstNameWidth(e.nativeEvent.layout.width)}} style={{opacity: 0, position: 'absolute', fontSize: height * 0.2}}>Andrew</Text>
-      <Text onLayout={(e) => {setFirstNameWidth(e.nativeEvent.layout.width)}} style={{opacity: 0, position: 'absolute', fontSize: height * 0.2}}>Mainella</Text>
+      <Text onLayout={(e) => {setFirstNameWidth(e.nativeEvent.layout.width)}} style={{opacity: 0, position: 'absolute', fontSize: getFontSize(width, height)}}>Andrew</Text>
+      <Text onLayout={(e) => {setLastNameWidth(e.nativeEvent.layout.width)}} style={{opacity: 0, position: 'absolute', fontSize: getFontSize(width, height)}}>Mainella</Text>
       <Animated.Image source={require('../assets/Smoke.png')} style={[{position: 'absolute', width: width * 2, marginLeft: -width/2, height: height, zIndex: 10}, smokeStyle]} height={100}/>
-      <Animated.View style={[{top: height/2 - height * 0.15}, leftStyle]}>
-        <Text style={{fontSize: height * 0.3, position: 'absolute', color: 'white'}}>Andrew</Text>
+      <Animated.View style={[{top: height/2 - getFontSize(width, height)}, leftStyle]}>
+        <Text style={{fontSize: getFontSize(width, height), position: 'absolute', color: 'white'}}>Andrew </Text>
       </Animated.View>
-      <Animated.View style={[{top: height/2 - height * 0.15}, rightStyle]}>
-        <Text style={{fontSize: height * 0.3, position: 'absolute', color: 'white'}}>Mainella</Text>
+      <Animated.View style={[{top: height/2}, rightStyle]}>
+        <Text style={{fontSize: getFontSize(width, height), position: 'absolute', color: 'white'}}>Mainella</Text>
       </Animated.View>
     </View>
   )

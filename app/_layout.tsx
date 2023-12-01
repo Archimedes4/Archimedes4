@@ -3,8 +3,8 @@
   Andrew Mainella
   30 November 2023
 */
-import { Dimensions } from 'react-native';
-import React, { useEffect } from "react";
+import { Dimensions, Platform } from 'react-native';
+import React, { useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
 import { Provider, useDispatch } from 'react-redux';
 import { dimentionsSlice } from '../redux/dimentionsReducer';
@@ -43,6 +43,13 @@ function AppCore() {
 }
 
 export default function App() {
+  const [mounted, setMounted] = useState<boolean>(false);
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+  if (Dimensions.get('window').width === 0 || !mounted) {
+    return null
+  }
   return (
     <Provider store={store}>
       <AppCore />
