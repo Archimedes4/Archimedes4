@@ -5,8 +5,10 @@
 import Animated, { SharedValue, useAnimatedStyle } from "react-native-reanimated";
 import { useSelector } from "react-redux";
 import store, { RootState } from "../redux/store";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Text, View } from "react-native";
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
 
 function getNameProgress(progress: number) {
   const width = store.getState().dimentions.width
@@ -42,11 +44,13 @@ function getLeftValue(progress: number, nameWidth: number): number {
 
 function getFontSize(width: number, height: number): number {
   if (width > height) {
-    return height * 0.3
+    return height * 0.2
   } else {
-    return width * 0.3
+    return width * 0.2
   }
 }
+
+SplashScreen.preventAutoHideAsync();
 
 export default function NameComponent({progress}:{progress: SharedValue<number>}) {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
@@ -78,16 +82,30 @@ export default function NameComponent({progress}:{progress: SharedValue<number>}
     }
   })
 
+  const [fontsLoaded] = useFonts({
+    'Bungee-Regular': require('../assets/Bungee-Regular.ttf'),
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
-    <View style={{height: height}}>
-      <Text onLayout={(e) => {setFirstNameWidth(e.nativeEvent.layout.width)}} style={{opacity: 0, position: 'absolute', fontSize: getFontSize(width, height)}}>Andrew</Text>
-      <Text onLayout={(e) => {setLastNameWidth(e.nativeEvent.layout.width)}} style={{opacity: 0, position: 'absolute', fontSize: getFontSize(width, height)}}>Mainella</Text>
+    <View style={{height: height}} onLayout={onLayoutRootView}>
+      <Text onLayout={(e) => {setFirstNameWidth(e.nativeEvent.layout.width)}} style={{opacity: 0, position: 'absolute', fontSize: getFontSize(width, height), fontFamily: 'Bungee-Regular'}}>Andrew</Text>
+      <Text onLayout={(e) => {setLastNameWidth(e.nativeEvent.layout.width)}} style={{opacity: 0, position: 'absolute', fontSize: getFontSize(width, height), fontFamily: 'Bungee-Regular'}}>Mainella</Text>
       <Animated.Image source={require('../assets/Smoke.png')} style={[{position: 'absolute', width: width * 2, marginLeft: -width/2, height: height, zIndex: 10}, smokeStyle]} height={100}/>
       <Animated.View style={[{top: height/2 - getFontSize(width, height)}, leftStyle]}>
-        <Text style={{fontSize: getFontSize(width, height), position: 'absolute', color: 'white'}}>Andrew </Text>
+        <Text style={{fontSize: getFontSize(width, height), position: 'absolute', color: 'white', fontFamily: 'Bungee-Regular'}}>Andrew </Text>
       </Animated.View>
       <Animated.View style={[{top: height/2}, rightStyle]}>
-        <Text style={{fontSize: getFontSize(width, height), position: 'absolute', color: 'white'}}>Mainella</Text>
+        <Text style={{fontSize: getFontSize(width, height), position: 'absolute', color: 'white', fontFamily: 'Bungee-Regular'}}>Mainella</Text>
       </Animated.View>
     </View>
   )

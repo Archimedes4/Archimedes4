@@ -1,5 +1,5 @@
 import { View, Text, Pressable, FlatList, ListRenderItemInfo, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { listPosts } from '../ulti/postFunctions'
 import { loadingStateEnum } from '../Types'
 import { useSelector } from 'react-redux'
@@ -7,6 +7,8 @@ import { RootState } from '../redux/store'
 import PostBlock from '../components/PostBlock'
 import Header from '../components/Header'
 import MarkdownCross from '../components/MarkdownCross'
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
 
 export default function Coding() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
@@ -28,13 +30,27 @@ export default function Coding() {
     loadPosts();
   }, [])
 
+  const [fontsLoaded] = useFonts({
+    'Bungee-Regular': require('../assets/Bungee-Regular.ttf'),
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
-    <View style={{width: width, height: height, backgroundColor: "#1c93ba"}}>
+    <View style={{width: width, height: height, backgroundColor: "#1c93ba"}} onLayout={onLayoutRootView}>
       <Header />
       { selectedPost !== undefined ?
         <MarkdownCross markdown={selectedPost.content} />:
         <>
-          <Text style={{}}>Coding</Text>
+          <Text style={{fontSize: height * 0.1, fontFamily: 'Bungee-Regular', color: 'white', marginLeft: 20}}>Coding</Text>
           { (postState === loadingStateEnum.loading) ?
             <View>
               <Text>Loading</Text>

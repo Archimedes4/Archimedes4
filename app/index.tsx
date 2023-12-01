@@ -6,7 +6,7 @@
   The main home page
 */
 import { View, Text } from 'react-native'
-import React, { Children, ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';

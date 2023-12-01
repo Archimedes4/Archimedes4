@@ -1,5 +1,5 @@
 import { View, Text, FlatList } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Header from '../components/Header'
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
@@ -7,6 +7,10 @@ import { loadingStateEnum } from '../Types';
 import MarkdownCross from '../components/MarkdownCross';
 import PostBlock from '../components/PostBlock';
 import { listPosts } from '../ulti/postFunctions';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync();
 
 export default function Activities() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
@@ -28,13 +32,28 @@ export default function Activities() {
     loadPosts();
   }, [])
 
+
+  const [fontsLoaded] = useFonts({
+    'Bungee-Regular': require('../assets/Bungee-Regular.ttf'),
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
-    <View style={{width: width, height: height, backgroundColor: "#1c93ba"}}>
+    <View style={{width: width, height: height, backgroundColor: "#1c93ba"}} onLayout={onLayoutRootView}>
       <Header />
       { selectedPost !== undefined ?
         <MarkdownCross markdown={selectedPost.content} />:
         <>
-          <Text>Coding</Text>
+          <Text style={{fontSize: height * 0.1, fontFamily: 'Bungee-Regular', color: 'white', marginLeft: 20}}>Activities</Text>
           { (postState === loadingStateEnum.loading) ?
             <View>
               <Text>Loading</Text>
