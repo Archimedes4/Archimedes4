@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import dimentionsReducer from './dimentionsReducer';
+import dimentionsReducer from './reducers/dimentionsReducer';
 
 
 const store = configureStore({

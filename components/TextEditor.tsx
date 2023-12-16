@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { NativeSyntheticEvent, Pressable, TextInput, TextInputKeyPressEventData, Text, View, ScrollView, Keyboard } from "react-native";
 import createUUID from "../ulti/createUUID";
 import * as Clipboard from 'expo-clipboard';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from "react-native-reanimated";
 
 function getPositionChar(position: number, text: textCharType[]): textCharType | undefined {
   if (position < text.length) {
@@ -10,178 +11,180 @@ function getPositionChar(position: number, text: textCharType[]): textCharType |
     return undefined;
   }
 }
-function handeKeyDown(e: NativeSyntheticEvent<TextInputKeyPressEventData>, position: number, text: textCharType[]): {position: number, newText?: textCharType[]} {
-  console.log(e.nativeEvent)
-  if (e.nativeEvent.key === "ArrowRight") {
-    if (text[text.length - 1].position > position) {
-      return {position: position + 1}
-    } else {
-      return {position: position}
-    }
-  } else if (e.nativeEvent.key === "ArrowLeft") {
-    if (position - 1 > 0) {
-      return {position: position - 1}
-    } else {
-      return {position: 0}
-    }
-  } else if (e.nativeEvent.key === "ArrowDown") {
-    const positionChar = getPositionChar(position, text);
-    if (positionChar !== undefined) {
-      //Next line exists and is long enough
-      const charOnNextLine = text.find((x) => {return x.line === positionChar.line + 1 && x.linePosition === positionChar.linePosition});
-      if (charOnNextLine !== undefined) {
-        return {position: charOnNextLine.position}
-      }
-      //Next Line Exisits
-      const nextLine = text.filter((x) => {return x.line === positionChar.line + 1});
-      if (nextLine.length >= 1) {
-        return {position: nextLine[nextLine.length - 1].position}
-      }
-      //End
-      return {position: text.length - 1}
-    }
-  } else if (e.nativeEvent.key === "ArrowUp") {
-    const positionChar = getPositionChar(position, text);
-    if (positionChar !== undefined) {
-      //Prev line exists and is long enough
-      const charOnPrevLine = text.find((x) => {return x.line === positionChar.line - 1 && x.linePosition === positionChar.linePosition});
-      if (charOnPrevLine !== undefined) {
-        return {position: charOnPrevLine.position}
-      }
-      //Prev Line Exisits
-      const prevLine = text.filter((x) => {return x.line === positionChar.line - 1});
-      if (prevLine.length >= 1) {
-        return {position: prevLine[prevLine.length - 1].position}
-      }
-      //End
-      return {position: 0}
-    }
-  }
-  if (e.nativeEvent.key === "Backspace") {
-    if (position - 1 >= 0) {
-      const posChar = getPositionChar(position, text);
-      if (posChar !== undefined) {
-        if (posChar.linePosition === 0) {
-          let oldLinePosition = 0;
-          return {position: position - 1, newText: [
-            ...text.slice(0, position).map((x) => {
-              if (x.line === posChar.line - 1) {
-                oldLinePosition = x.linePosition
-              }
-              return x
-            }),
-            ...text.slice(position + 1).flatMap((x) => {
-              if (x.line === posChar.linePosition) {
-                return {...x,  position: x.position - 1, line: x.line - 1, linePosition: x.linePosition - 1};
-              }
-              return {...x,  position: x.position - 1, line: x.line - 1};
-            })
-          ]}
-        }
-        return {position: position - 1, newText: [
-          ...text.slice(0, position),
-          ...text.slice(position + 1).flatMap((x) => {
-            if (x.line === posChar.linePosition) {
-              return {...x,  position: x.position - 1, linePosition: x.linePosition - 1};
-            }
-            return {...x,  position: x.position - 1};
-          })
-        ]}
-      }
-    } 
-    return {position: position};
-  }
-  if (e.nativeEvent.key === "Enter") {
-    const posChar = getPositionChar(position, text);
-    if (position < text[text.length - 1].position) {
-      const nextPosChar = getPositionChar(position + 1, text);
-      if (posChar.line === nextPosChar.line) {
-        return {position: position + 1, newText: [
-          ...text.slice(0, position),
-          {
-            char: '',
-            line: posChar.line + 1,
-            linePosition: 0,
-            position: position + 1,
-            id: createUUID()
-          },
-          ...text.slice(position).flatMap((x) => {
-            if (x.line === posChar.line) {
-              return {...x, linePosition: x.linePosition + 1, position: x.position + 1}
-            }
-            return {...x,  position: x.position + 1}
-          })
-        ]}
-      }
-      return {position: position + 1, newText: [
-        ...text.slice(0, position),
-        {
-          char: '',
-          line: posChar.line + 1,
-          linePosition: 0,
-          position: position + 1,
-          id: createUUID()
-        },
-        ...text.slice(position).flatMap((x) => {
-          return {...x, line: x.line + 1, position: x.position + 1}
-        })
-      ]}
-    }
-    return {position: position + 1, newText: [
-      ...text,
-      {
-        char: "",
-        line: posChar.line + 1,
-        linePosition: 0,
-        position: position + 1,
-        id: createUUID()
-      },
-    ]}
-  }
-  if (e.nativeEvent.key === "Tab") {
-    const posChar = getPositionChar(position, text);
-    if (posChar !== undefined) {
-      return {position: position + 1, newText: [
-        ...text.slice(0, position),
-        {
-          char: '\t',
-          line: posChar.line,
-          linePosition: posChar.linePosition + 1,
-          position: position + 1,
-          id: createUUID()
-        },
-        ...text.slice(position).flatMap((x) => {
-          if (x.line === posChar.line) {
-            return {...x, linePosition: x.linePosition + 1, position: x.position + 1}
-          }
-          return {...x,  position: x.position + 1}
-        })
-      ]}
-    }
-  }
-  if (!["Shift", "Escape", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "Control", "Alt", "Meta"].includes(e.nativeEvent.key)) {
-    const posChar = getPositionChar(position, text);
-    if (posChar !== undefined) {
-      return {position: position + 1, newText: [
-        ...text.slice(0, position + 1),
-        {
-          char: e.nativeEvent.key,
-          line: posChar.line,
-          linePosition: posChar.linePosition + 1,
-          position: position + 1,
-          id: createUUID()
-        },
-        ...text.slice(position + 1).flatMap((x) => {
-          if (x.line === posChar.line) {
-            return {...x, linePosition: x.linePosition + 1, position: x.position + 1}
-          }
-          return {...x,  position: x.position + 1}
-        })
-      ]}
-    }
-  }
-  return {position: position}
-}
+// function handeKeyDown(e: NativeSyntheticEvent<TextInputKeyPressEventData>, position: number, text: textCharType[]): {position: number, newText?: textCharType[]} {
+//   console.log(e.nativeEvent)
+//   if (e.nativeEvent.key === "ArrowRight") {
+//     if (text[text.length - 1].position > position) {
+//       return {position: position + 1}
+//     } else {
+//       return {position: position}
+//     }
+//   } else if (e.nativeEvent.key === "ArrowLeft") {
+//     if (position - 1 > 0) {
+//       return {position: position - 1}
+//     } else {
+//       return {position: 0}
+//     }
+//   } else if (e.nativeEvent.key === "ArrowDown") {
+//     const positionChar = getPositionChar(position, text);
+//     if (positionChar !== undefined) {
+//       //Next line exists and is long enough
+//       const charOnNextLine = text.find((x) => {return x.line === positionChar.line + 1 && x.linePosition === positionChar.linePosition});
+//       if (charOnNextLine !== undefined) {
+//         return {position: charOnNextLine.position}
+//       }
+//       //Next Line Exisits
+//       const nextLine = text.filter((x) => {return x.line === positionChar.line + 1});
+//       if (nextLine.length >= 1) {
+//         return {position: nextLine[nextLine.length - 1].position}
+//       }
+//       //End
+//       return {position: text.length - 1}
+//     }
+//   } else if (e.nativeEvent.key === "ArrowUp") {
+//     const positionChar = getPositionChar(position, text);
+//     if (positionChar !== undefined) {
+//       //Prev line exists and is long enough
+//       const charOnPrevLine = text.find((x) => {return x.line === positionChar.line - 1 && x.linePosition === positionChar.linePosition});
+//       if (charOnPrevLine !== undefined) {
+//         return {position: charOnPrevLine.position}
+//       }
+//       //Prev Line Exisits
+//       const prevLine = text.filter((x) => {return x.line === positionChar.line - 1});
+//       if (prevLine.length >= 1) {
+//         return {position: prevLine[prevLine.length - 1].position}
+//       }
+//       //End
+//       return {position: 0}
+//     }
+//   }
+//   if (e.nativeEvent.key === "Backspace") {
+//     if (position - 1 >= 0) {
+//       const posChar = getPositionChar(position, text);
+//       if (posChar !== undefined) {
+//         if (posChar.linePosition === 0) {
+//           let oldLinePosition = 0;
+//           return {position: position - 1, newText: [
+//             ...text.slice(0, position).map((x) => {
+//               if (x.line === posChar.line - 1) {
+//                 oldLinePosition = x.linePosition
+//               }
+//               return x
+//             }),
+//             ...text.slice(position + 1).flatMap((x) => {
+//               if (x.line === posChar.linePosition) {
+//                 return {...x,  position: x.position - 1, line: x.line - 1, linePosition: x.linePosition - 1};
+//               }
+//               return {...x,  position: x.position - 1, line: x.line - 1};
+//             })
+//           ]}
+//         }
+//         return {position: position - 1, newText: [
+//           ...text.slice(0, position),
+//           ...text.slice(position + 1).flatMap((x) => {
+//             if (x.line === posChar.linePosition) {
+//               return {...x,  position: x.position - 1, linePosition: x.linePosition - 1};
+//             }
+//             return {...x,  position: x.position - 1};
+//           })
+//         ]}
+//       }
+//     } 
+//     return {position: position};
+//   }
+//   if (e.nativeEvent.key === "Enter") {
+//     const posChar = getPositionChar(position, text);
+//     //If not at end
+//     if (position < text[text.length - 1].position) {
+//       const nextPosChar = getPositionChar(position + 1, text);
+//       //Check 
+//       if (posChar.line === nextPosChar.line) {
+//         return {position: position + 1, newText: [
+//           ...text.slice(0, position),
+//           {
+//             char: '',
+//             line: posChar.line + 1,
+//             linePosition: 0,
+//             position: position + 1,
+//             id: createUUID()
+//           },
+//           ...text.slice(position).flatMap((x) => {
+//             if (x.line === posChar.line) {
+//               return {...x, linePosition: x.linePosition + 1, position: x.position + 1}
+//             }
+//             return {...x,  position: x.position + 1}
+//           })
+//         ]}
+//       }
+//       return {position: position + 1, newText: [
+//         ...text.slice(0, position),
+//         {
+//           char: '',
+//           line: posChar.line + 1,
+//           linePosition: 0,
+//           position: position + 1,
+//           id: createUUID()
+//         },
+//         ...text.slice(position).flatMap((x) => {
+//           return {...x, line: x.line + 1, position: x.position + 1}
+//         })
+//       ]}
+//     }
+//     return {position: position + 1, newText: [
+//       ...text,
+//       {
+//         char: "",
+//         line: posChar.line + 1,
+//         linePosition: 0,
+//         position: position + 1,
+//         id: createUUID()
+//       },
+//     ]}
+//   }
+//   if (e.nativeEvent.key === "Tab") {
+//     const posChar = getPositionChar(position, text);
+//     if (posChar !== undefined) {
+//       return {position: position + 1, newText: [
+//         ...text.slice(0, position),
+//         {
+//           char: '\t',
+//           line: posChar.line,
+//           linePosition: posChar.linePosition + 1,
+//           position: position + 1,
+//           id: createUUID()
+//         },
+//         ...text.slice(position).flatMap((x) => {
+//           if (x.line === posChar.line) {
+//             return {...x, linePosition: x.linePosition + 1, position: x.position + 1}
+//           }
+//           return {...x,  position: x.position + 1}
+//         })
+//       ]}
+//     }
+//   }
+//   if (!["Shift", "Escape", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "Control", "Alt", "Meta"].includes(e.nativeEvent.key)) {
+//     const posChar = getPositionChar(position, text);
+//     if (posChar !== undefined) {
+//       return {position: position + 1, newText: [
+//         ...text.slice(0, position + 1),
+//         {
+//           char: e.nativeEvent.key,
+//           line: posChar.line,
+//           linePosition: posChar.linePosition + 1,
+//           position: position + 1,
+//           id: createUUID()
+//         },
+//         ...text.slice(position + 1).flatMap((x) => {
+//           if (x.line === posChar.line) {
+//             return {...x, linePosition: x.linePosition + 1, position: x.position + 1}
+//           }
+//           return {...x,  position: x.position + 1}
+//         })
+//       ]}
+//     }
+//   }
+//   return {position: position}
+// }
 
 function convertTextToType(text: string): textCharType[] {
   const lines = text.split(/\r?\n|\r|\n/g);
@@ -226,6 +229,7 @@ const colors:string[] = ["red","blue","green","yellow","orange"]
 
 export default function TextEditor({text, onChangeText}:{text: string, onChangeText: (item: string) => void}) {
   const [position, setPosition] = useState<number>(0);
+  const carrotOppacity = useSharedValue(1);
   const mainRef = useRef<TextInput>();
   const [textChar, setTextChar] = useState<textCharType[]>([{
     char: '',
@@ -251,6 +255,12 @@ export default function TextEditor({text, onChangeText}:{text: string, onChangeT
     setTextChar(convertTextToType(result));
   }
 
+  const carrotStyle = useAnimatedStyle(() => {
+    return {
+      opacity: carrotOppacity.value
+    }
+  })
+
   useEffect(() => {
     let result = "";
     let lastLine = 0;
@@ -266,6 +276,11 @@ export default function TextEditor({text, onChangeText}:{text: string, onChangeT
   
   useEffect(() => {
     setTextChar(convertTextToType(text));
+    carrotOppacity.value = withRepeat(withSequence(withDelay(650, withTiming(0, {
+      duration: 0
+    })), withDelay(500, withTiming(1, {
+      duration: 0
+    }))), -1);
   }, [])
 
   return (
@@ -277,18 +292,18 @@ export default function TextEditor({text, onChangeText}:{text: string, onChangeT
         mainRef.current.focus()
         setPosition(textChar[textChar.length - 1].position)
       }}>
-        <ScrollView horizontal>
+        <ScrollView horizontal style={{backgroundColor: 'white'}}>
           <View>
-            {Array.from(Array(textChar[textChar.length - 1].line + 1).keys()).map((_i, index) => (
-              <View style={{flexDirection: "row"}}>
+            {Array.from(Array(textChar[textChar.length - 1].line + 1).keys()).map((i, index) => (
+              <View key={i} style={{flexDirection: "row"}}>
                 <View style={{width: 20}}>
                   <Text>{index + 1}</Text>
                 </View>
                 {textChar.filter((e) => {return e.line === index}).map((char) => (
-                  <Pressable key={char.id} style={{flexDirection: 'row'}} onPress={() => {setPosition(char.position)}}>
+                  <Pressable focusable={false} key={char.id} style={{flexDirection: 'row'}} onPress={() => {setPosition(char.position); mainRef.current.focus();}}>
                     <Text selectable={false}>{char.char}</Text>
                     { (position === char.position) ?
-                      <View style={{width: 10, height: 16, backgroundColor: colors[Math.floor(Math.random() * (5))]}}/>:null
+                      <Animated.View style={[ carrotStyle, {position: 'absolute', right: 0, width: 1.5, height: 16, backgroundColor: 'gray'}]}/>:null
                     }
                   </Pressable>
                 ))}
