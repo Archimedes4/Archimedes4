@@ -15,10 +15,14 @@ declare global {
     loadingState: loadingStateEnum.success;
     url: string;
   }
+  type postAsset = {
+    item: storageItem,
+    id: string
+  }
   type post = {
     title: string;
     cover: storageItem;
-    assests: storageItem[];
+    assests: postAsset[];
     content: string;
     updated: string;
     type: string;

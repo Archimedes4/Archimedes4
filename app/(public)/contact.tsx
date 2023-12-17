@@ -25,7 +25,7 @@ export default function Contact() {
     }
   }
   return (
-    <View style={{width: width, height: height, backgroundColor: "#1c93ba"}}>
+    <View style={{width: width, height: height, backgroundColor: "#1c93ba", overflow: 'hidden'}}>
       <Header />
       <View style={{shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, marginLeft: 10, marginRight: 10, marginBottom: 10, backgroundColor: "white"}}>
         <Text style={{fontSize: 20, marginLeft: 10, marginTop: 10}}>Write a message</Text>
@@ -44,7 +44,7 @@ export default function Contact() {
           <Text>View on github</Text>
         </Pressable>
       </View>
-      <Text style={{ position: 'absolute', bottom: 2, left: 2, color: "white" }}>If you are looking for my insta, x, etc... You won't find it, I don't use social media</Text>
+      <Text style={{ position: 'absolute', bottom: 2, left: 2, color: "white" }}>If you are looking for my insta, X, etc... You won't find it, I don't use social media</Text>
     </View>
   )
 }

@@ -15,6 +15,7 @@ import { getAuth } from 'firebase/auth';
 import Head from "expo-router/head"
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import { getStorage } from 'firebase/storage';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -36,6 +37,8 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
+
+export const storage = getStorage(app)
 
 function AppCore() {
 
@@ -86,7 +89,7 @@ export default function App() {
         <title>Andrew Mainella</title>
       </Head>
       <Provider store={store}>
-        <View onLayout={onLayoutRootView}>
+        <View onLayout={onLayoutRootView} style={{overflow: 'hidden'}}>
           <AppCore />
         </View>
       </Provider>

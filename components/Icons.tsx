@@ -59,9 +59,29 @@ export function CloseIcon({ width, height, style }: iconProps) {
   );
 }
 
+export function MoreVIcon({ width, height, style }: iconProps) {
+  return (
+    <Svg width={width} height={height} style={style} fill="#000000" viewBox="0 0 24 24">
+      <G id="SVGRepo_iconCarrier">
+        <Path d="M10,4a2,2,0,1,1,2,2A2,2,0,0,1,10,4Zm2,10a2,2,0,1,0-2-2A2,2,0,0,0,12,14Zm0,8a2,2,0,1,0-2-2A2,2,0,0,0,12,22Z"/>
+      </G>
+    </Svg>
+  )
+}
+
+export function MoreHIcon({ width, height, style }: iconProps) {
+  return (
+    <Svg width={width} height={height} style={style} fill="#000000" viewBox="0 0 24 24">
+      <G id="SVGRepo_iconCarrier">
+        <Path d="M2,12a2,2,0,1,1,2,2A2,2,0,0,1,2,12Zm10,2a2,2,0,1,0-2-2A2,2,0,0,0,12,14Zm8-4a2,2,0,1,0,2,2A2,2,0,0,0,20,10Z"/>
+      </G>
+    </Svg>
+  )
+}
+
 export function ContactIcon({ width, height, style }: iconProps) {
   return (
-    <Svg  width={width} height={height} style={style} fill="#000000" viewBox="0 0 24 24">
+    <Svg width={width} height={height} style={style} fill="#000000" viewBox="0 0 24 24">
       <G id="SVGRepo_iconCarrier">
         <Path d="M4,21a1,1,0,0,0,1,1H19a1,1,0,0,0,1-1V3a1,1,0,0,0-1-1H5A1,1,0,0,0,4,3ZM12,7.5a2,2,0,1,1-2,2A2,2,0,0,1,12,7.5ZM8.211,16.215a4,4,0,0,1,7.578,0A.993.993,0,0,1,14.83,17.5H9.18A1,1,0,0,1,8.211,16.215Z"/>
       </G>
@@ -74,6 +94,16 @@ export function SettingIcon({ width, height, style }: iconProps) {
     <Svg width={width} height={height} style={style} viewBox="0 0 24 24" fill="none">
       <G id="SVGRepo_iconCarrier">
         <Path d="M20.1 9.2214C18.29 9.2214 17.55 7.9414 18.45 6.3714C18.97 5.4614 18.66 4.3014 17.75 3.7814L16.02 2.7914C15.23 2.3214 14.21 2.6014 13.74 3.3914L13.63 3.5814C12.73 5.1514 11.25 5.1514 10.34 3.5814L10.23 3.3914C9.78 2.6014 8.76 2.3214 7.97 2.7914L6.24 3.7814C5.33 4.3014 5.02 5.4714 5.54 6.3814C6.45 7.9414 5.71 9.2214 3.9 9.2214C2.86 9.2214 2 10.0714 2 11.1214V12.8814C2 13.9214 2.85 14.7814 3.9 14.7814C5.71 14.7814 6.45 16.0614 5.54 17.6314C5.02 18.5414 5.33 19.7014 6.24 20.2214L7.97 21.2114C8.76 21.6814 9.78 21.4014 10.25 20.6114L10.36 20.4214C11.26 18.8514 12.74 18.8514 13.65 20.4214L13.76 20.6114C14.23 21.4014 15.25 21.6814 16.04 21.2114L17.77 20.2214C18.68 19.7014 18.99 18.5314 18.47 17.6314C17.56 16.0614 18.3 14.7814 20.11 14.7814C21.15 14.7814 22.01 13.9314 22.01 12.8814V11.1214C22 10.0814 21.15 9.2214 20.1 9.2214ZM12 15.2514C10.21 15.2514 8.75 13.7914 8.75 12.0014C8.75 10.2114 10.21 8.7514 12 8.7514C13.79 8.7514 15.25 10.2114 15.25 12.0014C15.25 13.7914 13.79 15.2514 12 15.2514Z" fill="#292D32"/>
+      </G>
+    </Svg>
+  )
+}
+
+export function TrashIcon({ width, height, style }: iconProps) {
+  return (
+    <Svg width={width} height={height} style={style} viewBox="0 0 24 24" fill="none">
+      <G id="SVGRepo_iconCarrier">
+        <Path d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       </G>
     </Svg>
   )

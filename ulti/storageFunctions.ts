@@ -2,6 +2,7 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/
 import { loadingStateEnum } from "../Types";
 import * as DocumentPicker from 'expo-document-picker';
 import { addDoc, collection, doc, getDocs, getFirestore, getDoc, query, orderBy, startAt } from "firebase/firestore";
+import { storage } from "../app/_layout";
 
 export async function listStorageItems(): Promise<{result: loadingStateEnum.failed}|{result: loadingStateEnum.success, data: storageItem[]}> {
   const db = getFirestore();
@@ -70,11 +71,26 @@ export async function uploadFile() {
 
 export async function getAssest(item: string): Promise<{result: loadingStateEnum.success, data: string}|{result: loadingStateEnum.failed}> {
   try {
-    const storage = getStorage()
     const result = await ref(storage, item)
     const url = await getDownloadURL(result)
     return {result: loadingStateEnum.success, data: url}
   } catch {
     return {result: loadingStateEnum.failed}
   }
+}
+
+export async function getMarkdownFromAssets(assets: postAsset[]) {
+  let results: Promise<{result: loadingStateEnum.success, data: string}|{result: loadingStateEnum.failed}>[] = []
+  for (let index = 0; index < assets.length; index += 1) {
+    results.push(getAssest(assets[index].item.name));
+  }
+  let stringResult = ""
+  const finalResult = await Promise.all(results);
+  for (let index = 0; index < finalResult.length; index += 1) {
+    const item = finalResult[index]
+    if (item.result === loadingStateEnum.success) {
+      stringResult += `[${assets[index].id}]:${item.data}`
+    }
+  }
+  return stringResult;
 }
