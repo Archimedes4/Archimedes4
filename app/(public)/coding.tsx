@@ -7,8 +7,6 @@ import { RootState } from '../../redux/store'
 import PostBlock from '../../components/PostBlock'
 import Header from '../../components/Header'
 import MarkdownCross from '../../components/MarkdownCross'
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
 
 export default function Coding() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
@@ -30,36 +28,40 @@ export default function Coding() {
     loadPosts();
   }, [])
 
+  if (selectedPost !== undefined) {
+    return (
+      <View style={{width: width, height: height, backgroundColor: "#1c93ba"}}>
+        <Header />
+        <MarkdownCross markdown={selectedPost.content} />
+      </View>
+    )
+  }
+
   return (
     <View style={{width: width, height: height, backgroundColor: "#1c93ba"}}>
       <Header />
-      { selectedPost !== undefined ?
-        <MarkdownCross markdown={selectedPost.content} />:
+      <Text style={{fontSize: height * 0.1, fontFamily: 'Bungee-Regular', color: 'white', marginLeft: 20}}>Coding</Text>
+      { (postState === loadingStateEnum.loading) ?
+        <View>
+          <Text>Loading</Text>
+        </View>:
         <>
-          <Text style={{fontSize: height * 0.1, fontFamily: 'Bungee-Regular', color: 'white', marginLeft: 20}}>Coding</Text>
-          { (postState === loadingStateEnum.loading) ?
-            <View>
-              <Text>Loading</Text>
-            </View>:
-            <>
-              { (postState === loadingStateEnum.success) ?
-                <FlatList 
-                  data={posts}
-                  renderItem={(item) => (
-                    <View style={{marginBottom: 20}}>
-                      <PostBlock width={width * 0.9} height={height * 0.4} item={item} setPost={(e) => {
-                        let newPosts = posts;
-                        newPosts[item.index] = e
-                        setPosts([...newPosts])
-                      }} onSelect={() => setSelectedPost(item.item)}/>
-                    </View>
-                  )}
-                />:
-                <View>
-                  <Text>Failed</Text>
+          { (postState === loadingStateEnum.success) ?
+            <FlatList 
+              data={posts}
+              renderItem={(item) => (
+                <View style={{marginBottom: 20}}>
+                  <PostBlock width={width * 0.9} height={height * 0.4} item={item} setPost={(e) => {
+                    let newPosts = posts;
+                    newPosts[item.index] = e
+                    setPosts([...newPosts])
+                  }} onSelect={() => setSelectedPost(item.item)}/>
                 </View>
-              }
-            </>
+              )}
+            />:
+            <View>
+              <Text>Failed</Text>
+            </View>
           }
         </>
       }

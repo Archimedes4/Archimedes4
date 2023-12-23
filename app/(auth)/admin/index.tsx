@@ -1,5 +1,10 @@
-import { View, Text, TextInput, Pressable, Modal, FlatList, ScrollView, NativeSyntheticEvent, TextInputKeyPressEventData, ListRenderItemInfo, Image } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+/*
+  Ultimate Tic Tac Toe
+  Andrew Mainella
+
+*/
+import { View, Text, TextInput, Pressable, Modal, FlatList, ScrollView, ListRenderItemInfo, Image } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { getAssest, listStorageItems, uploadFile } from '../../../ulti/storageFunctions';
@@ -14,6 +19,8 @@ import StyledButton from '../../../components/StyledButton';
 import { MoreHIcon, MoreVIcon, TrashIcon } from '../../../components/Icons';
 
 function SelectFile({onClose, onSelect, selectedFile}:{onClose: () => void, onSelect: (item: storageItem) => void, selectedFile: undefined|storageItem}) {
+  const { height, width } = useSelector((state: RootState) => state.dimentions);
+
   const [fileState, setFileState] = useState<loadingStateEnum>(loadingStateEnum.loading);
   const [files, setFiles] = useState<storageItem[]>([]);
 
@@ -21,6 +28,7 @@ function SelectFile({onClose, onSelect, selectedFile}:{onClose: () => void, onSe
     const result = await listStorageItems();
     if (result.result === loadingStateEnum.success) {
       setFiles(result.data)
+
       setFileState(loadingStateEnum.success)
     } else {
       setFileState(loadingStateEnum.failed)
@@ -31,6 +39,28 @@ function SelectFile({onClose, onSelect, selectedFile}:{onClose: () => void, onSe
     loadFiles()
   }, [])
 
+  if (fileState === loadingStateEnum.success) {
+    return ( 
+      <View style={{width, height, backgroundColor: "#1c93ba"}}>
+        <Pressable onPress={() => onClose()}>
+          <Text>Close</Text>
+        </Pressable>
+        <FlatList
+          data={files}
+          renderItem={(item) => (
+            <Pressable onPress={(e) => {console.log(item.item); onSelect(item.item)}} style={{backgroundColor: (item.item.name === selectedFile.name) ? "#d3d3d3":"white", flexDirection: 'row', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, margin: 10, padding: 10}}>
+              {item.item.loadingState === loadingStateEnum.success ?
+                <Image source={{uri: item.item.url}} style={{width: 100, height: 100}}/>:null
+              }
+              <Text>{item.item.name}</Text>
+            </Pressable>
+          )}
+        />
+        <StyledButton onPress={() => uploadFile()} text='Upload File' style={{padding: 10}}/>
+      </View>
+    )
+  }
+
   return (
     <View>
       <Pressable onPress={() => onClose()}>
@@ -40,33 +70,11 @@ function SelectFile({onClose, onSelect, selectedFile}:{onClose: () => void, onSe
         <View>
           <Text>Loading</Text>
         </View>:
-        <>
-          { fileState === loadingStateEnum.success ?
-            <FlatList
-              data={files}
-              renderItem={(item) => (
-                <Pressable onPress={(e) => {console.log(item.item); onSelect(item.item)}} style={{
-                  backgroundColor: (item.item.name === selectedFile.name) ? "#d3d3d3":"white",
-                  shadowColor: 'black',
-                  shadowOffset: { width: 1, height: 1 },
-                  shadowOpacity: 1,
-                  shadowRadius: 5,
-                  margin: 4,
-                  padding: 4, borderRadius: 15
-                }}>
-                  <Text>{item.item.name}</Text>
-                </Pressable>
-              )}
-            />:
-            <View>
-              <Text>Failed</Text>
-            </View>
-
-          }
-        </>
-
+        <View>
+          <Text>Failed</Text>
+        </View>
       }
-      <StyledButton onPress={() => uploadFile()} text='Upload File'/>
+      <StyledButton onPress={() => uploadFile()} text='Upload File' style={{padding: 10}}/>
     </View>
   )
 }

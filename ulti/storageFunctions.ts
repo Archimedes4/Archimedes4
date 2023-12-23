@@ -15,7 +15,7 @@ export async function listStorageItems(): Promise<{result: loadingStateEnum.fail
     resultData.push({
       name: data.name,
       fileType: data.fileType,
-      loadingState: loadingStateEnum.notStarted
+      loadingState: loadingStateEnum.loading
     })
   });
   return {result: loadingStateEnum.success, data: resultData};
