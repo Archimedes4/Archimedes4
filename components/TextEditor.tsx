@@ -119,25 +119,26 @@ function handeKeyDown(e: NativeSyntheticEvent<TextInputKeyPressEventData>, posit
         //If midway through line
       } else if (posChar.line === nextPosChar.line) {
         return {position: position + 1, newText: [
-          ...text.slice(0, position),
+          ...text.slice(0, position + 1),
           {
             char: '',
             line: posChar.line + 1,
             linePosition: 0,
-            position: position,
+            position: position + 1,
             id: createUUID()
           },
           ...text.slice(position + 1).flatMap((x) => {
             if (x.line === posChar.line) {
-              return {...x, linePosition: x.linePosition - posChar.linePosition + 1, line: x.line + 1, position: x.position + 1}
+              return {...x, linePosition: x.linePosition - posChar.linePosition, line: x.line + 1, position: x.position + 1}
             }
             return {...x,  position: x.position + 1}
           })
         ]}
       }
+      console.error("End of line")
       //at end of line
       return {position: position + 1, newText: [
-        ...text.slice(0, position),
+        ...text.slice(0, position + 1),
         {
           char: '',
           line: posChar.line + 1,
@@ -145,7 +146,7 @@ function handeKeyDown(e: NativeSyntheticEvent<TextInputKeyPressEventData>, posit
           position: position + 1,
           id: createUUID()
         },
-        ...text.slice(position).flatMap((x) => {
+        ...text.slice(position + 1).flatMap((x) => {
           return {...x, line: x.line + 1, position: x.position + 1}
         })
       ]}
@@ -208,11 +209,17 @@ function handeKeyDown(e: NativeSyntheticEvent<TextInputKeyPressEventData>, posit
 
 function convertTextToType(text: string): textCharType[] {
   const lines = text.split(/\r?\n|\r|\n/g);
-  let result: textCharType[] = []
-  let position = 0;
+  let result: textCharType[] = [{
+    char: '',
+    line: 0,
+    linePosition: 0,
+    position: 0,
+    id: createUUID()
+  }]
+  let position = 1;
   for (let index = 0; index < lines.length; index += 1) {
     const lineArray = lines[index].split("");
-    if (lineArray.length === 0) {
+    if (lineArray.length === 0 && position !== 1) {
       result.push({
         char: '',
         line: index,
@@ -222,6 +229,16 @@ function convertTextToType(text: string): textCharType[] {
       })
       position += 1;
     } else {
+      if (index !== 0) {
+        result.push({
+          char: '',
+          line: index,
+          linePosition: 0,
+          position: position,
+          id: createUUID()
+        })
+        position += 1;
+      }
       for (let charIndex = 0; charIndex < lineArray.length; charIndex += 1) {
         result.push({
           char: lineArray[charIndex],
@@ -260,12 +277,14 @@ export default function TextEditor({text, onChangeText}:{text: string, onChangeT
   }]);
 
   async function pasteItem() {
+    const clipboard = await Clipboard.getStringAsync();
+    console.log(clipboard)
     let result = "";
     let lastLine = 0;
     for (let index = 0; index < textChar.length; index += 1) {
       result += textChar[index].char
       if (textChar[index].position === position) {
-        result += await Clipboard.getStringAsync();
+        result += clipboard
       }
       if (lastLine !== textChar[index].line) {
         result += "\n"
@@ -283,18 +302,18 @@ export default function TextEditor({text, onChangeText}:{text: string, onChangeT
 
   useEffect(() => {
     let result = "";
-    let lastLine = 0;
-    for (let index = 0; index < textChar.length; index += 1) {
-      result += textChar[index].char
-      if (lastLine !== textChar[index].line) {
+    for (let index = 1; index < textChar.length; index += 1) {
+      if (textChar[index].char === "") {
         result += "\n"
-        lastLine += 1;
+      } else {
+        result += textChar[index].char
       }
     }
     onChangeText(result);
   }, [textChar])
   
   useEffect(() => {
+    console.log(mainRef.current.isFocused())
     setTextChar(convertTextToType(text));
     carrotOppacity.value = withRepeat(withSequence(withDelay(650, withTiming(0, {
       duration: 0
@@ -322,8 +341,8 @@ export default function TextEditor({text, onChangeText}:{text: string, onChangeT
                 {textChar.filter((e) => {return e.line === index}).map((char) => (
                   <Pressable focusable={false} key={char.id} style={{flexDirection: 'row'}} onPress={() => {setPosition(char.position); mainRef.current.focus();}}>
                     <Text selectable={false}>{char.char}</Text>
-                    { (position === char.position) ?
-                      <Animated.View style={[ carrotStyle, {position: 'absolute', right: 0, width: 1.5, height: 16, backgroundColor: 'gray'}]}/>:null
+                    { (position === char.position && mainRef.current?.isFocused()) ?
+                      <Animated.View style={[ carrotStyle, {position: 'absolute', right: 0, width: 1.5, height: 16.4, backgroundColor: 'gray'}]}/>:null
                     }
                   </Pressable>
                 ))}

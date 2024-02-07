@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { listPosts } from '../../ulti/postFunctions'
 import { loadingStateEnum } from '../../Types'
 import { useSelector } from 'react-redux'
-import { RootState } from '../../redux/store'
+import store, { RootState } from '../../redux/store'
 import PostBlock from '../../components/PostBlock'
 import Header from '../../components/Header'
 import MarkdownCross from '../../components/MarkdownCross'
@@ -30,9 +30,9 @@ export default function Coding() {
 
   if (selectedPost !== undefined) {
     return (
-      <View style={{width: width, height: height, backgroundColor: "#1c93ba"}}>
+      <View style={{width: width, height: height, backgroundColor: "white"}}>
         <Header />
-        <MarkdownCross markdown={selectedPost.content} />
+        <MarkdownCross markdown={selectedPost.content} assests={selectedPost.assests}/>
       </View>
     )
   }
@@ -49,15 +49,20 @@ export default function Coding() {
           { (postState === loadingStateEnum.success) ?
             <FlatList 
               data={posts}
-              renderItem={(item) => (
-                <View style={{marginBottom: 20}}>
-                  <PostBlock width={width * 0.9} height={height * 0.4} item={item} setPost={(e) => {
-                    let newPosts = posts;
-                    newPosts[item.index] = e
-                    setPosts([...newPosts])
-                  }} onSelect={() => setSelectedPost(item.item)}/>
-                </View>
-              )}
+              renderItem={(item) => {
+                if (item.item.hidden) {
+                  return null
+                }
+                return (        
+                  <View style={{marginBottom: 20}}>
+                    <PostBlock width={width * 0.9} height={height * 0.4} item={item} setPost={(e) => {
+                      let newPosts = posts;
+                      newPosts[item.index] = e
+                      setPosts([...newPosts])
+                    }} onSelect={() => setSelectedPost(item.item)}/>
+                  </View>
+                )
+              }}
             />:
             <View>
               <Text>Failed</Text>

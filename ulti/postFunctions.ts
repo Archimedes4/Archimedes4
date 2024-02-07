@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 import { app } from "../app/_layout"
 import { loadingStateEnum } from "../Types";
 
@@ -14,7 +14,8 @@ export async function addPost(item: post) {
     url: item.url,
     githubUrl: item.githubUrl,
     status: item.status,
-    technologies: item.technologies
+    technologies: item.technologies,
+    hidden: item.hidden
   })
   //TODO collection
   //TODO assests
@@ -42,7 +43,8 @@ export async function listPosts(): Promise<{result: loadingStateEnum.failed}|{re
   const db = getFirestore();
   //TODO error and handel paginate
   let resultData: post[] = []
-  const querySnapshot = await getDocs(collection(db, "Posts"));
+  const q = query(collection(db, "Posts"), where("hidden", "==", false));
+  const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     const data = doc.data()
     resultData.push({
@@ -60,7 +62,9 @@ export async function listPosts(): Promise<{result: loadingStateEnum.failed}|{re
       status: data.status,
       url: data.url,
       technologies: data.technologies,
-      githubUrl: data.githubUrl
+      githubUrl: data.githubUrl,
+      hidden: data.hidden,
+      views: []
     })
   });
   return {result: loadingStateEnum.success, data: resultData};

@@ -3,7 +3,7 @@
   Andrew Mainella
 
 */
-import { View, Text, TextInput, Pressable, Modal, FlatList, ScrollView, ListRenderItemInfo, Image } from 'react-native'
+import { View, Text, TextInput, Pressable, Modal, FlatList, ScrollView, ListRenderItemInfo, Image, Switch } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
@@ -17,67 +17,7 @@ import { listTechnologies } from '../../../ulti/technologyFunctions';
 import SVGXml from '../../../components/SVGXml/SVGXml';
 import StyledButton from '../../../components/StyledButton';
 import { MoreHIcon, MoreVIcon, TrashIcon } from '../../../components/Icons';
-
-function SelectFile({onClose, onSelect, selectedFile}:{onClose: () => void, onSelect: (item: storageItem) => void, selectedFile: undefined|storageItem}) {
-  const { height, width } = useSelector((state: RootState) => state.dimentions);
-
-  const [fileState, setFileState] = useState<loadingStateEnum>(loadingStateEnum.loading);
-  const [files, setFiles] = useState<storageItem[]>([]);
-
-  async function loadFiles() {
-    const result = await listStorageItems();
-    if (result.result === loadingStateEnum.success) {
-      setFiles(result.data)
-
-      setFileState(loadingStateEnum.success)
-    } else {
-      setFileState(loadingStateEnum.failed)
-    }
-  }
-
-  useEffect(() => {
-    loadFiles()
-  }, [])
-
-  if (fileState === loadingStateEnum.success) {
-    return ( 
-      <View style={{width, height, backgroundColor: "#1c93ba"}}>
-        <Pressable onPress={() => onClose()}>
-          <Text>Close</Text>
-        </Pressable>
-        <FlatList
-          data={files}
-          renderItem={(item) => (
-            <Pressable onPress={(e) => {console.log(item.item); onSelect(item.item)}} style={{backgroundColor: (item.item.name === selectedFile.name) ? "#d3d3d3":"white", flexDirection: 'row', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, margin: 10, padding: 10}}>
-              {item.item.loadingState === loadingStateEnum.success ?
-                <Image source={{uri: item.item.url}} style={{width: 100, height: 100}}/>:null
-              }
-              <Text>{item.item.name}</Text>
-            </Pressable>
-          )}
-        />
-        <StyledButton onPress={() => uploadFile()} text='Upload File' style={{padding: 10}}/>
-      </View>
-    )
-  }
-
-  return (
-    <View>
-      <Pressable onPress={() => onClose()}>
-        <Text>Close</Text>
-      </Pressable>
-      { fileState === loadingStateEnum.loading ?
-        <View>
-          <Text>Loading</Text>
-        </View>:
-        <View>
-          <Text>Failed</Text>
-        </View>
-      }
-      <StyledButton onPress={() => uploadFile()} text='Upload File' style={{padding: 10}}/>
-    </View>
-  )
-}
+import SelectFile from '../../../components/SelectFile';
 
 function EditPost({onBack, newPost, setNewPost}:{onBack: () => void, newPost: post, setNewPost: (item: post) => void}) {
   //View
@@ -89,13 +29,12 @@ function EditPost({onBack, newPost, setNewPost}:{onBack: () => void, newPost: po
   const [isHover, setIsHover] = useState<boolean>(false);
   const [technologies, setTechnologies] = useState<technology[]>([]);
   const [techState, setTechState] = useState<loadingStateEnum>(loadingStateEnum.loading);
-  const [coverImageHeight, setCoverImageHeight] = useState<number>(0);
+  const [coverImageHeight, setCoverImageHeight] = useState<number>(100);
   const [isNavHidden, setIsNavHidden] = useState<boolean>(false);
 
   async function loadTechnologies() {
     const result = await listTechnologies();
     if (result.result === loadingStateEnum.success) {
-      console.log(result.data)
       setTechnologies(result.data);
       setTechState(loadingStateEnum.success);
     } else {
@@ -106,12 +45,18 @@ function EditPost({onBack, newPost, setNewPost}:{onBack: () => void, newPost: po
   async function loadCover() {
     setNewPost({...newPost, cover: {...newPost.cover, loadingState: loadingStateEnum.loading}})
     const result = await getAssest(newPost.cover.name);
-    console.log(result)
+
     if (result.result === loadingStateEnum.success) {
       setNewPost({...newPost, cover: {...newPost.cover, loadingState: loadingStateEnum.success, url: result.data}})
     } else {
       setNewPost({...newPost, cover: {...newPost.cover, loadingState: loadingStateEnum.failed}})
     }
+  }
+
+  async function getCoverImageHeight(uri: string) {
+    Image.getSize(uri, (imgWidth, imgHeight) => {
+      setCoverImageHeight(imgHeight/imgWidth * (width - 36));
+    });
   }
 
   useEffect(() => {
@@ -156,11 +101,11 @@ function EditPost({onBack, newPost, setNewPost}:{onBack: () => void, newPost: po
             {newPost.cover.name !== '' ?
               <>
                 {newPost.cover.loadingState ===loadingStateEnum.success ?
-                  <Image source={{uri: newPost.cover.url}} onLoad={(e) => {
-                    if (e.nativeEvent.source.height !== undefined) {
-                      setCoverImageHeight(e.nativeEvent.source.height/e.nativeEvent.source.width * width);
+                  <Image source={{uri: newPost.cover.url}} onLayout={(e) => {
+                    if (newPost.cover.loadingState === loadingStateEnum.success) {
+                      getCoverImageHeight(newPost.cover.url) 
                     }
-                  }} style={{width: width - 20, height: coverImageHeight}}/>:
+                  }} style={{width: width - 35, height: coverImageHeight}}/>:
                   <>
                     {newPost.cover.loadingState === loadingStateEnum.loading ?
                       <View style={{height: 100}}>
@@ -205,6 +150,26 @@ function EditPost({onBack, newPost, setNewPost}:{onBack: () => void, newPost: po
               style={{marginBottom: 15}}
             />
           </View>
+          {(newPost.id === 'Create') ?
+            <View style={{backgroundColor: 'white', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 10, margin: 10, flexDirection: 'row'}}>
+              <Text>Hidden: </Text>
+              <Switch value={newPost.hidden} onValueChange={(e) => {
+                setNewPost({
+                  ...newPost,
+                  hidden: e
+                })
+              }}/>
+            </View>:
+            <View style={{backgroundColor: 'white', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 'auto', margin: 10}}>
+              <Text>Hidden: </Text>
+              <Switch value={newPost.hidden} onValueChange={(e) => {
+                setNewPost({
+                  ...newPost,
+                  hidden: e
+                })
+              }}/>
+            </View>
+          }
         </View>
       </>
     )
@@ -248,7 +213,7 @@ function EditPost({onBack, newPost, setNewPost}:{onBack: () => void, newPost: po
       </View>
       <ScrollView style={{width: width, height: height}}>
         {isPreview ?
-          <MarkdownCross markdown={newPost.content}/>:
+          <MarkdownCross markdown={newPost.content} assests={newPost.assests}/>:
           <TextEditor text={newPost.content} onChangeText={(e) => {setNewPost({...newPost, content: e})}} />
         }
       </ScrollView>
@@ -256,12 +221,15 @@ function EditPost({onBack, newPost, setNewPost}:{onBack: () => void, newPost: po
       <FlatList
         data={newPost.assests}
         renderItem={(e) => (
-          <View style={{flexDirection: 'row', margin: 10, marginLeft: 20, marginRight: 20, padding: 10, backgroundColor: 'white', borderWidth: 2, borderRadius: 30, borderColor: 'black', shadowColor: 'black', shadowOffset: {width: 4, height: 3}}}>
-            <Text>{e.item.item.name}</Text>
+          <View style={{flexDirection: 'row', margin: 10, backgroundColor: 'white', borderWidth: 2, borderRadius: 30, borderColor: 'black', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, overflow: 'hidden'}}>
+            <Text style={{margin: 10}} selectable={false}>{e.item.item.name}</Text>
             <Pressable onPress={() => {
-
-            }} style={{padding: 5, backgroundColor: 'red'}}>
-              <TrashIcon width={16.4} height={16.4}/>
+              setNewPost({
+                ...newPost,
+                assests: [...newPost.assests.toSpliced(e.index, 1)],
+              })
+            }} style={{backgroundColor: 'red', marginLeft: 'auto'}}>
+              <TrashIcon width={16.4} height={16.4} style={{ marginTop: 'auto', marginBottom: 'auto', paddingLeft: 10, paddingRight: 5 }}/>
             </Pressable>
           </View>
         )}
@@ -316,7 +284,9 @@ export default function AdminPanel() {
         status: 'inProgress',
         url: '',
         technologies: [],
-        githubUrl: ''
+        githubUrl: '',
+        views: [],
+        hidden: true
       }])
     }
   }

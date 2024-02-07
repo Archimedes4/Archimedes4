@@ -48,7 +48,7 @@ function BodyComponent({onLayoutHeight}:{onLayoutHeight: (item: number) => void}
       <View style={{height: 40, marginLeft: 20}}>
         <HelloComponet />
       </View>
-      <Text style={{color: "white", fontSize: 25, marginLeft: 20, marginRight: 20}}>my Name is Andrew Mainella, I am a student, curler, coder. I am a born and raised Manitoban. I am a student at Saint Paul's High School with a passion for computer science. I hope that this website will show you what I have done!</Text>
+      <Text style={{color: "white", fontSize: 25, marginLeft: 20, marginRight: 20}}>my name is Andrew Mainella, I am a student, curler, coder. I am a born and raised Manitoban. I am a student at Saint Paul's High School with a passion for computer science. I hope that this website will show you what I have done!</Text>
       <View>
         <Text adjustsFontSizeToFit style={{color: 'white', fontSize: 50, marginLeft: 20}}>What I am using</Text>
         <View style={{flexDirection: "row", width: width - 40, marginLeft: 20}}>

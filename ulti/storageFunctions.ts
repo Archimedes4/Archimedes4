@@ -15,7 +15,7 @@ export async function listStorageItems(): Promise<{result: loadingStateEnum.fail
     resultData.push({
       name: data.name,
       fileType: data.fileType,
-      loadingState: loadingStateEnum.loading
+      loadingState: loadingStateEnum.notStarted
     })
   });
   return {result: loadingStateEnum.success, data: resultData};
@@ -80,17 +80,21 @@ export async function getAssest(item: string): Promise<{result: loadingStateEnum
 }
 
 export async function getMarkdownFromAssets(assets: postAsset[]) {
-  let results: Promise<{result: loadingStateEnum.success, data: string}|{result: loadingStateEnum.failed}>[] = []
-  for (let index = 0; index < assets.length; index += 1) {
-    results.push(getAssest(assets[index].item.name));
-  }
-  let stringResult = ""
-  const finalResult = await Promise.all(results);
-  for (let index = 0; index < finalResult.length; index += 1) {
-    const item = finalResult[index]
-    if (item.result === loadingStateEnum.success) {
-      stringResult += `[${assets[index].id}]:${item.data}`
+  if (assets.length >= 1) {
+    let results: Promise<{result: loadingStateEnum.success, data: string}|{result: loadingStateEnum.failed}>[] = []
+    for (let index = 0; index < assets.length; index += 1) {
+      results.push(getAssest(assets[index].item.name));
     }
+    let stringResult = "\n"
+    const finalResult = await Promise.all(results);
+    for (let index = 0; index < finalResult.length; index += 1) {
+      const item = finalResult[index]
+      if (item.result === loadingStateEnum.success) {
+        stringResult += `\n[${assets[index].id}]:${item.data}`
+      }
+    }
+    return stringResult;
+  } else {
+    return ""
   }
-  return stringResult;
 }

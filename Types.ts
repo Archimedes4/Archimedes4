@@ -19,6 +19,10 @@ declare global {
     item: storageItem,
     id: string
   }
+  type postView = {
+    date: string;
+    userId: string;
+  }
   type post = {
     title: string;
     cover: storageItem;
@@ -31,6 +35,8 @@ declare global {
     technologies: technology[];
     status: string;
     githubUrl: string;
+    hidden: boolean;
+    views: postView[]
   }
   type message = {
     email: string;
