@@ -43,7 +43,7 @@ export async function listPosts(): Promise<{result: loadingStateEnum.failed}|{re
   const db = getFirestore();
   //TODO error and handel paginate
   let resultData: post[] = []
-  const q = query(collection(db, "Posts"), where("hidden", "==", false));
+  const q = query(collection(db, "Posts"));
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     const data = doc.data()

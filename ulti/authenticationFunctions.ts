@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { confirmPasswordReset, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../app/_layout";
 
 export function signIn(email: string, password: string) {
@@ -22,4 +22,8 @@ export function isUserAdmin(): boolean {
   } else {
     return false
   }
+}
+
+export async function resetPassword(oobCode: string, newPassword: string) {
+  await confirmPasswordReset(auth, oobCode, newPassword)
 }

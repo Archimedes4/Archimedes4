@@ -30,6 +30,12 @@ export default function Root({ children }: PropsWithChildren) {
           .r-cursor-1loqt21 {
             cursor: url(https://cdn.custom-cursor.com/db/15051/32/starter-northern-lights-pointer.png), pointer !important;
           }
+          .r-1otgn73 {
+            cursor: url(https://cdn.custom-cursor.com/db/15051/32/starter-northern-lights-pointer.png), pointer !important;
+          }
+          .r-1loqt21 {
+            cursor: url(https://cdn.custom-cursor.com/db/15051/32/starter-northern-lights-pointer.png), pointer !important;
+          }
         `}
         </style>
       </head>
