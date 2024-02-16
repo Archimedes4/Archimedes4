@@ -3,6 +3,7 @@ export enum loadingStateEnum {
   loading,
   failed,
   success,
+  notFound
 }
 declare global {
   type storageItem = {

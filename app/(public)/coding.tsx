@@ -15,8 +15,9 @@ export default function Coding() {
   const [selectedPost, setSelectedPost] = useState<post | undefined>(undefined);
 
   async function loadPosts() {
-    const result = await listPosts()
+    const result = await listPosts(false)
     if (result.result === loadingStateEnum.success) {
+      console.log(result.data)
       setPosts(result.data);
       setPostState(loadingStateEnum.success)
     } else {

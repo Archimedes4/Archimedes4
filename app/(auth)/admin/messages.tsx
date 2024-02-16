@@ -1,15 +1,14 @@
 import { View, Text, Pressable, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import Header from './Header'
+import Header from '../../../components/Header'
 import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
-import { useNavigate } from 'react-router-native';
-import { loadingStateEnum } from '../Types';
-import { listMessages } from '../ulti/messageFunctions';
+import { RootState } from '../../../redux/store';
+import { loadingStateEnum } from '../../../Types';
+import { listMessages } from '../../../ulti/messageFunctions';
+import { router } from 'expo-router';
 
 export default function AdminMessages() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
-  const navigate = useNavigate();
   const [messageState, setMessageState] = useState<loadingStateEnum>(loadingStateEnum.notStarted);
   const [messages, setMessages] = useState<message[]>([]);
 
@@ -31,10 +30,10 @@ export default function AdminMessages() {
   return (
     <View style={{width: width, height: height, backgroundColor: "#1c93ba"}}>
       <Header/>
-      <Pressable onPress={() => navigate("/admin")}>
+      <Pressable onPress={() => router.push("/admin")}>
         <Text>Back</Text>
       </Pressable>
-      <Text>AdminMessages</Text>
+      <Text>Admin Messages</Text>
       <FlatList
         data={messages}
         renderItem={(message) => (

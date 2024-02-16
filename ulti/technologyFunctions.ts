@@ -1,12 +1,22 @@
-import { addDoc, collection, doc, getDocs, getFirestore, orderBy, query, serverTimestamp, updateDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, orderBy, query, serverTimestamp, updateDoc } from "firebase/firestore";
 import { app } from "../app/_layout"
 import { loadingStateEnum } from "../Types";
+
+export async function deleteTechnology(id: string): Promise<loadingStateEnum> {
+  try {
+    const db = getFirestore(app);
+    await deleteDoc(doc(db, "Technologies", id))
+    return loadingStateEnum.success
+  } catch {
+    return loadingStateEnum.failed
+  }
+}
 
 export async function addTechnology(item: technology): Promise<loadingStateEnum> {
   const db = getFirestore(app);
   try {
     await addDoc(collection(db, 'Technologies'), {
-      contact: item.content,
+      content: item.content,
       name: item.name,
       displayTechnology: item.displayTechnology,
       firstUsed: serverTimestamp(),
@@ -42,6 +52,7 @@ export async function listTechnologies() {
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     const data = doc.data()
+    console.log(data)
     resultData.push({
       content: data.content,
       name: data.name,
@@ -51,5 +62,37 @@ export async function listTechnologies() {
       id: doc.id,
     })
   });
+  console.log(resultData)
   return {result: loadingStateEnum.success, data: resultData};
+}
+
+export async function getTechnology(id: string): Promise<{
+  result: loadingStateEnum.success,
+  data: technology
+} | {
+  result: loadingStateEnum.failed
+} | {
+  result: loadingStateEnum.notFound
+}> {
+  try {
+    const db = getFirestore()
+    const result = await getDoc(doc(db, "Technologies", id));
+    if (result.exists()) {
+      const data = result.data()
+      return {
+        result: loadingStateEnum.success,
+        data: {
+          content: data.content,
+          name: data.name,
+          firstUsed: data.firstUsed.toDate().toISOString(),
+          lastUsed: data.lastUsed.toDate().toISOString(),
+          displayTechnology: data.displayTechnology,
+          id: result.id
+        }
+      }
+    }
+    return { result: loadingStateEnum.notFound }
+  } catch {
+    return { result: loadingStateEnum.failed }
+  }
 }
