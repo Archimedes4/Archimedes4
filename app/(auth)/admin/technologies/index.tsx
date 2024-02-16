@@ -1,6 +1,6 @@
 import { View, Text, Pressable, FlatList, ListRenderItemInfo, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import SVGXml from '../../../../components/SVGXml/SVGXml';
+import SVGXml from '../../../../components/SVGXml';
 import Header from '../../../../components/Header';
 import { loadingStateEnum } from '../../../../Types';
 import { addTechnology, listTechnologies, updateTechnology } from '../../../../ulti/technologyFunctions';

@@ -1,7 +1,7 @@
 import MarkdownCross from '../../../../components/MarkdownCross';
 import TextEditor from '../../../../components/TextEditor';
 import { listTechnologies } from '../../../../ulti/technologyFunctions';
-import SVGXml from '../../../../components/SVGXml/SVGXml';
+import SVGXml from '../../../../components/SVGXml';
 import StyledButton from '../../../../components/StyledButton';
 import { MoreHIcon, MoreVIcon, TrashIcon } from '../../../../components/Icons';
 import SelectFile from '../../../../components/SelectFile';

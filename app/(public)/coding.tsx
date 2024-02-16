@@ -1,4 +1,4 @@
-import { View, Text, Pressable, FlatList, ListRenderItemInfo, Image } from 'react-native'
+import { View, Text, Pressable, FlatList, ListRenderItemInfo, Image, useColorScheme } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { listPosts } from '../../ulti/postFunctions'
 import { loadingStateEnum } from '../../Types'
@@ -13,6 +13,7 @@ export default function Coding() {
   const [posts, setPosts] = useState<post[]>([]);
   const [postState, setPostState] = useState<loadingStateEnum>(loadingStateEnum.loading);
   const [selectedPost, setSelectedPost] = useState<post | undefined>(undefined);
+  const colorScheme = useColorScheme()
 
   async function loadPosts() {
     const result = await listPosts(false)
@@ -26,12 +27,16 @@ export default function Coding() {
   }
 
   useEffect(() => {
+      document.body.classList.add('dark');
+  }, []); 
+
+  useEffect(() => {
     loadPosts();
   }, [])
 
   if (selectedPost !== undefined) {
     return (
-      <View style={{width: width, height: height, backgroundColor: "white"}}>
+      <View style={{width: width, height: height, backgroundColor: (colorScheme ===  "light") ? "white":"#0d1117"}}>
         <Header />
         <MarkdownCross markdown={selectedPost.content} assests={selectedPost.assests}/>
       </View>
@@ -50,13 +55,14 @@ export default function Coding() {
           { (postState === loadingStateEnum.success) ?
             <FlatList 
               data={posts}
+              numColumns={2}
               renderItem={(item) => {
                 if (item.item.hidden) {
                   return null
                 }
                 return (        
-                  <View style={{marginBottom: 20}}>
-                    <PostBlock width={width * 0.9} height={height * 0.4} item={item} setPost={(e) => {
+                  <View style={{margin: 10, marginBottom: 20}} key={item.item.id}>
+                    <PostBlock width={width * 0.45} item={item} setPost={(e) => {
                       let newPosts = posts;
                       newPosts[item.index] = e
                       setPosts([...newPosts])
