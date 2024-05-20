@@ -16,7 +16,7 @@ export default function Coding() {
   const colorScheme = useColorScheme()
 
   async function loadPosts() {
-    const result = await listPosts(false)
+    const result = await listPosts(false, "Coding")
     if (result.result === loadingStateEnum.success) {
       console.log(result.data)
       setPosts(result.data);

@@ -44,7 +44,7 @@ export default function AdminPanel() {
         assests: [],
         updated: '',
         type: '',
-        id: 'Create',
+        id: 'create',
         status: 'inProgress',
         url: '',
         technologies: [],

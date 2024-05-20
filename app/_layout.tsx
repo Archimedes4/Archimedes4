@@ -16,13 +16,9 @@ import Head from "expo-router/head"
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { getStorage } from 'firebase/storage';
+import { getFirestore } from 'firebase/firestore';
 
 SplashScreen.preventAutoHideAsync();
-
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: "(public)/index",
-};
 
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_APIKEY,
@@ -39,6 +35,8 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
 export const storage = getStorage(app)
+
+export const db = getFirestore(app);
 
 function AppCore() {
 

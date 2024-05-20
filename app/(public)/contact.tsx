@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Linking, TextInput, ScrollView } from 'react-native'
+import { View, Text, Pressable, Linking, TextInput, ScrollView, Platform } from 'react-native'
 import React, { useState } from 'react'
 import Header from '../../components/Header'
 import { useSelector } from 'react-redux';
@@ -32,7 +32,25 @@ export default function Contact() {
         <Text style={{fontSize: 20, marginLeft: 10, marginTop: 10}}>Write a message</Text>
         <TextInput multiline value={message} onChangeText={setMessage} style={{marginLeft: 10, marginRight: 10, marginTop: 3, height: height - 300}}/>
         <Text style={{marginLeft: 10}}>Your Contact</Text>
-        <TextInput value={email} onChangeText={setEmail} style={{marginLeft: 10, marginRight: 10}}/>
+        <TextInput
+          value={email}
+          onChangeText={setEmail}
+          style={[{
+            marginLeft: 10,
+            marginRight: 10,
+            shadowColor: 'black',
+            shadowOffset: {width: 2, height: 1},
+            borderWidth: 1,
+            borderColor: 'black',
+            borderRadius: 30,
+            padding: 5
+          },
+          // @ts-expect-error
+          Platform.select({
+            web: {
+              outlineStyle: "none"
+            }
+          })]}/>
         <Pressable onHoverIn={() => setIsSendHover(true)} onHoverOut={() => {setIsSendHover(false)}} onPress={() => {loadSendMessage()}} style={{backgroundColor: isSendHover ? "#d3d3d3":"white", shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 10, paddingLeft: width * 0.3, paddingRight: width * 0.3, marginLeft: 'auto', marginRight: 'auto', marginBottom: 10, marginTop: 10}}>
           <Text>Send</Text>
         </Pressable>

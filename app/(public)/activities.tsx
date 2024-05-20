@@ -15,7 +15,7 @@ export default function Activities() {
   const [selectedPost, setSelectedPost] = useState<post | undefined>(undefined);
 
   async function loadPosts() {
-    const result = await listPosts()
+    const result = await listPosts(false, "Activities")
     if (result.result === loadingStateEnum.success) {
       setPosts(result.data);
       setPostState(loadingStateEnum.success)
@@ -32,7 +32,7 @@ export default function Activities() {
     <View style={{width: width, height: height, backgroundColor: "#1c93ba"}}>
       <Header />
       { selectedPost !== undefined ?
-        <MarkdownCross markdown={selectedPost.content} />:
+        <MarkdownCross markdown={selectedPost.content} assests={selectedPost.assests} />:
         <>
           <Text style={{fontSize: height * 0.1, fontFamily: 'Bungee-Regular', color: 'white', marginLeft: 20}}>Activities</Text>
           { (postState === loadingStateEnum.loading) ?
@@ -45,7 +45,7 @@ export default function Activities() {
                   data={posts}
                   renderItem={(item) => (
                     <View style={{marginBottom: 20}}>
-                      <PostBlock width={width * 0.9} height={height * 0.4} item={item} setPost={(e) => {
+                      <PostBlock width={width * 0.9} item={item} setPost={(e) => {
                         let newPosts = posts;
                         newPosts[item.index] = e
                         setPosts([...newPosts])
