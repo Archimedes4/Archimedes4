@@ -17,7 +17,7 @@ export async function addPost(item: post): Promise<{
     let result = await addDoc(collection(db, 'Posts'), {
       title: item.title,
       cover: item.cover.name,
-      updated: serverTimestamp(),
+      updated: new Date().toISOString(),
       content: item.content,
       type: 'Coding',
       url: item.url,
@@ -125,6 +125,7 @@ export async function listPosts(hidden: boolean, type?: "Coding" | "Activities")
     resultData.push({
       title: data.title,
       cover: {
+        id: "",
         name: data.cover,
         fileType: "",
         loadingState: loadingStateEnum.notStarted
@@ -155,6 +156,7 @@ export async function getPost(id: string): Promise<{result: loadingStateEnum.fai
       return { result: loadingStateEnum.success, data: {
         title: data.title,
         cover: {
+          id: "",
           name: data.cover,
           fileType: "",
           loadingState: loadingStateEnum.notStarted

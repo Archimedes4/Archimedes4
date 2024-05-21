@@ -1,11 +1,11 @@
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
-import { loadingStateEnum } from "../Types";
+import { loadingStateEnum, uploadStateEnum } from "../Types";
 import * as DocumentPicker from 'expo-document-picker';
 import { addDoc, collection, doc, getDocs, getFirestore, getDoc, query, orderBy, startAt } from "firebase/firestore";
-import { storage } from "../app/_layout";
+import { db, storage } from "../app/_layout";
+import { useState } from "react";
 
 export async function listStorageItems(): Promise<{result: loadingStateEnum.failed}|{result: loadingStateEnum.success, data: storageItem[]}> {
-  const db = getFirestore();
   //TODO error handel paginate
   let resultData: storageItem[] = []
   const q = query(collection(db, "Files"), orderBy('name'));
@@ -15,57 +15,66 @@ export async function listStorageItems(): Promise<{result: loadingStateEnum.fail
     resultData.push({
       name: data.name,
       fileType: data.fileType,
-      loadingState: loadingStateEnum.notStarted
+      loadingState: loadingStateEnum.notStarted,
+      id: doc.id
     })
   });
   return {result: loadingStateEnum.success, data: resultData};
 }
 
-export async function uploadFile() {
-  let result = await DocumentPicker.getDocumentAsync({});
-  if (!result.canceled) {
-    const response = await fetch(result.assets[0].uri);
-    if (response.ok) {
-      const blob = await response.blob();
-      const storage = getStorage();
-      const db = getFirestore()
-      const storageRef = ref(storage, result.assets[0].name);
+export function useUploadFile() {
+  const [uploadState, setUploadState] = useState<uploadStateEnum>(uploadStateEnum.notStarted)
+  const [uploadProgress, setUploadProgress] = useState<number>(0)
 
-      const uploadTask = uploadBytesResumable(storageRef, blob);
-
-      uploadTask.on('state_changed', 
-        (snapshot) => {
-          // Observe state change events such as progress, pause, and resume
-          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log('Upload is ' + progress + '% done');
-          switch (snapshot.state) {
-            case 'paused':
-              console.log('Upload is paused');
-              break;
-            case 'running':
-              console.log('Upload is running');
-              break;
-          }
-        }, 
-        (error) => {
-          // Handle unsuccessful uploads
-        }, 
-        async () => {
-          await addDoc(collection(db, 'Files'), {
-            name: result.assets[0].name,
-            fileType: result.assets[0].mimeType
-          })
-          // Handle successful uploads on complete
-          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log('File available at', downloadURL);
-          });
-        }
-      );
-    } else {
-
+  async function uploadFile() {
+    if (uploadState !== uploadStateEnum.failed && uploadState !== uploadStateEnum.success && uploadState !== uploadStateEnum.notStarted) {
+      return
     }
+    let result = await DocumentPicker.getDocumentAsync({});
+    if (!result.canceled) {
+      const response = await fetch(result.assets[0].uri);
+      if (response.ok) {
+        const blob = await response.blob();
+        const storageRef = ref(storage, result.assets[0].name);
+
+        const uploadTask = uploadBytesResumable(storageRef, blob);
+
+        uploadTask.on('state_changed', 
+          (snapshot) => {
+            // Observe state change events such as progress, pause, and resume
+            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setUploadProgress(progress)
+            switch (snapshot.state) {
+              case 'paused':
+                setUploadState(uploadStateEnum.paused)
+                break;
+              case 'running':
+                setUploadState(uploadStateEnum.running)
+                break;
+            }
+          }, 
+          () => {
+            setUploadState(uploadStateEnum.failed)
+          }, 
+          async () => {
+            await addDoc(collection(db, 'Files'), {
+              name: uploadTask.snapshot.ref.name,
+              fileType: result.assets[0].mimeType
+            })
+            setUploadState(uploadStateEnum.success)
+          }
+        );
+      } else {
+
+      }
+    }
+  }
+
+  return {
+    uploadFile,
+    uploadState,
+    uploadProgress
   }
 }
 

@@ -5,12 +5,23 @@ export enum loadingStateEnum {
   success,
   notFound
 }
+
+export enum uploadStateEnum {
+  notStarted,
+  running,
+  paused,
+  failed,
+  success
+}
+
 declare global {
   type storageItem = {
+    id: string
     name: string;
     fileType: string;
     loadingState: loadingStateEnum.failed | loadingStateEnum.loading | loadingStateEnum.notStarted;
   } | {
+    id: string
     name: string;
     fileType: string;
     loadingState: loadingStateEnum.success;

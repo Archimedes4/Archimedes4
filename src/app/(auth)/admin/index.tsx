@@ -37,6 +37,7 @@ export default function AdminPanel() {
         title: 'Create New Post',
         cover: {
           name: '',
+          id: '',
           fileType: '',
           loadingState: loadingStateEnum.failed
         },

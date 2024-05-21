@@ -3,20 +3,30 @@ import { getAssest } from "../ulti/storageFunctions";
 import { useEffect, useState } from "react";
 import { loadingStateEnum } from "../Types";
 import SVGXml from "./SVGXml";
+import store from "../redux/store";
+import { postsSlice } from "../redux/reducers/postsReducer";
 
-export default function PostBlock({item, setPost, onSelect, width}:{item: ListRenderItemInfo<post>, setPost: (item: post) => void, onSelect: () => void, width: number}) {
+export default function PostBlock({item, onSelect, width}:{item: ListRenderItemInfo<post>, onSelect: () => void, width: number}) {
   const [height, setHeight] = useState<number>(100)
+  
   async function loadCover() {
-    setPost({...item.item, cover: {...item.item.cover, loadingState: loadingStateEnum.loading}})
+    if (item.item.cover.loadingState === loadingStateEnum.success) {
+      Image.getSize(item.item.cover.url, (srcWidth, srcHeight) => {
+        const aspectRatio = srcWidth / srcHeight;
+        setHeight(width / aspectRatio)
+      })
+      return
+    }
+    store.dispatch(postsSlice.actions.setCoverState({loadingState: loadingStateEnum.loading, id: item.item.id}))
     const result = await getAssest(item.item.cover.name);
     if (result.result === loadingStateEnum.success) {
       Image.getSize(result.data, (srcWidth, srcHeight) => {
         const aspectRatio = srcWidth / srcHeight;
         setHeight(width / aspectRatio)
       })
-      setPost({...item.item, cover: {...item.item.cover, loadingState: loadingStateEnum.success, url: result.data}})
+      store.dispatch(postsSlice.actions.setCoverState({loadingState: loadingStateEnum.success, id: item.item.id, url: result.data}))
     } else {
-      setPost({...item.item, cover: {...item.item.cover, loadingState: loadingStateEnum.failed}})
+      store.dispatch(postsSlice.actions.setCoverState({loadingState: loadingStateEnum.failed, id: item.item.id}))
     }
   }
 

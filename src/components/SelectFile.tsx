@@ -1,16 +1,81 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { useEffect, useState } from "react";
-import { loadingStateEnum } from "../Types";
-import { listStorageItems, uploadFile } from "../ulti/storageFunctions";
-import { FlatList, Pressable, View, Text, Image } from "react-native";
+import { loadingStateEnum, uploadStateEnum } from "../Types";
+import { listStorageItems, useUploadFile } from "../ulti/storageFunctions";
+import { FlatList, Pressable, View, Text, Image, ListRenderItemInfo, ActivityIndicator } from "react-native";
 import StyledButton from "./StyledButton";
+import { TrashIcon } from "./Icons";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db, storage } from "../app/_layout";
+import { deleteObject, ref } from "firebase/storage";
 
-export default function SelectFile({onClose, onSelect, selectedFile}:{onClose: () => void, onSelect: (item: storageItem) => void, selectedFile: undefined|storageItem}) {
+
+function FileItem({
+  onSelect,
+  selectedFile,
+  item,
+  files,
+  setFiles
+}:{
+  onSelect: (item: storageItem | undefined) => void;
+  selectedFile: undefined|storageItem
+  item: ListRenderItemInfo<storageItem>
+  files: storageItem[],
+  setFiles: (item: storageItem[]) => void
+}) {
+  const [deleteFileState, setDeleteFileState] = useState<loadingStateEnum>(loadingStateEnum.notStarted)
+
+  async function deleteFile(file: storageItem) {
+    try {
+      setDeleteFileState(loadingStateEnum.loading)
+      if (file.name === selectedFile.name) {
+        onSelect(undefined)
+      }
+      await deleteDoc(doc(db, "Files", file.id))
+      const storageRef = ref(storage, file.name);
+      await deleteObject(storageRef)
+      let newFiles = [...files].filter((e) => {return e.name !== item.item.name})
+      setFiles(newFiles)
+      setDeleteFileState(loadingStateEnum.success)
+    } catch {
+      setDeleteFileState(loadingStateEnum.failed)
+    }
+  }
+
+  return (
+    <Pressable  onPress={(e) => {onSelect(item.item)}} style={{flexDirection: 'row', margin: 10, backgroundColor: selectedFile.name === item.item.name ? "gray":'white', borderWidth: 2, borderRadius: 30, borderColor: 'black', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, overflow: 'hidden'}}>
+      {item.item.loadingState === loadingStateEnum.success ?
+        <Image source={{uri: item.item.url}} style={{width: 100, height: 100}}/>:null
+      }
+      <Text selectable={false} style={{padding: 10}}>{item.item.name}</Text>
+      <Pressable onPress={() => {
+        if (deleteFileState !== loadingStateEnum.notStarted) {
+          return
+        }
+        deleteFile(item.item)
+      }} style={{backgroundColor: 'red', marginLeft: 'auto'}}>
+        {(deleteFileState === loadingStateEnum.loading) ?
+          <ActivityIndicator style={{height: 16.4, width: 16.4}}/>:null
+        }
+        {(deleteFileState === loadingStateEnum.failed) ?
+          <Text>!</Text>:null
+        }
+        {(deleteFileState !== loadingStateEnum.failed && deleteFileState !== loadingStateEnum.loading) ?
+          <TrashIcon width={16.4} height={16.4} style={{ marginTop: 'auto', marginBottom: 'auto', paddingLeft: 10, paddingRight: 5 }}/>:null
+        }
+      </Pressable>
+    </Pressable>
+  )
+}
+
+export default function SelectFile({onClose, onSelect, selectedFile}:{onClose: () => void, onSelect: (item: storageItem | undefined) => void, selectedFile: undefined|storageItem}) {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
 
   const [fileState, setFileState] = useState<loadingStateEnum>(loadingStateEnum.loading);
   const [files, setFiles] = useState<storageItem[]>([]);
+
+  const { uploadFile, uploadState, uploadProgress } = useUploadFile()
 
   async function loadFiles() {
     const result = await listStorageItems();
@@ -32,18 +97,21 @@ export default function SelectFile({onClose, onSelect, selectedFile}:{onClose: (
         <Pressable onPress={() => onClose()}>
           <Text>Close</Text>
         </Pressable>
+        <Text>Select File</Text>
         <FlatList
           data={files}
           renderItem={(item) => (
-            <Pressable onPress={(e) => {onSelect(item.item)}} style={{backgroundColor: (item.item.name === selectedFile.name) ? "#d3d3d3":"white", flexDirection: 'row', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, margin: 10, padding: 10}}>
-              {item.item.loadingState === loadingStateEnum.success ?
-                <Image source={{uri: item.item.url}} style={{width: 100, height: 100}}/>:null
-              }
-              <Text selectable={false}>{item.item.name}</Text>
-            </Pressable>
+            <FileItem
+              onSelect={onSelect}
+              selectedFile={selectedFile}
+              item={item}
+              files={files}
+              setFiles={setFiles} />
           )}
         />
-        <StyledButton onPress={() => uploadFile()} text='Upload File' style={{padding: 10}}/>
+        { (uploadState !== uploadStateEnum.notStarted) ?
+          <Text>Upload: {uploadProgress}</Text>:<StyledButton onPress={() => uploadFile()} text='Upload File' style={{padding: 10}}/>
+        }
       </View>
     )
   }
@@ -61,7 +129,9 @@ export default function SelectFile({onClose, onSelect, selectedFile}:{onClose: (
           <Text>Failed</Text>
         </View>
       }
-      <StyledButton onPress={() => uploadFile()} text='Upload File' style={{padding: 10}}/>
+      { (uploadState !== uploadStateEnum.notStarted) ?
+        <Text>Upload: {uploadProgress}</Text>:<StyledButton onPress={() => uploadFile()} text='Upload File' style={{padding: 10}}/>
+      }
     </View>
   )
 }

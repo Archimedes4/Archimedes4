@@ -6,22 +6,15 @@ import { RootState } from '../../redux/store';
 import { loadingStateEnum } from '../../Types';
 import MarkdownCross from '../../components/MarkdownCross';
 import PostBlock from '../../components/PostBlock';
-import { listPosts } from '../../ulti/postFunctions';
+import { listPosts } from '../../redux/reducers/postsReducer';
 
 export default function Activities() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
-  const [posts, setPosts] = useState<post[]>([]);
-  const [postState, setPostState] = useState<loadingStateEnum>(loadingStateEnum.loading);
   const [selectedPost, setSelectedPost] = useState<post | undefined>(undefined);
+  const { postState, posts } = useSelector((state: RootState) => state.posts);
 
   async function loadPosts() {
-    const result = await listPosts(false, "Activities")
-    if (result.result === loadingStateEnum.success) {
-      setPosts(result.data);
-      setPostState(loadingStateEnum.success)
-    } else {
-      setPostState(loadingStateEnum.failed)
-    }
+    await listPosts("Activities")
   }
 
   useEffect(() => {
@@ -45,11 +38,7 @@ export default function Activities() {
                   data={posts}
                   renderItem={(item) => (
                     <View style={{marginBottom: 20}}>
-                      <PostBlock width={width * 0.9} item={item} setPost={(e) => {
-                        let newPosts = posts;
-                        newPosts[item.index] = e
-                        setPosts([...newPosts])
-                      }} onSelect={() => setSelectedPost(item.item)}/>
+                      <PostBlock width={width * 0.9} item={item} onSelect={() => setSelectedPost(item.item)}/>
                     </View>
                   )}
                 />:

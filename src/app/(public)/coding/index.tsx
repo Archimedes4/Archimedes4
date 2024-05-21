@@ -1,33 +1,27 @@
-import { View, Text, Pressable, FlatList, ListRenderItemInfo, Image, useColorScheme } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
-import { listPosts } from '../../ulti/postFunctions'
-import { loadingStateEnum } from '../../Types'
+import { View, Text, FlatList, useColorScheme, ActivityIndicator, Platform } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { loadingStateEnum } from '../../../Types'
 import { useSelector } from 'react-redux'
-import store, { RootState } from '../../redux/store'
-import PostBlock from '../../components/PostBlock'
-import Header from '../../components/Header'
-import MarkdownCross from '../../components/MarkdownCross'
+import { RootState } from '../../../redux/store'
+import PostBlock from '../../../components/PostBlock'
+import Header from '../../../components/Header'
+import MarkdownCross from '../../../components/MarkdownCross'
+import { listPosts } from '../../../redux/reducers/postsReducer'
 
 export default function Coding() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
-  const [posts, setPosts] = useState<post[]>([]);
-  const [postState, setPostState] = useState<loadingStateEnum>(loadingStateEnum.loading);
   const [selectedPost, setSelectedPost] = useState<post | undefined>(undefined);
   const colorScheme = useColorScheme()
+  const { postState, posts } = useSelector((state: RootState) => state.posts);
 
   async function loadPosts() {
-    const result = await listPosts(false, "Coding")
-    if (result.result === loadingStateEnum.success) {
-      console.log(result.data)
-      setPosts(result.data);
-      setPostState(loadingStateEnum.success)
-    } else {
-      setPostState(loadingStateEnum.failed)
-    }
+    listPosts("Coding")
   }
 
   useEffect(() => {
+    if (Platform.OS === 'web') {
       document.body.classList.add('dark');
+    }
   }, []); 
 
   useEffect(() => {
@@ -48,8 +42,9 @@ export default function Coding() {
       <Header />
       <Text style={{fontSize: height * 0.1, fontFamily: 'Bungee-Regular', color: 'white', marginLeft: 20}}>Coding</Text>
       { (postState === loadingStateEnum.loading) ?
-        <View>
-          <Text>Loading</Text>
+        <View style={{flex: 1, alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
+          <ActivityIndicator size={"large"}/>
+          <Text style={{color: 'white', marginTop: 5}}>Loading</Text>
         </View>:
         <>
           { (postState === loadingStateEnum.success) ?
@@ -62,11 +57,7 @@ export default function Coding() {
                 }
                 return (        
                   <View style={{margin: 10, marginBottom: 20}} key={item.item.id}>
-                    <PostBlock width={width * 0.45} item={item} setPost={(e) => {
-                      let newPosts = posts;
-                      newPosts[item.index] = e
-                      setPosts([...newPosts])
-                    }} onSelect={() => setSelectedPost(item.item)}/>
+                    <PostBlock width={(width - 40)/2} item={item} onSelect={() => setSelectedPost(item.item)}/>
                   </View>
                 )
               }}

@@ -7,8 +7,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
 import { useEffect, useState } from 'react';
 import { loadingStateEnum } from '../../../../Types';
-import { Pressable, View, Text, TextInput, Modal, Image, Switch, ScrollView, FlatList, Alert } from 'react-native';
-import { addPost, deletePost, getPost, updatePost } from '../../../../ulti/postFunctions';
+import { Pressable, View, Text, Modal, ScrollView, FlatList } from 'react-native';
+import { addPost, deletePost, getPost } from '../../../../ulti/postFunctions';
 import { getAssest } from '../../../../ulti/storageFunctions';
 import { router, useGlobalSearchParams, useNavigation } from 'expo-router';
 import Header from '../../../../components/Header';
@@ -57,6 +57,7 @@ export default function EditPost() {
         cover: {
           name: '',
           fileType: '',
+          id: '',
           loadingState: loadingStateEnum.failed
         },
         content: '',
