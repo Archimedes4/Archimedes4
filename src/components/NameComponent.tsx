@@ -82,25 +82,11 @@ export default function NameComponent({progress}:{progress: SharedValue<number>}
     }
   })
 
-  const [fontsLoaded] = useFonts({
-    'Bungee-Regular': require('../assets/Bungee-Regular.ttf'),
-  });
-
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
   return (
-    <View style={{height: height}} onLayout={onLayoutRootView}>
+    <View style={{height: height}}>
       <Text onLayout={(e) => {setFirstNameWidth(e.nativeEvent.layout.width)}} style={{opacity: 0, position: 'absolute', fontSize: getFontSize(width, height), fontFamily: 'Bungee-Regular'}}>Andrew</Text>
       <Text onLayout={(e) => {setLastNameWidth(e.nativeEvent.layout.width)}} style={{opacity: 0, position: 'absolute', fontSize: getFontSize(width, height), fontFamily: 'Bungee-Regular'}}>Mainella</Text>
-      <Animated.Image source={require('../assets/Smoke.png')} style={[{position: 'absolute', width: width * 2, marginLeft: -width/2, height: height, zIndex: 10}, smokeStyle]} height={100}/>
+      <Animated.Image source={require('../../assets/Smoke.png')} style={[{position: 'absolute', width: width * 2, marginLeft: -width/2, height: height, zIndex: 10}, smokeStyle]} height={100}/>
       <Animated.View style={[{top: height/2 - getFontSize(width, height)}, leftStyle]}>
         <Text style={{fontSize: getFontSize(width, height), position: 'absolute', color: 'white', fontFamily: 'Bungee-Regular'}}>Andrew </Text>
       </Animated.View>

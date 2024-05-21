@@ -1,6 +1,6 @@
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
-import { app, db } from "../app/_layout"
+import { addDoc, collection, deleteDoc, doc, documentId, getDoc, getDocs, getFirestore, query, serverTimestamp, updateDoc, where } from "firebase/firestore";
 import { loadingStateEnum } from "../Types";
+import { db } from "../app/_layout";
 
 
 export async function addPost(item: post): Promise<{
@@ -8,6 +8,10 @@ export async function addPost(item: post): Promise<{
   id: string
 } | {result: loadingStateEnum.failed}> {
   try {
+    let resultTechnologies: string[] = []
+    for (let index = 0; index < item.technologies.length; index += 1) {
+      resultTechnologies.push(item.technologies[index].id)
+    }
     //TODO collection
     //TODO assests
     let result = await addDoc(collection(db, 'Posts'), {
@@ -19,7 +23,7 @@ export async function addPost(item: post): Promise<{
       url: item.url,
       githubUrl: item.githubUrl,
       status: item.status,
-      technologies: item.technologies,
+      technologies: resultTechnologies,
       hidden: item.hidden
     })
     return {
@@ -35,6 +39,11 @@ export async function addPost(item: post): Promise<{
 
 export async function updatePost(item: post) {
   try {
+    let resultTechnologies: string[] = []
+    for (let index = 0; index < item.technologies.length; index += 1) {
+      resultTechnologies.push(item.technologies[index].id)
+    }
+
     await updateDoc(doc(db, 'Posts', item.id), {
       title: item.title,
       cover: item.cover.name,
@@ -42,7 +51,7 @@ export async function updatePost(item: post) {
       url: item.url,
       githubUrl: item.githubUrl,
       status: item.status,
-      technologies: item.technologies,
+      technologies: resultTechnologies,
       hidden: item.hidden
     })
     return loadingStateEnum.success
@@ -53,6 +62,26 @@ export async function updatePost(item: post) {
 
 export async function deletePost(id: string) {
   await deleteDoc(doc(db, 'Posts', id))
+}
+
+async function getTechnologies(unique: string[]) {
+  let resultTechnologies: technology[] = []
+
+  if (unique.length >= 1) {
+    const technologiesSnapshot = await getDocs(query(collection(db, "Technologies"), where(documentId(), 'in', unique)))
+    technologiesSnapshot.forEach((doc) => {
+      const data = doc.data()
+      resultTechnologies.push({
+        content: data.content,
+        name: data.name,
+        displayTechnology: data.displayTechnology,
+        firstUsed: data.firstUsed.toDate().toISOString(),
+        lastUsed: data.lastUsed.toDate().toISOString(),
+        id: doc.id,
+      })
+    })
+  }
+  return resultTechnologies
 }
 
 export async function listPosts(hidden: boolean, type?: "Coding" | "Activities"): Promise<{result: loadingStateEnum.failed}|{result: loadingStateEnum.success, data: post[]}> {
@@ -69,8 +98,30 @@ export async function listPosts(hidden: boolean, type?: "Coding" | "Activities")
     q = query(collection(db, "Posts"), where("type", "==", "Activities"));
   } 
   const querySnapshot = await getDocs(q);
+  let technologies = []
   querySnapshot.forEach((doc) => {
     const data = doc.data()
+    for (let index = 0; index < data.technologies.length; index += 1) {
+      if (!technologies.includes(data.technologies[index])) {
+        technologies.push(data.technologies[index])
+      }
+    }
+  })
+
+  const resultTechnologies = await getTechnologies(technologies)
+
+  querySnapshot.forEach((doc) => {
+    const data = doc.data()
+    let foundTechnologies: technology[] = []
+    for (let index = 0; index < data.technologies.length; index += 1) {
+      let found = resultTechnologies.find((e) => {return e.id === data.technologies[index]})
+      if (found !== undefined) {
+        foundTechnologies.push(found)
+      }
+      // This would be an error if undefined but best to ignore it rather than do anything
+    }
+
+
     resultData.push({
       title: data.title,
       cover: {
@@ -85,7 +136,7 @@ export async function listPosts(hidden: boolean, type?: "Coding" | "Activities")
       id: doc.id,
       status: data.status,
       url: data.url,
-      technologies: data.technologies,
+      technologies: foundTechnologies,
       githubUrl: data.githubUrl,
       hidden: data.hidden,
       views: []
@@ -100,6 +151,7 @@ export async function getPost(id: string): Promise<{result: loadingStateEnum.fai
     const document = await getDoc(doc(db, "Posts", id))
     if (document.exists()) {
       const data = document.data()
+      let resultTechnologies = await getTechnologies(data.technologies)
       return { result: loadingStateEnum.success, data: {
         title: data.title,
         cover: {
@@ -114,7 +166,7 @@ export async function getPost(id: string): Promise<{result: loadingStateEnum.fai
         id: document.id,
         status: data.status,
         url: data.url,
-        technologies: data.technologies,
+        technologies: resultTechnologies,
         githubUrl: data.githubUrl,
         hidden: data.hidden,
         views: []

@@ -1,4 +1,5 @@
 {
   "compilerOptions": {},
+  "include": ["src/**/*", "assets/*", "public/*", "tests/**/*"],
   "extends": "expo/tsconfig.base"
 }

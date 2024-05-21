@@ -1,10 +1,9 @@
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, orderBy, query, serverTimestamp, updateDoc } from "firebase/firestore";
-import { app } from "../app/_layout"
 import { loadingStateEnum } from "../Types";
+import { db } from "../app/_layout";
 
 export async function deleteTechnology(id: string): Promise<loadingStateEnum> {
   try {
-    const db = getFirestore(app);
     await deleteDoc(doc(db, "Technologies", id))
     return loadingStateEnum.success
   } catch {
@@ -13,7 +12,6 @@ export async function deleteTechnology(id: string): Promise<loadingStateEnum> {
 }
 
 export async function addTechnology(item: technology): Promise<loadingStateEnum> {
-  const db = getFirestore(app);
   try {
     await addDoc(collection(db, 'Technologies'), {
       content: item.content,
@@ -29,7 +27,6 @@ export async function addTechnology(item: technology): Promise<loadingStateEnum>
 }
 
 export async function updateTechnology(item: technology): Promise<loadingStateEnum> {
-  const db = getFirestore(app);
   try {
     await updateDoc(doc(db, 'Technologies', item.id), {
       contact: item.content,

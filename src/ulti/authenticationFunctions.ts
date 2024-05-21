@@ -1,18 +1,16 @@
 import { router } from "expo-router";
 import { confirmPasswordReset, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { loadingStateEnum } from "../Types";
 import { auth } from "../app/_layout";
 
-export function signIn(email: string, password: string) {
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // Signed in 
-      router.replace('/admin')
-      // ...
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-    });
+export async function signIn(email: string, password: string): Promise<loadingStateEnum> {
+  try {
+    await signInWithEmailAndPassword(auth, email, password)
+    router.replace('/admin')
+    return loadingStateEnum.success
+  } catch {
+    return loadingStateEnum.failed
+  }
 }
 
 export function isUserAdmin(): boolean {

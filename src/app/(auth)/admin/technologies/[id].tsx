@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { addTechnology, deleteTechnology, getTechnology, updateTechnology } from "../../../../ulti/technologyFunctions";
 import { loadingStateEnum } from "../../../../Types";
 import { View, Text, TextInput, Pressable } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import SVGXml from "../../../../components/SVGXml";
 import StyledButton from "../../../../components/StyledButton";
 import { DatePickerModal } from "react-native-paper-dates";

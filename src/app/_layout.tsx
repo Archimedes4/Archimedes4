@@ -64,7 +64,7 @@ export default function App() {
 
 
   const [fontsLoaded] = useFonts({
-    'Bungee-Regular': require('../assets/Bungee-Regular.ttf'),
+    'Bungee-Regular': require('../../assets/Bungee-Regular.ttf'),
   });
 
   const onLayoutRootView = useCallback(async () => {
