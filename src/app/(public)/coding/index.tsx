@@ -5,13 +5,11 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../../../redux/store'
 import PostBlock from '../../../components/PostBlock'
 import Header from '../../../components/Header'
-import MarkdownCross from '../../../components/MarkdownCross'
 import { listPosts } from '../../../redux/reducers/postsReducer'
+import { router } from 'expo-router'
 
 export default function Coding() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
-  const [selectedPost, setSelectedPost] = useState<post | undefined>(undefined);
-  const colorScheme = useColorScheme()
   const { postState, posts } = useSelector((state: RootState) => state.posts);
 
   async function loadPosts() {
@@ -19,23 +17,8 @@ export default function Coding() {
   }
 
   useEffect(() => {
-    if (Platform.OS === 'web') {
-      document.body.classList.add('dark');
-    }
-  }, []); 
-
-  useEffect(() => {
     loadPosts();
   }, [])
-
-  if (selectedPost !== undefined) {
-    return (
-      <View style={{width: width, height: height, backgroundColor: (colorScheme ===  "light") ? "white":"#0d1117"}}>
-        <Header />
-        <MarkdownCross markdown={selectedPost.content} assests={selectedPost.assests}/>
-      </View>
-    )
-  }
 
   return (
     <View style={{width: width, height: height, backgroundColor: "#1c93ba"}}>
@@ -57,7 +40,7 @@ export default function Coding() {
                 }
                 return (        
                   <View style={{margin: 10, marginBottom: 20}} key={item.item.id}>
-                    <PostBlock width={(width - 40)/2} item={item} onSelect={() => setSelectedPost(item.item)}/>
+                    <PostBlock width={(width - 40)/2} item={item} onSelect={() => router.push(`/coding/${item.item.id}`)}/>
                   </View>
                 )
               }}

@@ -28,7 +28,6 @@ export default function EditPostCard({
   const router = useRouter() 
   const [technologies, setTechnologies] = useState<technology[]>([]);
   const [techState, setTechState] = useState<loadingStateEnum>(loadingStateEnum.loading);
-  const [isHover, setIsHover] = useState<boolean>(false);
   const [coverImageHeight, setCoverImageHeight] = useState<number>(100);
 
   async function loadTechnologies() {
@@ -64,6 +63,24 @@ export default function EditPostCard({
         </Pressable>
         <Pressable onPress={() => setIsCard(false)} style={{backgroundColor: isCard ? 'white':'#d3d3d3', width: width/2-20}}>
           <Text style={{margin: 10}}>Blog</Text>
+        </Pressable>
+      </View>
+      <View style={{width: width-40, borderRadius:50, flexDirection: 'row', overflow: 'hidden', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', padding: 'auto', margin: 10, marginLeft: 'auto', marginRight: 'auto'}}>
+        <Pressable onPress={() => {
+           setNewPost({
+            ...newPost,
+            type: "Coding"
+          })
+        }} style={{backgroundColor: (newPost.type === "Coding") ? '#d3d3d3':'white', width: width/2-20}}>
+          <Text style={{margin: 10}}>Coding</Text>
+        </Pressable>
+        <Pressable onPress={() => {
+          setNewPost({
+            ...newPost,
+            type: "Activities"
+          })
+        }} style={{backgroundColor:  (newPost.type === "Activities") ? '#d3d3d3':'white', width: width/2-20}}>
+          <Text style={{margin: 10}}>Activities</Text>
         </Pressable>
       </View>
       <View style={{margin: 5}}>

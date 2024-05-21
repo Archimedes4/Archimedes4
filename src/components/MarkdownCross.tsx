@@ -29,7 +29,7 @@ export default function MarkdownCross({markdown, assests}:{markdown: string, ass
       <html lang="en">
       <body>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="github-markdown.css">
+        <link rel="stylesheet" href="/github-markdown.css">
         <style>
           .markdown-body {
             box-sizing: border-box;

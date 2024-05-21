@@ -19,7 +19,7 @@ export async function addPost(item: post): Promise<{
       cover: item.cover.name,
       updated: new Date().toISOString(),
       content: item.content,
-      type: 'Coding',
+      type: item.type,
       url: item.url,
       githubUrl: item.githubUrl,
       status: item.status,

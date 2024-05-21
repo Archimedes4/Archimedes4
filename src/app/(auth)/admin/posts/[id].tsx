@@ -63,7 +63,7 @@ export default function EditPost() {
         content: '',
         assests: [],
         updated: '',
-        type: '',
+        type: 'Coding',
         id: 'Create',
         status: 'inProgress',
         url: '',
