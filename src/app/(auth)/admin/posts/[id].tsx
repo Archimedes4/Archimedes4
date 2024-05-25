@@ -70,7 +70,8 @@ export default function EditPost() {
         technologies: [],
         githubUrl: '',
         views: [],
-        hidden: true
+        hidden: true,
+        hiddenTitle: false
       })
       setLoadPostState(loadingStateEnum.success)
     } else {
@@ -138,12 +139,10 @@ export default function EditPost() {
             }
           </Pressable>
         </View>
-        <ScrollView style={{width: width, height: height}}>
-          {isPreview ?
-            <MarkdownCross markdown={newPost.content} assests={newPost.assests}/>:
-            <TextEditor text={newPost.content} onChangeText={(e) => {setNewPost({...newPost, content: e})}} />
-          }
-        </ScrollView>
+        {isPreview ?
+          <MarkdownCross markdown={newPost.content} assests={newPost.assests}/>:
+          <TextEditor text={newPost.content} onChangeText={(e) => {setNewPost({...newPost, content: e})}} height={height}/>
+        }
         <Text style={{marginLeft: 20, color: "white"}}>Assests</Text>
         <FlatList
           data={newPost.assests}

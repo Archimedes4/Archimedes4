@@ -51,7 +51,8 @@ export default function AdminPanel() {
         technologies: [],
         githubUrl: '',
         views: [],
-        hidden: true
+        hidden: true,
+        hiddenTitle: false
       }])
     }
   }

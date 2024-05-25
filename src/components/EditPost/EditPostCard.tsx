@@ -149,26 +149,24 @@ export default function EditPostCard({
             style={{marginBottom: 15}}
           />
         </View>
-        {(newPost.id === 'Create') ?
-          <View style={{backgroundColor: 'white', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 10, margin: 10, flexDirection: 'row'}}>
-            <Text>Hidden: </Text>
-            <Switch value={newPost.hidden} onValueChange={(e) => {
-              setNewPost({
-                ...newPost,
-                hidden: e
-              })
-            }}/>
-          </View>:
-          <View style={{backgroundColor: 'white', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 10, margin: 10, flexDirection: 'row'}}>
-            <Text>Hidden: </Text>
-            <Switch value={newPost.hidden} onValueChange={(e) => {
-              setNewPost({
-                ...newPost,
-                hidden: e
-              })
-            }}/>
-          </View>
-        }
+        <View style={{backgroundColor: 'white', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 10, margin: 10, flexDirection: 'row'}}>
+          <Text>Hidden: </Text>
+          <Switch value={newPost.hidden} onValueChange={(e) => {
+            setNewPost({
+              ...newPost,
+              hidden: e
+            })
+          }}/>
+        </View>
+        <View style={{backgroundColor: 'white', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 10, margin: 10, flexDirection: 'row'}}>
+          <Text>Title Hidden: </Text>
+          <Switch value={newPost.hiddenTitle} onValueChange={(e) => {
+            setNewPost({
+              ...newPost,
+              hiddenTitle: e
+            })
+          }}/>
+        </View>
         <UpdatePostButton newPost={newPost} setNewPost={setNewPost}/>
       </View>
     </ScrollView>

@@ -48,7 +48,8 @@ declare global {
     status: string;
     githubUrl: string;
     hidden: boolean;
-    views: postView[]
+    views: postView[];
+    hiddenTitle: boolean;
   }
   type message = {
     email: string;

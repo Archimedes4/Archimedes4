@@ -10,6 +10,7 @@ export default function PostBlock({item, onSelect, width}:{item: ListRenderItemI
   const [height, setHeight] = useState<number>(100)
   
   async function loadCover() {
+    console.log(item)
     if (item.item.cover.loadingState === loadingStateEnum.success) {
       Image.getSize(item.item.cover.url, (srcWidth, srcHeight) => {
         const aspectRatio = srcWidth / srcHeight;
@@ -35,7 +36,7 @@ export default function PostBlock({item, onSelect, width}:{item: ListRenderItemI
   }, [])
   
   return (
-    <Pressable onPress={() => onSelect()} style={{width: width, height: height + 25, borderRadius: 15, backgroundColor: '#FFFFFF', marginLeft: 'auto', marginRight: 'auto', overflow: 'hidden', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', padding: 'auto'}}>
+    <Pressable onPress={() => onSelect()} style={{width: width, height: height + ((item.item.hiddenTitle === false) ? 25:0), borderRadius: 15, backgroundColor: '#FFFFFF', marginLeft: 'auto', marginRight: 'auto', overflow: 'hidden', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', padding: 'auto'}}>
       { (item.item.cover.loadingState === loadingStateEnum.loading) ?
         <View style={{width: width, height: height, alignContent: 'center', alignItems: 'center', justifyContent: 'center'}}>
           <ActivityIndicator size="large" />
@@ -48,14 +49,16 @@ export default function PostBlock({item, onSelect, width}:{item: ListRenderItemI
           }
         </>
       }
-      <View style={{flexDirection: 'row'}}>
-        <Text style={{marginLeft: 5}}>{item.item.title}</Text>
-        <View style={{flexDirection: 'row', marginLeft: 'auto', marginRight: 5}}>
-          {item.item.technologies.map((svg) => (
-            <SVGXml key={svg.id} xml={svg.content} width={16} height={16} />
-          ))}
-        </View>
-      </View>
+      {(item.item.hiddenTitle === false) ?
+        <View style={{flexDirection: 'row'}}>
+          <Text style={{marginLeft: 5}}>{item.item.title}</Text>
+          <View style={{flexDirection: 'row', marginLeft: 'auto', marginRight: 5}}>
+            {item.item.technologies.map((svg) => (
+              <SVGXml key={svg.id} xml={svg.content} width={16} height={16} />
+            ))}
+          </View>
+        </View>:null
+      }
     </Pressable>
   )
 }

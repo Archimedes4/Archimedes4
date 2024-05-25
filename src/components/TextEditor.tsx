@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { NativeSyntheticEvent, Pressable, TextInput, TextInputKeyPressEventData, Text, View, ScrollView, Keyboard } from "react-native";
+import { NativeSyntheticEvent, Pressable, TextInput, TextInputKeyPressEventData, Text, View, ScrollView, Keyboard, Platform } from "react-native";
 import createUUID from "../ulti/createUUID";
 import * as Clipboard from 'expo-clipboard';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from "react-native-reanimated";
@@ -12,7 +12,7 @@ function getPositionChar(position: number, text: textCharType[]): textCharType |
   }
 }
 
-function handeKeyDown(e: NativeSyntheticEvent<TextInputKeyPressEventData>, position: number, text: textCharType[]): {position: number, newText?: textCharType[]} {
+async function handeKeyDown(e: NativeSyntheticEvent<TextInputKeyPressEventData>, position: number, text: textCharType[]): Promise<{ position: number; newText?: textCharType[]; }> {
   if (e.nativeEvent.key === "ArrowRight") {
     if (text[text.length - 1].position > position) {
       return {position: position + 1}
@@ -183,7 +183,39 @@ function handeKeyDown(e: NativeSyntheticEvent<TextInputKeyPressEventData>, posit
       ]}
     }
   }
-  if (!["Shift", "Escape", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "Control", "Alt", "Meta"].includes(e.nativeEvent.key)) {
+  // @ts-expect-error metaKey exists on web
+  if (Platform.OS === 'web' && e.nativeEvent.key === 'v' && e.metaKey === true) {
+    const clipboard = await Clipboard.getStringAsync();
+    let newPosition = position;
+    let newText = [...text]
+    for (let index = 0; index < clipboard.length; index += 1) {  
+      const posChar = getPositionChar(newPosition, newText);
+      if (posChar !== undefined) {
+        newPosition += 1
+        newText = [
+          ...newText.slice(0, newPosition + 1),
+          {
+            char: clipboard.at(index),
+            line: posChar.line,
+            linePosition: posChar.linePosition + 1,
+            position: newPosition + 1,
+            id: createUUID()
+          },
+          ...newText.slice(newPosition + 1).flatMap((x) => {
+            if (x.line === posChar.line) {
+              return {...x, linePosition: x.linePosition + 1, position: x.position + 1}
+            }
+            return {...x,  position: x.position + 1}
+          })
+        ]
+      }
+    }
+    console.log("Here", newText)
+    return ({
+      position: newPosition,
+      newText
+    })
+  } else if (!["Shift", "Escape", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "Control", "Alt", "Meta"].includes(e.nativeEvent.key)) {
     const posChar = getPositionChar(position, text);
     if (posChar !== undefined) {
       return {position: position + 1, newText: [
@@ -264,10 +296,11 @@ type textCharType = {
 
 const colors:string[] = ["red","blue","green","yellow","orange"]
 
-export default function TextEditor({text, onChangeText}:{text: string, onChangeText: (item: string) => void}) {
+export default function TextEditor({text, onChangeText, height}:{text: string, onChangeText: (item: string) => void; height: number}) {
   const [position, setPosition] = useState<number>(0);
   const carrotOppacity = useSharedValue(1);
   const mainRef = useRef<TextInput>();
+  const horizontalScroll = useRef<ScrollView>();
   const [textChar, setTextChar] = useState<textCharType[]>([{
     char: '',
     line: 0,
@@ -278,7 +311,6 @@ export default function TextEditor({text, onChangeText}:{text: string, onChangeT
 
   async function pasteItem() {
     const clipboard = await Clipboard.getStringAsync();
-    console.log(clipboard)
     let result = "";
     let lastLine = 0;
     for (let index = 0; index < textChar.length; index += 1) {
@@ -313,7 +345,6 @@ export default function TextEditor({text, onChangeText}:{text: string, onChangeT
   }, [textChar])
   
   useEffect(() => {
-    console.log(mainRef.current.isFocused())
     setTextChar(convertTextToType(text));
     carrotOppacity.value = withRepeat(withSequence(withDelay(650, withTiming(0, {
       duration: 0
@@ -322,16 +353,30 @@ export default function TextEditor({text, onChangeText}:{text: string, onChangeT
     }))), -1);
   }, [])
 
+  useEffect(() => {
+    const result = getPositionChar(position, textChar)
+    if (result !== undefined) {
+      horizontalScroll.current.scrollTo({
+        x: result.position * 2
+      })
+    }
+  }, [position])
+
   return (
-    <>
-      <Pressable onPress={() => pasteItem()}>
-        <Text>Paste</Text>
-      </Pressable>
-      <Pressable onPress={() => {
-        mainRef.current.focus()
+    <View style={{marginHorizontal: 20, shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 10, backgroundColor: 'white'}}>
+      <View style={{borderBottomColor: 'black',borderBottomWidth: 1}}>
+        <Pressable onPress={() => pasteItem()}>
+          <Text>Paste</Text>
+        </Pressable>
+      </View>
+      <Pressable onPress={(e) => {
+        if (!mainRef.current?.isFocused()) {
+          e.preventDefault()
+          mainRef.current.focus()
+        }
         setPosition(textChar[textChar.length - 1].position)
       }}>
-        <ScrollView horizontal style={{backgroundColor: 'white'}}>
+        <ScrollView ref={horizontalScroll} horizontal style={{backgroundColor: 'white', padding: 4, height}}>
           <View>
             {Array.from(Array(textChar[textChar.length - 1].line + 1).keys()).map((i, index) => (
               <View key={i} style={{flexDirection: "row"}}>
@@ -339,7 +384,13 @@ export default function TextEditor({text, onChangeText}:{text: string, onChangeT
                   <Text>{index + 1}</Text>
                 </View>
                 {textChar.filter((e) => {return e.line === index}).map((char) => (
-                  <Pressable focusable={false} key={char.id} style={{flexDirection: 'row'}} onPress={() => {setPosition(char.position); mainRef.current.focus();}}>
+                  <Pressable focusable={false} key={char.id} style={{flexDirection: 'row'}} onPress={(e) => {
+                    e.preventDefault()
+                    setPosition(char.position);
+                    if (!mainRef.current?.isFocused()) {
+                      mainRef.current.focus();
+                    }
+                  }}>
                     <Text selectable={false}>{char.char}</Text>
                     { (position === char.position && mainRef.current?.isFocused()) ?
                       <Animated.View style={[ carrotStyle, {position: 'absolute', right: 0, width: 1.5, height: 16.4, backgroundColor: 'gray'}]}/>:null
@@ -351,14 +402,14 @@ export default function TextEditor({text, onChangeText}:{text: string, onChangeT
           </View>
         </ScrollView>
       </Pressable>
-      <TextInput ref={mainRef} multiline onKeyPress={(e) => {
-        const result = handeKeyDown(e, position, textChar)
-        console.log(result)
+      <TextInput ref={mainRef} multiline onKeyPress={async (e) => {
+        e.preventDefault()
+        const result = await handeKeyDown(e, position, textChar)
         setPosition(result.position);
         if (result.newText !== undefined) {
           setTextChar(result.newText)
         }
-      }} style={{opacity: 0}}/>
-    </>
+      }} style={{opacity: 0, height: 0}}/>
+    </View>
   )
 }

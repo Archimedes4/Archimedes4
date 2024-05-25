@@ -24,7 +24,8 @@ export async function addPost(item: post): Promise<{
       githubUrl: item.githubUrl,
       status: item.status,
       technologies: resultTechnologies,
-      hidden: item.hidden
+      hidden: item.hidden,
+      hiddenTitle: item.hiddenTitle
     })
     return {
       result: loadingStateEnum.success,
@@ -140,7 +141,8 @@ export async function listPosts(hidden: boolean, type?: "Coding" | "Activities")
       technologies: foundTechnologies,
       githubUrl: data.githubUrl,
       hidden: data.hidden,
-      views: []
+      views: [],
+      hiddenTitle: data.hiddenTitle
     })
   });
   return {result: loadingStateEnum.success, data: resultData};
@@ -171,7 +173,8 @@ export async function getPost(id: string): Promise<{result: loadingStateEnum.fai
         technologies: resultTechnologies,
         githubUrl: data.githubUrl,
         hidden: data.hidden,
-        views: []
+        views: [],
+        hiddenTitle: data.hiddenTitle
       }}
     } else {
       return { result: loadingStateEnum.notFound }

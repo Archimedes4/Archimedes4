@@ -13,15 +13,6 @@ export async function signIn(email: string, password: string): Promise<loadingSt
   }
 }
 
-export function isUserAdmin(): boolean {
-  if (auth.currentUser !== null) {
-    //TODO check admin
-    return true
-  } else {
-    return false
-  }
-}
-
 export async function resetPassword(oobCode: string, newPassword: string) {
   await confirmPasswordReset(auth, oobCode, newPassword)
 }
