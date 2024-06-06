@@ -30,7 +30,7 @@ export default function Contact() {
       <Header />
       <View style={{shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, marginLeft: 10, marginRight: 10, marginBottom: 10, backgroundColor: "white"}}>
         <Text style={{fontSize: 20, marginLeft: 10, marginTop: 10}}>Write a message</Text>
-        <TextInput multiline value={message} onChangeText={setMessage} style={{marginLeft: 10, marginRight: 10, marginTop: 3, height: height - 300}}/>
+        <TextInput multiline value={message} onChangeText={setMessage} style={{marginLeft: 10, marginRight: 10, marginTop: 3, height: height - 300, minHeight: 110, borderRadius: 5, borderWidth: 1, padding: 5}}/>
         <Text style={{marginLeft: 10}}>Your Contact</Text>
         <TextInput
           value={email}
@@ -43,7 +43,7 @@ export default function Contact() {
             borderWidth: 1,
             borderColor: 'black',
             borderRadius: 30,
-            padding: 5
+            padding: 5,
           },
           // @ts-expect-error
           Platform.select({

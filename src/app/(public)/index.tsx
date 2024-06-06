@@ -5,7 +5,7 @@
   Home.tsx
   The main home page
 */
-import { View, Text } from 'react-native'
+import { View, Text, Pressable } from 'react-native'
 import React, { ReactNode, useEffect, useState } from 'react'
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { StatusBar } from 'expo-status-bar';
@@ -31,13 +31,28 @@ function getBodySize(width: number, height: number): number {
 
 function BodyBlock({text, children}:{text: string, children: ReactNode}) {
   const { width, height } = useSelector((state: RootState) => state.dimentions);
+  const [isHover, setIsHover] = useState<boolean>(false);
   return (
-    <View style={{width: getBodySize(width, height), height: getBodySize(width, height), marginLeft: 'auto', marginRight: 'auto', borderRadius: getBodySize(width, height)/2, backgroundColor: 'black'}}>
+    <Pressable 
+      style={{
+        width: getBodySize(width, height),
+        height: getBodySize(width, height),
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        borderRadius: getBodySize(width, height)/2,
+        backgroundColor: 'black',
+        transform: [{scale: isHover ? 1.05:1}],
+        shadowRadius: isHover ? 10:0,
+        shadowColor: 'white'
+      }}
+      onHoverIn={() => setIsHover(true)}
+      onHoverOut={() => setIsHover(false)}
+    >
       <View style={{marginLeft: 'auto', marginRight: 'auto', marginTop: 'auto'}}>
         {children}
       </View>
       <Text style={{marginTop: 5, marginLeft: 'auto', marginRight: 'auto', color: 'white', marginBottom: "auto"}}>{text}</Text>
-    </View>
+    </Pressable>
   )
 }
 
