@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Andrew_Mainella",
+    "name": "Andrew Mainella",
     "slug": "Andrew_Mainella",
     "scheme": "Andrew_Mainella",
     "version": "1.0.0",
@@ -17,14 +17,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.archimedes4.AndrewMainella"
+      "bundleIdentifier": "com.Archimedes4.AndrewMainella"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.archimedes4.Andrew_Mainella"
+      "package": "com.Archimedes4.Andrew_Mainella"
     },
     "web": {
       "favicon": "./assets/favicon.jpg",

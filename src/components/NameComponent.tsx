@@ -5,22 +5,21 @@
 import Animated, { SharedValue, useAnimatedStyle } from "react-native-reanimated";
 import { useSelector } from "react-redux";
 import store, { RootState } from "../redux/store";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { Text, View } from "react-native";
-import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
-function getNameProgress(progress: number) {
-  const width = store.getState().dimentions.width
+function getNameProgress(progress: number, width: number) {
+  'worklet'
   if (progress < width/2) {
     return 0;
   }
   return progress - width/2
 }
 
-function getRightValue(progress: number, nameWidth: number): number {
-  const width = store.getState().dimentions.width
-  const progressValue = getNameProgress(progress)
+function getRightValue(progress: number, nameWidth: number, width: number): number {
+  'worklet'
+  const progressValue = getNameProgress(progress, width)
   if (progressValue === 0) {
     return width
   }
@@ -30,9 +29,9 @@ function getRightValue(progress: number, nameWidth: number): number {
   return (width - nameWidth)/2
 }
 
-function getLeftValue(progress: number, nameWidth: number): number {
-  const width = store.getState().dimentions.width
-  const progressValue = getNameProgress(progress)
+function getLeftValue(progress: number, nameWidth: number, width: number): number {
+  'worklet'
+  const progressValue = getNameProgress(progress, width)
   if (progressValue === 0) {
     return -nameWidth
   }
@@ -60,7 +59,7 @@ export default function NameComponent({progress}:{progress: SharedValue<number>}
     return {
       transform: [
         {
-          translateX: getLeftValue(progress.value, firstNameWidth)
+          translateX: getLeftValue(progress.value, firstNameWidth, width)
         },
       ],
     };
@@ -70,7 +69,7 @@ export default function NameComponent({progress}:{progress: SharedValue<number>}
     return {
       transform: [
         {
-          translateX: getRightValue(progress.value, lastNameWidth)
+          translateX: getRightValue(progress.value, lastNameWidth, width)
         },
       ],
     };

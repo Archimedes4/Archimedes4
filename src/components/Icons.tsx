@@ -304,3 +304,11 @@ export function GithubIcon({ width, height, style }: iconProps) {
     </Svg>
   )
 }
+
+export function LogoIcon({ width, height, style }: iconProps) {
+  return (
+    <Svg width={width} height={height} style={style} viewBox="0 0 33 33" fill="none">
+      <Path d="m 9 24 z C 7 30 7 30 6 30 L 2 30 Q 0 30 1 28 L 10 7 Q 16 -5 22 7 L 32 28 Q 33 30 31 30 L 27 30 C 26 30 25 29 24 28 L 5 10 C 2 7 6 4 9 7 L 22 19 C 23 20 24 19 23 17 L 18 7 C 17 5 15 5 14 7 L 9 24" fill="white"/>
+    </Svg>
+  )
+}

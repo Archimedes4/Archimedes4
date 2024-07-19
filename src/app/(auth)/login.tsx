@@ -1,10 +1,15 @@
-import { View, Text, TextInput, Pressable, ActivityIndicator } from 'react-native'
-import React, { useState } from 'react'
-import { getAuth } from "firebase/auth";
+import { View, Text, TextInput, Pressable, ActivityIndicator, Platform, useWindowDimensions } from 'react-native';
+import React, { useState } from 'react';
 import { signIn } from '../../ulti/authenticationFunctions';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { loadingStateEnum } from '../../Types';
+import StyledButton from '../../components/StyledButton';
+import AppleAuthenticationButton from '../../components/AppleAuthenticationButton';
+import useIsUserAuth from '../../hooks/useIsUserAuth';
+import { Redirect, router } from 'expo-router';
+import { LogoIcon } from '../../components/Icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function getColor(hover: boolean, focus: boolean) {
   if (focus) {
@@ -17,7 +22,9 @@ function getColor(hover: boolean, focus: boolean) {
 }
 
 export default function AdminLogin() {
+  const { isUserAuth } = useIsUserAuth()
   const { height, width } = useSelector((state: RootState) => state.dimentions);
+  const dimentions = useWindowDimensions()
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isLoginHover, setIsLoginHover] = useState<boolean>(false);
@@ -26,6 +33,7 @@ export default function AdminLogin() {
   const [emailFocus, setEmailFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
   const [signInState, setSignInState] = useState<loadingStateEnum>(loadingStateEnum.notStarted)
+  const insets = useSafeAreaInsets()
 
   async function onSignIn() {
     setSignInState(loadingStateEnum.loading)
@@ -35,6 +43,29 @@ export default function AdminLogin() {
     } else {
     setSignInState(loadingStateEnum.failed)
     }
+  }
+
+  if (isUserAuth === true) {
+    return (
+      <Redirect href={'/admin'}/>
+    )
+  }
+
+  if (Platform.OS === 'ios') {
+    return (
+      <View style={{width, height, backgroundColor: "#1c93ba", paddingBottom: insets.bottom}}>
+        <View style={{marginTop: 'auto', marginBottom: 'auto', width}}>
+          <LogoIcon width={width * 0.5} height={width * 0.5} style={{marginHorizontal: width * 0.25}}/>
+          <Text style={{marginHorizontal: 'auto', fontSize: 18, fontWeight: 'bold', color: 'white', textAlign: 'center', marginVertical: 15}}>Andrew Mainella Login</Text>
+          <View style={{marginHorizontal: 15, flexDirection: 'row'}}>
+            <AppleAuthenticationButton />
+          </View>
+          { (width > 500) ?
+            <StyledButton text='Back' style={{padding: 10, marginHorizontal: 15}} onPress={() => {router.push("/")}}/>:null
+          }
+        </View>
+      </View>
+    )
   }
 
   return (

@@ -9,6 +9,7 @@ import { router, useGlobalSearchParams } from "expo-router";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import Header from "../../../../components/Header";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 
 export default function EditTechnology() {
@@ -21,6 +22,7 @@ export default function EditTechnology() {
   const [loadTechState, setLoadTechState] = useState<loadingStateEnum>(loadingStateEnum.loading)
   const [item, setItem] = useState<technology>(undefined);
   const [deleteState, setDeleteState] = useState<loadingStateEnum>(loadingStateEnum.notStarted);
+  const insets = useSafeAreaInsets()
 
   //states
   const { id } = useGlobalSearchParams();
@@ -81,7 +83,7 @@ export default function EditTechnology() {
   
   if (item !== undefined && loadTechState === loadingStateEnum.success) {
     return (
-      <View style={{width: width, height: height, backgroundColor: "#1c93ba"}}>
+      <View style={{width: width, height: height, backgroundColor: "#1c93ba", paddingTop: insets.top}}>
         <Header />
         <Pressable onPress={() => router.push("/admin/technologies")}>
           <Text>Back</Text>

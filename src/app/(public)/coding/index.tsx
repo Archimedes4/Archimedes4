@@ -7,10 +7,12 @@ import PostBlock from '../../../components/PostBlock'
 import Header from '../../../components/Header'
 import { listPosts } from '../../../redux/reducers/postsReducer'
 import { router } from 'expo-router'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Coding() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
   const { postState, posts } = useSelector((state: RootState) => state.posts);
+  const insets = useSafeAreaInsets()
 
   async function loadPosts() {
     listPosts("Coding")
@@ -21,9 +23,9 @@ export default function Coding() {
   }, [])
 
   return (
-    <View style={{width: width, height: height, backgroundColor: "#1c93ba"}}>
+    <View style={{width: width, height: height, backgroundColor: "#1c93ba", paddingTop: insets.top}}>
       <Header />
-      <Text style={{fontSize: height * 0.1, fontFamily: 'Bungee-Regular', color: 'white', marginLeft: 20}}>Coding</Text>
+      <Text style={{fontSize: height * 0.1, fontFamily: 'Bungee-Regular', color: 'white', marginHorizontal: 20, textAlign: 'center'}}>Coding</Text>
       { (postState === loadingStateEnum.loading) ?
         <View style={{flex: 1, alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
           <ActivityIndicator size={"large"}/>

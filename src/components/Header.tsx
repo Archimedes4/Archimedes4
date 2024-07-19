@@ -1,9 +1,10 @@
-import { View, Text, Pressable, Linking } from 'react-native'
+import { View, Text, Pressable, Linking, Platform } from 'react-native'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { ActivityIcon, CodingIcon, ContactIcon, GithubIcon, HomeIcon } from './Icons'
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
 import { useRouter } from 'expo-router'
+import useSetting from '../hooks/useSetting'
 
 function getWidth(width: number) {
   if (width/5 <= 20) {
@@ -41,15 +42,53 @@ export default function Header() {
   const router = useRouter();
   const { width } = useSelector((state: RootState) => state.dimentions);
   const [compSize, setCompSize] = useState<number>(14);
+  const [isShowingAuth, setIsShowingAuth] = useSetting<number>("showing_login")
+  const [isComped, setIsComped] = useState(false)
 
   useEffect(() => {
     const compWidth = getWidth((width - 5))
-    if (compWidth < 100) {
+    if (compWidth < 80) {
+      setIsComped(true)
+    } else if (compWidth < 100) {
+      setIsComped(false)
       setCompSize(compWidth/14)
     } else {
+      setIsComped(false)
       setCompSize(14)
     }
   }, [width])
+
+  if (width <= 500) {
+    return null
+  }
+
+  if (isComped) {
+    return (
+      <View style={{backgroundColor: "blue", flexDirection: 'row', height: (width/5), alignItems: 'center'}}>
+        <Pressable style={{width: width/5, alignItems: 'center'}} onPress={() => router.push("/")}>
+          <HomeIcon width={(width/5) * 0.8} height={(width/5) * 0.8}/>
+        </Pressable>
+        <Pressable style={{width: width/5, alignItems: 'center'}} onPress={() => router.push("/")}>
+          <CodingIcon width={(width/5) * 0.8} height={(width/5) * 0.8}/>
+        </Pressable>
+        <Pressable style={{width: width/5, alignItems: 'center'}} onPress={() => router.push("/")}>
+          <ActivityIcon width={(width/5) * 0.8} height={(width/5) * 0.8}/>
+        </Pressable>
+        <Pressable style={{width: width/5, alignItems: 'center'}} onPress={() => {
+           if (isShowingAuth === 1) {
+            router.push('/admin')
+          } else {
+            setIsShowingAuth(1)
+          }
+        }}>
+         <GithubIcon width={(width/5) * 0.8} height={(width/5) * 0.8} style={{margin: 'auto', marginRight: 0}}/>
+        </Pressable>
+        <Pressable style={{width: width/5, alignItems: 'center'}} onPress={() => router.push("/")}>
+          <ContactIcon width={(width/5) * 0.8} height={(width/5) * 0.8} style={{margin: 'auto', marginRight: 0}}/>
+        </Pressable>
+      </View>
+    )
+  }
 
   return (
     <View style={{marginLeft: 'auto', marginRight: 'auto', paddingTop: 10, paddingBottom: 10}}>
@@ -63,7 +102,14 @@ export default function Header() {
         <HeaderBlock text='Activities' onPress={() => router.replace('/activities')}>
           <ActivityIcon width={compSize} height={compSize} style={{margin: 'auto', marginRight: 0}}/>
         </HeaderBlock>
-        <HeaderBlock text='GitHub' onPress={() => Linking.openURL('https://github.com/Archimedes4')}>
+        <HeaderBlock text={(isShowingAuth === 1) ? "Login":'GitHub'} onPress={() => {
+          if (isShowingAuth === 1) {
+            router.push('/admin')
+          } else {
+            setIsShowingAuth(1)
+          }
+         // Linking.openURL('https://github.com/Archimedes4')
+        }}>
           <GithubIcon width={compSize} height={compSize} style={{margin: 'auto', marginRight: 0}}/>
         </HeaderBlock>
         <HeaderBlock text='Contact' onPress={() => router.replace('/contact')} last={true}>

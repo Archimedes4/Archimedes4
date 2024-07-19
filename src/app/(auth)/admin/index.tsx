@@ -11,6 +11,7 @@ import { loadingStateEnum } from '../../../Types';
 import { listPosts } from '../../../ulti/postFunctions';
 import Header from '../../../components/Header';
 import { router } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function AdminPostBlock({post}:{post: ListRenderItemInfo<post>}) {
   const [isHover, setIsHover] = useState<boolean>(false);
@@ -29,6 +30,7 @@ export default function AdminPanel() {
   const [isTechHover, setIsTechHover] = useState<boolean>(false);
   const [topHeight, setTopHeight] = useState<number>(0);
   const [bottomHeight, setBottomHeight] = useState<number>(0);
+  const insets = useSafeAreaInsets()
 
   async function loadPost() {
     const result = await listPosts(true);
@@ -62,7 +64,7 @@ export default function AdminPanel() {
   }, [])
 
   return (
-    <ScrollView style={{width: width, height: height, backgroundColor: "#1c93ba"}}>
+    <ScrollView style={{width: width, height: height, backgroundColor: "#1c93ba", paddingTop: insets.top, paddingBottom: (width <= 500) ? 0:insets.bottom}}>
       <View onLayout={(e) => setTopHeight(e.nativeEvent.layout.height)}>
         <Header />
         <Text style={{marginLeft: 'auto', marginRight: 'auto', color: 'white'}}>Admin Panel</Text>
@@ -72,7 +74,7 @@ export default function AdminPanel() {
         renderItem={(post) => (
           <AdminPostBlock post={post} />
         )}
-        style={{height: height - bottomHeight - topHeight}}
+        style={{height: height - bottomHeight - topHeight - (width > 500 ? insets.bottom:0) - insets.top}}
       />
       <View style={{flexDirection: 'row'}} onLayout={(e) => setBottomHeight(e.nativeEvent.layout.height)}>
         <View style={{width: width/2}}>

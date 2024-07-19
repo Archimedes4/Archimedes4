@@ -5,7 +5,7 @@
   Home.tsx
   The main home page
 */
-import { View, Text, Pressable } from 'react-native'
+import { View, Text, Pressable, Platform } from 'react-native'
 import React, { ReactNode, useEffect, useState } from 'react'
 import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { StatusBar } from 'expo-status-bar';
@@ -14,6 +14,8 @@ import { RootState } from '../../redux/store';
 import { AzureIcon, FirebaseIcon, GitIcon, JavaIcon, ProcessingIcon, PythonIcon, ReactIcon, SwiftIcon } from '../../components/Icons';
 import Header from '../../components/Header';
 import NameComponent from '../../components/NameComponent';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function getChildrenSize(width: number, height: number): number {
   if (width < height) {
@@ -24,7 +26,7 @@ function getChildrenSize(width: number, height: number): number {
 
 function getBodySize(width: number, height: number): number {
   if (width < height) {
-    return  width * 0.3;
+    return  width * 0.25;
   }
   return height * 0.35;
 }
@@ -65,7 +67,7 @@ function BodyComponent({onLayoutHeight}:{onLayoutHeight: (item: number) => void}
       </View>
       <Text style={{color: "white", fontSize: 25, marginLeft: 20, marginRight: 20}}>my name is Andrew Mainella, I am a student, curler, coder. I am a born and raised Manitoban. I am a student at Saint Paul's High School with a passion for computer science. I hope that this website will show you what I have done!</Text>
       <View>
-        <Text adjustsFontSizeToFit style={{color: 'white', fontSize: 50, marginLeft: 20}}>What I am using</Text>
+        <Text adjustsFontSizeToFit style={{color: 'white', fontSize: 50, marginHorizontal: 20}} numberOfLines={1}>What I am using</Text>
         <View style={{flexDirection: "row", width: width - 40, marginLeft: 20}}>
           <BodyBlock text='React'>
             <ReactIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
@@ -77,7 +79,7 @@ function BodyComponent({onLayoutHeight}:{onLayoutHeight: (item: number) => void}
             <AzureIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
           </BodyBlock>
         </View>
-        <Text adjustsFontSizeToFit style={{color: 'white', fontSize: 50, marginLeft: 20}}>What I am learning</Text>
+        <Text adjustsFontSizeToFit style={{color: 'white', fontSize: 50, marginHorizontal: 20}} numberOfLines={1}>What I am learning</Text>
         <View style={{flexDirection: "row", width: width - 40, marginLeft: 20}}>
           <BodyBlock text='Java'>
             <JavaIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
@@ -89,7 +91,7 @@ function BodyComponent({onLayoutHeight}:{onLayoutHeight: (item: number) => void}
             <PythonIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
           </BodyBlock>
         </View>
-        <Text adjustsFontSizeToFit numberOfLines={1} style={{color: 'white', fontSize: 50, marginLeft: 20}}>What I have used</Text>
+        <Text adjustsFontSizeToFit style={{color: 'white', fontSize: 50, marginHorizontal: 20}} numberOfLines={1}>What I have used</Text>
         <View style={{flexDirection: "row", width: width - 40, marginLeft: 20, marginBottom: 10}}>
           <BodyBlock text='Firebase'>
             <FirebaseIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
@@ -114,6 +116,8 @@ export default function Index() {
   const progress = useSharedValue(0);
   const [bodyHeight, setBodyHeight] = useState<number>(0);
 
+  const insets = useSafeAreaInsets()
+
   const innerStyle = useAnimatedStyle(() => {
     return {
       top: ((width * 1.5) > progress.value) ? 0:-(progress.value - width * 1.5)
@@ -123,7 +127,7 @@ export default function Index() {
   const headerStyle = useAnimatedStyle(() => {
     return {
       opacity: ((width * 1.5) > progress.value) ? 0:(progress.value - width * 1.5 > 100) ? 1:1-progress.value/100,
-      top: ((width * 1.5) > progress.value) ? 0:progress.value - width * 1.5
+      top: (((width * 1.5) > progress.value) ? 0:progress.value - width * 1.5)
     }
   })
 
@@ -131,22 +135,59 @@ export default function Index() {
     progress.value = event.contentOffset.y
   });
 
+  const gesture = Gesture.Pan().onUpdate((e) => {
+    if (progress.value - e.translationY >= 0 && progress.value - e.translationY <= (width * 1.5) + bodyHeight) {
+      progress.value -= e.translationY
+    } else if (progress.value - e.translationY < 0) {
+      progress.value = 0
+    } else if (progress.value - e.translationY > (width * 1.5) + bodyHeight) {
+      progress.value = (width * 1.5) + bodyHeight
+    }
+  })
+
+  if (Platform.OS === 'ios') {
+    return (
+      <GestureDetector gesture={gesture}>
+        <View
+          style={{width, height, backgroundColor: "#1c93ba"}}
+        >
+          <Animated.View style={[{width: width, height: height, zIndex: 5, backgroundColor: "#1c93ba"}, innerStyle]}>
+            <StatusBar style="auto" />
+            <Animated.View style={[{zIndex: 12, width: width, position: 'absolute', marginTop: insets.top}, headerStyle]}>
+              <Header />
+            </Animated.View>
+            <NameComponent progress={progress}/>
+            <BodyComponent onLayoutHeight={setBodyHeight}/>
+          </Animated.View>
+        </View>
+      </GestureDetector>
+    )
+  }
+
   return (
-    <Animated.ScrollView scrollEventThrottle={16} style={{width: width, height: height, zIndex: 10}} onScroll={scrollHandler}
-      stickyHeaderIndices={[0]}
-    >
-      <Animated.View style={[{width: width, height: height, position: 'absolute'}, innerStyle]}>
-        <StatusBar style="auto" />
-        <Animated.View style={[{zIndex: 12, width: width, position: 'absolute'}, headerStyle]}>
-          <Header />
+    <View style={{width, height, backgroundColor: "#1c93ba"}}>
+      
+      <Animated.ScrollView scrollEventThrottle={16} style={{width: width, height: height, zIndex: 6}} onScroll={scrollHandler} contentContainerStyle={{
+        height: width * 1.5 + height + bodyHeight,
+        pointerEvents: 'none'
+      }} stickyHeaderIndices={[0]}>
+        <Animated.View style={[{width: width, height: height, zIndex: 5, backgroundColor: "#1c93ba", position: 'absolute'}, innerStyle]}>
+          <StatusBar style="auto" />
+          <Animated.View style={[{zIndex: 12, width: width, position: 'absolute'}, headerStyle]}>
+            <Header />
+          </Animated.View>
+          <NameComponent progress={progress}/>
+          <BodyComponent onLayoutHeight={setBodyHeight}/>
         </Animated.View>
-        <NameComponent progress={progress}/>
-        <BodyComponent onLayoutHeight={setBodyHeight}/>
-      </Animated.View>
-      <View style={{height: width * 1.5 + height + bodyHeight, backgroundColor: "#1c93ba"}} pointerEvents='none'>
-        
-      </View>
-    </Animated.ScrollView>
+      </Animated.ScrollView>
+{/*         
+      //   {Platform.OS !== 'ios' ?
+      //     <View style={{height: width * 1.5 + height + bodyHeight, zIndex: -1}}>
+          
+      //     </View>:null
+      //   }
+      // </Animated.ScrollView>  */}
+    </View>
   )
 }
 
