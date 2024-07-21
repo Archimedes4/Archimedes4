@@ -3,12 +3,13 @@ import { RootState } from "../redux/store";
 import { useEffect, useState } from "react";
 import { loadingStateEnum, uploadStateEnum } from "../Types";
 import { listStorageItems, useUploadFile } from "../ulti/storageFunctions";
-import { FlatList, Pressable, View, Text, Image, ListRenderItemInfo, ActivityIndicator } from "react-native";
+import { FlatList, Pressable, View, Text, Image, ListRenderItemInfo, ActivityIndicator, useWindowDimensions } from "react-native";
 import StyledButton from "./StyledButton";
 import { TrashIcon } from "./Icons";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db, storage } from "../app/_layout";
 import { deleteObject, ref } from "firebase/storage";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 
 function FileItem({
@@ -70,7 +71,8 @@ function FileItem({
 }
 
 export default function SelectFile({onClose, onSelect, selectedFile}:{onClose: () => void, onSelect: (item: storageItem | undefined) => void, selectedFile: undefined|storageItem}) {
-  const { height, width } = useSelector((state: RootState) => state.dimentions);
+  const { height, width } = useWindowDimensions()
+  const insets = useSafeAreaInsets()
 
   const [fileState, setFileState] = useState<loadingStateEnum>(loadingStateEnum.loading);
   const [files, setFiles] = useState<storageItem[]>([]);
@@ -93,11 +95,11 @@ export default function SelectFile({onClose, onSelect, selectedFile}:{onClose: (
 
   if (fileState === loadingStateEnum.success) {
     return ( 
-      <View style={{width, height, backgroundColor: "#1c93ba"}}>
+      <View style={{width, height, backgroundColor: "#1c93ba", paddingBottom: insets.bottom, paddingTop: insets.top}}>
         <Pressable onPress={() => onClose()}>
           <Text>Close</Text>
         </Pressable>
-        <Text>Select File</Text>
+        <Text style={{fontSize: height * 0.1, fontFamily: 'Bungee-Regular', color: 'white', marginHorizontal: 20, textAlign: 'center'}} adjustsFontSizeToFit numberOfLines={1}>Select File</Text>
         <FlatList
           data={files}
           renderItem={(item) => (

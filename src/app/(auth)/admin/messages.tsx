@@ -13,6 +13,7 @@ import { loadingStateEnum } from '../../../Types';
 import { listMessages } from '../../../ulti/messageFunctions';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import HeaderText from '../../../components/HeaderText';
 
 export default function AdminMessages() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
@@ -41,7 +42,7 @@ export default function AdminMessages() {
       <Pressable onPress={() => router.push("/admin")}>
         <Text>Back</Text>
       </Pressable>
-      <Text style={{textAlign: 'center'}}>Admin Messages</Text>
+      <HeaderText text='Admin Messages'/>
       <FlatList
         data={messages}
         renderItem={(message) => (

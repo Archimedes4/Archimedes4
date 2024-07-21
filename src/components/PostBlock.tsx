@@ -10,7 +10,6 @@ export default function PostBlock({item, onSelect, width}:{item: ListRenderItemI
   const [height, setHeight] = useState<number>(100)
   
   async function loadCover() {
-    console.log(item)
     if (item.item.cover.loadingState === loadingStateEnum.success) {
       Image.getSize(item.item.cover.url, (srcWidth, srcHeight) => {
         const aspectRatio = srcWidth / srcHeight;

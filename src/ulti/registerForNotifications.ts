@@ -35,7 +35,7 @@ export default async function registerForPushNotificationsAsync(): Promise<{
     }
 
     //TODO fix
-    const projectId = 'd29b72c5-c493-44f3-90a8-6ec7a4a37b61';
+    const projectId = 'e37f58d3-106c-4403-9f4d-f65867548aec';
     if (!projectId) {
       return {
         result: loadingStateEnum.failed,

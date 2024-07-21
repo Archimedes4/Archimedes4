@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { sendMessage } from '../../ulti/messageFunctions';
 import { loadingStateEnum } from '../../Types';
-import { GithubIcon, MailIcon } from '../../components/Icons';
+import { GithubIcon, MailIcon, SendIcon } from '../../components/Icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function Contact() {
@@ -50,6 +50,7 @@ export default function Contact() {
               borderColor: 'black',
               borderRadius: 30,
               padding: 5,
+              marginBottom: (message === "" ? 10:0)
             },
             // @ts-expect-error
             Platform.select({
@@ -57,16 +58,19 @@ export default function Contact() {
                 outlineStyle: "none"
               }
             })]}/>
-          <Pressable
-            onHoverIn={() => setIsSendHover(true)}
-            onHoverOut={() => {setIsSendHover(false)}}
-            onPressIn={() => setIsSendHover(true)}
-            onPressOut={() => {setIsSendHover(false)}}
-            onPress={() => {loadSendMessage()}}
-            style={{backgroundColor: isSendHover ? "#d3d3d3":"white", shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 10, marginHorizontal: 5, marginBottom: 10, marginTop: 10, flexDirection: 'row', justifyContent: 'center'}}
-          >
-            <Text style={{fontSize: 18, fontWeight: 'bold'}}>SEND</Text>
-          </Pressable>
+          {message !== "" ?
+            <Pressable
+              onHoverIn={() => setIsSendHover(true)}
+              onHoverOut={() => {setIsSendHover(false)}}
+              onPressIn={() => setIsSendHover(true)}
+              onPressOut={() => {setIsSendHover(false)}}
+              onPress={() => {loadSendMessage()}}
+              style={{backgroundColor: isSendHover ? "#d3d3d3":"white", shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 10, marginHorizontal: 5, marginBottom: 10, marginTop: 10, flexDirection: 'row', justifyContent: 'center'}}
+            >
+              <SendIcon width={25} height={25}/>
+              <Text style={{fontSize: 18, fontWeight: 'bold', marginTop: 'auto', marginBottom: 'auto', marginLeft: 5}}>SEND</Text>
+            </Pressable>:null
+          }
         </View>
         <View style={{flexDirection: (width < 450) ? undefined:'row', marginBottom: 10}}>
           <Pressable

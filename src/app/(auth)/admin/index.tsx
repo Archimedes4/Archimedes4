@@ -12,6 +12,7 @@ import { listPosts } from '../../../ulti/postFunctions';
 import Header from '../../../components/Header';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import HeaderText from '../../../components/HeaderText';
 
 function AdminPostBlock({post}:{post: ListRenderItemInfo<post>}) {
   const [isHover, setIsHover] = useState<boolean>(false);
@@ -67,7 +68,7 @@ export default function AdminPanel() {
     <ScrollView style={{width: width, height: height, backgroundColor: "#1c93ba", paddingTop: insets.top, paddingBottom: (width <= 500) ? 0:insets.bottom}}>
       <View onLayout={(e) => setTopHeight(e.nativeEvent.layout.height)}>
         <Header />
-        <Text style={{marginLeft: 'auto', marginRight: 'auto', color: 'white'}}>Admin Panel</Text>
+        <HeaderText text='Admin Dashboard'/>
       </View>
       <FlatList 
         data={posts}

@@ -8,13 +8,12 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 
 export default function MarkdownCross({markdown, assests}:{markdown: string, assests: postAsset[];}) {
-  const { height } = useSelector((state: RootState) => state.dimentions);
+  const { height, width } = useSelector((state: RootState) => state.dimentions);
   const [html, setHtml] = useState<string>("")
 
   async function getMarkdown() {
     const assetResult = await getMarkdownFromAssets(assests)
     let markdownArray = markdown.split('<img src="')
-    console.log(markdownArray)
     let markdownResult = markdown + assetResult
     setHtml(await convertToMarkdown(markdownResult))
   }
@@ -56,8 +55,34 @@ export default function MarkdownCross({markdown, assests}:{markdown: string, ass
   }
   return (
     <WebView
-      source={{html: html}}
-      style={{width: 100, height:100}}
+      source={{html: `
+        <html lang="en">
+      <body>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/github-markdown.css">
+        <style>
+          .markdown-body {
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 45px;
+            height: ${height}px;
+          }
+      
+          @media (max-width: 767px) {
+            .markdown-body {
+              padding: 15px;
+            }
+          }
+        </style>
+        <div class="markdown-body">
+          ${html}          
+        </div>
+      </body>
+      </html>
+        `}}
+      style={{width: width, height:height}}
     />
   )
 }

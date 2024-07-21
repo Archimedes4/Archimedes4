@@ -7,7 +7,6 @@ export default function useIsUserAuth() {
 
   useEffect(() => {
     const unsub = auth.onAuthStateChanged((e) => {
-      console.log("Auth Change", e)
       if (e !== null) {
         setIsUserAuth(true)
         setIsLoading(false)

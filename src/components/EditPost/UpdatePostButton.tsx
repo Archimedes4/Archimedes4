@@ -5,15 +5,17 @@ import { addPost, updatePost } from '../../ulti/postFunctions';
 
 export default function UpdatePostButton({
   newPost,
-  setNewPost
+  setNewPost,
+  hasChanged
 }:{
   newPost: post;
   setNewPost: (item: post) => void
+  onEditPostSuccess: () => void,
+  hasChanged: boolean
 }) {
   const [isHover, setIsHover] = useState<boolean>(false);
   const [currentState, setCurrentState] = useState<loadingStateEnum>(loadingStateEnum.notStarted)
   const [savedPost, setSavedPost] = useState<post>()
-  const [hasChanged, setHasChanged] = useState<boolean>(true)
 
   async function onPress() {
     setCurrentState(loadingStateEnum.loading)

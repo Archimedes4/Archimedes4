@@ -49,7 +49,6 @@ export async function listTechnologies() {
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     const data = doc.data()
-    console.log(data)
     resultData.push({
       content: data.content,
       name: data.name,
@@ -59,7 +58,6 @@ export async function listTechnologies() {
       id: doc.id,
     })
   });
-  console.log(resultData)
   return {result: loadingStateEnum.success, data: resultData};
 }
 

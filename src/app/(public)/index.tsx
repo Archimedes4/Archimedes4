@@ -105,7 +105,7 @@ function BodyComponent({onLayoutHeight}:{onLayoutHeight: (item: number) => void}
         </View>
       </View>
       <View>
-        <Text style={{color: "white", marginLeft: 5, marginBottom: 5}}>Copyright &#169; 2023 Andrew Mainella</Text>
+        <Text style={{color: "white", marginLeft: 5, marginBottom: 5}}>Copyright &#169; 2024 Andrew Mainella</Text>
       </View>
     </View>
   );
@@ -166,12 +166,10 @@ export default function Index() {
 
   return (
     <View style={{width, height, backgroundColor: "#1c93ba"}}>
-      
       <Animated.ScrollView scrollEventThrottle={16} style={{width: width, height: height, zIndex: 6}} onScroll={scrollHandler} contentContainerStyle={{
-        height: width * 1.5 + height + bodyHeight,
-        pointerEvents: 'none'
+        height: width * 1.5 + height + bodyHeight
       }} stickyHeaderIndices={[0]}>
-        <Animated.View style={[{width: width, height: height, zIndex: 5, backgroundColor: "#1c93ba", position: 'absolute'}, innerStyle]}>
+        <Animated.View style={[{width: width, height: height, zIndex: 8, backgroundColor: "#1c93ba", position: 'absolute'}, innerStyle]}>
           <StatusBar style="auto" />
           <Animated.View style={[{zIndex: 12, width: width, position: 'absolute'}, headerStyle]}>
             <Header />
@@ -180,13 +178,6 @@ export default function Index() {
           <BodyComponent onLayoutHeight={setBodyHeight}/>
         </Animated.View>
       </Animated.ScrollView>
-{/*         
-      //   {Platform.OS !== 'ios' ?
-      //     <View style={{height: width * 1.5 + height + bodyHeight, zIndex: -1}}>
-          
-      //     </View>:null
-      //   }
-      // </Animated.ScrollView>  */}
     </View>
   )
 }

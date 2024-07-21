@@ -77,8 +77,10 @@ export default function Header() {
         <Pressable style={{width: width/5, alignItems: 'center'}} onPress={() => {
            if (isShowingAuth === 1) {
             router.push('/admin')
-          } else {
+          } else if (Platform.OS === 'ios') {
             setIsShowingAuth(1)
+          } else {
+            router.push('/admin')
           }
         }}>
          <GithubIcon width={(width/5) * 0.8} height={(width/5) * 0.8} style={{margin: 'auto', marginRight: 0}}/>

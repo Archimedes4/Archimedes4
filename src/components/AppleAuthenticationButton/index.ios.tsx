@@ -3,6 +3,7 @@ import * as AppleAuthentication from 'expo-apple-authentication';
 import { OAuthProvider, signInWithCredential } from 'firebase/auth';
 import { useWindowDimensions } from 'react-native';
 import { auth } from '../../app/_layout';
+import updateUserProperties from '../../ulti/updateUserProperties';
 
 export default function AppleAuthenticationButton() {
   const {width} = useWindowDimensions()
@@ -25,11 +26,10 @@ export default function AppleAuthenticationButton() {
               idToken: identityToken!,
               rawNonce: nonce
           });
-          console.log(credential)
           await signInWithCredential(auth, credential);
+          await updateUserProperties()
           // signed in
         } catch (e: unknown) {
-          console.log(e)
           if (typeof e === 'object' && e !== null && 'code' in e && e.code === 'ERR_REQUEST_CANCELED') {
             // handle that the user canceled the sign-in flow
           } else {

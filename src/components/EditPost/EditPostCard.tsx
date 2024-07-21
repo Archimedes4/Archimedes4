@@ -16,11 +16,15 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 export default function EditPostCard({
   newPost,
   setIsCard,
-  setNewPost
+  setNewPost,
+  onEditPostSuccess,
+  hasChanged
 }:{
   newPost: post
   setIsCard: (item: boolean) => void,
-  setNewPost: (item: post) => void
+  setNewPost: (item: post) => void,
+  onEditPostSuccess: () => void,
+  hasChanged: boolean
 }) {
   const [isPickingCover, setIsPickingCover] = useState<boolean>(false);
   const { height, width } = useSelector((state: RootState) => state.dimentions);
@@ -52,7 +56,7 @@ export default function EditPostCard({
 
   return (
     <View style={{height, width}}>
-      <ScrollView style={{width: width, height: height, backgroundColor: "#1c93ba"}} contentContainerStyle={{paddingTop: insets.top}}>
+      <ScrollView style={{width: width, height: height, backgroundColor: "#1c93ba"}} contentContainerStyle={{paddingTop: insets.top}} nestedScrollEnabled>
         <Modal visible={isPickingCover}>
           <SelectFile selectedFile={newPost.cover} onClose={() => {setIsPickingCover(false)}} onSelect={(e) => {setNewPost({...newPost, cover: e})}}/>
         </Modal>
@@ -150,7 +154,7 @@ export default function EditPostCard({
             />
           </View>
           <View style={{backgroundColor: 'white', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 10, margin: 10, flexDirection: 'row'}}>
-            <Text>Hidden: </Text>
+            <Text style={{fontSize: 15, marginTop: 'auto', marginBottom: 'auto'}}>Hidden: </Text>
             <Switch value={newPost.hidden} onValueChange={(e) => {
               setNewPost({
                 ...newPost,
@@ -167,7 +171,7 @@ export default function EditPostCard({
               })
             }}/>
           </View>
-          <UpdatePostButton newPost={newPost} setNewPost={setNewPost}/>
+          <UpdatePostButton newPost={newPost} setNewPost={setNewPost} onEditPostSuccess={onEditPostSuccess} hasChanged={hasChanged}/>
         </View>
       </ScrollView>
     </View>

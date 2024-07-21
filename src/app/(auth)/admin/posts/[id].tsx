@@ -1,3 +1,7 @@
+/*
+  Andrew Mainella
+  July 19 2024
+*/
 import MarkdownCross from '../../../../components/MarkdownCross';
 import TextEditor from '../../../../components/TextEditor';
 import StyledButton from '../../../../components/StyledButton';
@@ -15,6 +19,7 @@ import Header from '../../../../components/Header';
 import EditPostCard from '../../../../components/EditPost/EditPostCard';
 import UpdatePostButton from '../../../../components/EditPost/UpdatePostButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { checkIfUnsaved } from '../../../../ulti/checkIfUnsaved';
 
 export default function EditPost() {
   //View
@@ -27,8 +32,8 @@ export default function EditPost() {
   const [newPost, setNewPost] = useState<post>()
   const [loadPostState, setLoadPostState] = useState<loadingStateEnum>(loadingStateEnum.notStarted)
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(true)
-  const navigation = useNavigation()
   const insets = useSafeAreaInsets()
+  const [originalPost, setOriginalPost] = useState<post>(undefined)
 
   async function loadCover() {
     setNewPost({...newPost, cover: {...newPost.cover, loadingState: loadingStateEnum.loading}})
@@ -49,6 +54,7 @@ export default function EditPost() {
       const result = await getPost(id);
       if (result.result === loadingStateEnum.success) {
         setNewPost(result.data)
+        setOriginalPost(result.data)
       } else {
         setLoadPostState(result.result)
       }
@@ -81,6 +87,14 @@ export default function EditPost() {
   }
 
   useEffect(() => {
+    if (newPost === undefined || originalPost === undefined || newPost.id === 'Create') {
+      return
+    }
+    setHasUnsavedChanges(checkIfUnsaved(originalPost, newPost))
+    console.log(checkIfUnsaved(originalPost, newPost))
+  }, [newPost])
+
+  useEffect(() => {
     if (newPost !== undefined && newPost.cover.loadingState === loadingStateEnum.notStarted) {
       loadCover();
     }
@@ -99,7 +113,10 @@ export default function EditPost() {
   }
 
   if (isCard && loadPostState === loadingStateEnum.success) {
-    return <EditPostCard newPost={newPost} setIsCard={setIsCard} setNewPost={setNewPost} />
+    return <EditPostCard newPost={newPost} setIsCard={setIsCard} setNewPost={setNewPost} onEditPostSuccess={() => {
+      setHasUnsavedChanges(false)
+      setOriginalPost(newPost)
+    }} hasChanged={hasUnsavedChanges}/>
   }
 
   if (loadPostState === loadingStateEnum.success) {
@@ -137,7 +154,7 @@ export default function EditPost() {
             </View>
             <Pressable onPress={() => {setIsNavHidden(!isNavHidden)}} style={{width: 36.4, height: 36.4, borderRadius: 30, marginRight: 20, backgroundColor: 'white', marginTop: 10, shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 2, borderColor: 'black'}}>
               {isNavHidden ?
-                <MoreHIcon width={10} height={10} style={{margin: "auto"}}/>:<MoreVIcon width={10} height={10} style={{margin: "auto"}}/>
+                <MoreHIcon width={10} height={10} style={{margin: 11.2}}/>:<MoreVIcon width={10} height={10} style={{margin: 11.2}}/>
               }
             </Pressable>
           </View>
@@ -163,7 +180,12 @@ export default function EditPost() {
             )}
           />
           <StyledButton style={{padding: 10}} onPress={() => setIsAssest(true)} text='Add Asset'/>
-          <UpdatePostButton newPost={newPost} setNewPost={setNewPost} />
+          <UpdatePostButton newPost={newPost} setNewPost={setNewPost} onEditPostSuccess={() => {
+            setHasUnsavedChanges(false)
+            setOriginalPost(newPost)
+          }}
+            hasChanged={hasUnsavedChanges}
+          />
           { newPost.id !== 'Create' ?
             <StyledButton style={{padding: 10}} onPress={() => deletePost(newPost.id)} text='Delete Post'/>:null
           }

@@ -20,6 +20,7 @@ import { getFirestore } from 'firebase/firestore';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ActivityIcon, CodingIcon, ContactIcon, GithubIcon, HomeIcon } from '../components/Icons';
+import useNotificationHandler from '../hooks/useNotificationHandler';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -42,6 +43,7 @@ export const storage = getStorage(app)
 export const db = getFirestore(app);
 
 function AppCore() {
+  useNotificationHandler()
   const {width, height} = useWindowDimensions();
   const isCollapsed = useMemo(() => {
     if (width <= 1000) {
