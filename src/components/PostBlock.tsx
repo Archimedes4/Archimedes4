@@ -1,10 +1,11 @@
 import { ListRenderItemInfo, View, Text, Image, Pressable, ActivityIndicator } from "react-native";
 import { getAssest } from "../ulti/storageFunctions";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { loadingStateEnum } from "../Types";
 import SVGXml from "./SVGXml";
 import store from "../redux/store";
 import { postsSlice } from "../redux/reducers/postsReducer";
+import { BlurView } from "expo-blur";
 
 export default function PostBlock({item, onSelect, width}:{item: ListRenderItemInfo<post>, onSelect: () => void, width: number}) {
   const [height, setHeight] = useState<number>(100)
@@ -35,7 +36,7 @@ export default function PostBlock({item, onSelect, width}:{item: ListRenderItemI
   }, [])
   
   return (
-    <Pressable onPress={() => onSelect()} style={{width: width, height: height + ((item.item.hiddenTitle === false) ? 25:0), borderRadius: 15, backgroundColor: '#FFFFFF', marginLeft: 'auto', marginRight: 'auto', overflow: 'hidden', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', padding: 'auto'}}>
+    <Pressable onPress={() => onSelect()} style={{width: width, height: height, borderRadius: 15, backgroundColor: '#FFFFFF', marginLeft: 'auto', marginRight: 'auto', overflow: 'hidden', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', padding: 'auto'}}>
       { (item.item.cover.loadingState === loadingStateEnum.loading) ?
         <View style={{width: width, height: height, alignContent: 'center', alignItems: 'center', justifyContent: 'center'}}>
           <ActivityIndicator size="large" />
@@ -49,14 +50,14 @@ export default function PostBlock({item, onSelect, width}:{item: ListRenderItemI
         </>
       }
       {(item.item.hiddenTitle === false) ?
-        <View style={{flexDirection: 'row'}}>
-          <Text style={{marginLeft: 5}}>{item.item.title}</Text>
+        <BlurView style={{flexDirection: 'row', position: 'absolute', bottom: 0, width: width, padding: 10}}>
+          <Text style={{marginLeft: 5, fontSize: 20}}>{item.item.title}</Text>
           <View style={{flexDirection: 'row', marginLeft: 'auto', marginRight: 5}}>
             {item.item.technologies.map((svg) => (
-              <SVGXml key={svg.id} xml={svg.content} width={16} height={16} />
+              <SVGXml key={svg.id} xml={svg.content} width={25} height={25} />
             ))}
           </View>
-        </View>:null
+        </BlurView>:null
       }
     </Pressable>
   )

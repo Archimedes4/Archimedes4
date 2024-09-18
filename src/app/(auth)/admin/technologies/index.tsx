@@ -55,7 +55,7 @@ export default function AdminTechnologies() {
   return (
     <View style={{width: width, height: height, backgroundColor: "#1c93ba", paddingTop: insets.top, paddingBottom: insets.bottom}}>
       <Header/>
-      <Pressable onPress={() => {router.push('/admin')}}>
+      <Pressable onPress={() => {router.push('/admin')}} style={{margin: 15}}>
         <Text>Back</Text>
       </Pressable>
       <HeaderText text='Admin Technologies'/>

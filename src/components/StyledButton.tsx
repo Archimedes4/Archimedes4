@@ -1,4 +1,4 @@
-import { View, Text, Pressable, TextStyle } from 'react-native'
+import { Text, Pressable, TextStyle } from 'react-native'
 import React, { useState } from 'react'
 
 export default function StyledButton({text, textStyle, style, onPress}:{text: string, textStyle?: TextStyle | undefined, style?: TextStyle | undefined, onPress?: () => void}) {

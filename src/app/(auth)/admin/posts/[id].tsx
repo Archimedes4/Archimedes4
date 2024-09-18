@@ -1,4 +1,5 @@
 /*
+  Archimedes4
   Andrew Mainella
   July 19 2024
 */
@@ -14,7 +15,7 @@ import { loadingStateEnum } from '../../../../Types';
 import { Pressable, View, Text, Modal, ScrollView, FlatList } from 'react-native';
 import { deletePost, getPost } from '../../../../ulti/postFunctions';
 import { getAssest } from '../../../../ulti/storageFunctions';
-import { router, useGlobalSearchParams, useNavigation } from 'expo-router';
+import { router, useGlobalSearchParams } from 'expo-router';
 import Header from '../../../../components/Header';
 import EditPostCard from '../../../../components/EditPost/EditPostCard';
 import UpdatePostButton from '../../../../components/EditPost/UpdatePostButton';

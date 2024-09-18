@@ -32,7 +32,8 @@
       "output": "static"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-dev-launcher"
     ],
     "extra": {
       "eas": {

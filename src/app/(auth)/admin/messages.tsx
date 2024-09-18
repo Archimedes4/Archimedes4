@@ -3,7 +3,6 @@
   Andrew Mainella
   June 30 2024
 */
-
 import { View, Text, Pressable, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Header from '../../../components/Header'
@@ -37,9 +36,9 @@ export default function AdminMessages() {
   }, [])
 
   return (
-    <View style={{width: width, height: height, backgroundColor: "#1c93ba", paddingTop: insets.top, paddingBottom: insets.top}}>
+    <View style={{width: width, height: height, backgroundColor: "#1c93ba", paddingTop: insets.top}}>
       <Header/>
-      <Pressable onPress={() => router.push("/admin")}>
+      <Pressable onPress={() => router.push("/admin")} style={{margin: 15}}>
         <Text>Back</Text>
       </Pressable>
       <HeaderText text='Admin Messages'/>
@@ -50,6 +49,10 @@ export default function AdminMessages() {
             <Text>{message.item.email !== '' ? message.item.email:'No Sender Provided'}</Text>
             <Text>{message.item.content}</Text>
           </View>
+        )}
+        style={{marginTop: 15}}
+        ListFooterComponent={() => (
+          <View  style={{height: insets.bottom}}/>
         )}
       />
     </View>

@@ -1,3 +1,8 @@
+/*
+  Sudoku
+  Andrew Mainella
+  13 September 2024
+*/
 import { View, Text, Pressable, Linking, Platform } from 'react-native'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { ActivityIcon, CodingIcon, ContactIcon, GithubIcon, HomeIcon } from './Icons'
@@ -105,12 +110,12 @@ export default function Header() {
           <ActivityIcon width={compSize} height={compSize} style={{margin: 'auto', marginRight: 0}}/>
         </HeaderBlock>
         <HeaderBlock text={(isShowingAuth === 1) ? "Login":'GitHub'} onPress={() => {
-          if (isShowingAuth === 1) {
+          if (Platform.OS === 'ios' && isShowingAuth === 1) {
             router.push('/admin')
-          } else {
+          } else if (Platform.OS === 'ios') {
             setIsShowingAuth(1)
           }
-         // Linking.openURL('https://github.com/Archimedes4')
+          Linking.openURL('https://github.com/Archimedes4')
         }}>
           <GithubIcon width={compSize} height={compSize} style={{margin: 'auto', marginRight: 0}}/>
         </HeaderBlock>

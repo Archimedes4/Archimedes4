@@ -4,7 +4,7 @@
 
 import Animated, { SharedValue, useAnimatedStyle } from "react-native-reanimated";
 import { useSelector } from "react-redux";
-import store, { RootState } from "../redux/store";
+import { RootState } from "../redux/store";
 import { useState } from "react";
 import { Text, View } from "react-native";
 import * as SplashScreen from 'expo-splash-screen';
