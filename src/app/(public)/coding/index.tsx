@@ -1,5 +1,5 @@
-import { View, Text, FlatList, useColorScheme, ActivityIndicator, Platform } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, Text, FlatList, ActivityIndicator } from 'react-native'
+import React, { useEffect } from 'react'
 import { loadingStateEnum } from '../../../Types'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../../redux/store'

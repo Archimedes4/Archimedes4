@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
 import { useEffect, useState } from 'react';
 import { loadingStateEnum } from '../../../../Types';
-import { Pressable, View, Text, Modal, ScrollView, FlatList } from 'react-native';
+import { Pressable, View, Text, Modal, ScrollView, FlatList, ActivityIndicator } from 'react-native';
 import { deletePost, getPost } from '../../../../ulti/postFunctions';
 import { getAssest } from '../../../../ulti/storageFunctions';
 import { router, useGlobalSearchParams } from 'expo-router';
@@ -107,8 +107,9 @@ export default function EditPost() {
 
   if (loadPostState === loadingStateEnum.loading) {
     return (
-      <View>
-        <Text>Loading</Text>
+      <View style={{width, height, justifyContent: 'center', alignItems: 'center', backgroundColor: "#1c93ba"}}>
+        <ActivityIndicator color={'white'} size={'large'}/>
+        <Text style={{marginTop: 5, color: 'white'}}>Loading...</Text>
       </View>
     )
   }
