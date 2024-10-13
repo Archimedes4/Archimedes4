@@ -1,8 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+/*
+  Andrew Mainella
+*/
+import { useEffect, useMemo, useRef, useState } from "react";
 import { NativeSyntheticEvent, Pressable, TextInput, TextInputKeyPressEventData, Text, View, ScrollView, Keyboard, Platform } from "react-native";
 import createUUID from "../ulti/createUUID";
 import * as Clipboard from 'expo-clipboard';
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from "react-native-reanimated";
+import Line from "./Line";
 
 function getPositionChar(position: number, text: textCharType[]): textCharType | undefined {
   if (position < text.length) {
@@ -12,17 +16,24 @@ function getPositionChar(position: number, text: textCharType[]): textCharType |
   }
 }
 
+/**
+ * 
+ * @param e The Event To Handle
+ * @param position Current Position
+ * @param text Current Text Data
+ * @returns 
+ */
 async function handeKeyDown(e: NativeSyntheticEvent<TextInputKeyPressEventData>, position: number, text: textCharType[]): Promise<{ position: number; newText?: textCharType[]; }> {
   if (e.nativeEvent.key === "ArrowRight") {
-    if (text[text.length - 1].position > position) {
+    if (text[text.length - 1].position > position) {// Checking if cursor past
       return {position: position + 1}
-    } else {
+    } else { // At the right boundrys
       return {position: position}
     }
   } else if (e.nativeEvent.key === "ArrowLeft") {
-    if (position - 1 > 0) {
+    if (position - 1 > 0) { // Check if the cursor at the left boundry
       return {position: position - 1}
-    } else {
+    } else {// At the left boundry
       return {position: 0}
     }
   } else if (e.nativeEvent.key === "ArrowDown") {
@@ -301,30 +312,7 @@ export default function TextEditor({text, onChangeText, height}:{text: string, o
   const carrotOppacity = useSharedValue(1);
   const mainRef = useRef<TextInput>();
   const horizontalScroll = useRef<ScrollView>();
-  const [textChar, setTextChar] = useState<textCharType[]>([{
-    char: '',
-    line: 0,
-    linePosition: 0,
-    position: 0,
-    id: createUUID()
-  }]);
-
-  async function pasteItem() {
-    const clipboard = await Clipboard.getStringAsync();
-    let result = "";
-    let lastLine = 0;
-    for (let index = 0; index < textChar.length; index += 1) {
-      result += textChar[index].char
-      if (textChar[index].position === position) {
-        result += clipboard
-      }
-      if (lastLine !== textChar[index].line) {
-        result += "\n"
-        lastLine += 1;
-      }
-    }
-    setTextChar(convertTextToType(result));
-  }
+  const textArr = useMemo(() => {return text.split("\n")}, [text])
 
   const carrotStyle = useAnimatedStyle(() => {
     return {
@@ -332,83 +320,45 @@ export default function TextEditor({text, onChangeText, height}:{text: string, o
     }
   })
 
-  useEffect(() => {
-    let result = "";
-    for (let index = 1; index < textChar.length; index += 1) {
-      if (textChar[index].char === "") {
-        result += "\n"
-      } else {
-        result += textChar[index].char
-      }
-    }
-    onChangeText(result);
-  }, [textChar])
   
-  useEffect(() => {
-    setTextChar(convertTextToType(text));
-    carrotOppacity.value = withRepeat(withSequence(withDelay(650, withTiming(0, {
-      duration: 0
-    })), withDelay(500, withTiming(1, {
-      duration: 0
-    }))), -1);
-  }, [])
-
-  useEffect(() => {
-    const result = getPositionChar(position, textChar)
-    if (result !== undefined) {
-      horizontalScroll.current.scrollTo({
-        x: result.position * 2
-      })
-    }
-  }, [position])
 
   return (
     <View style={{marginHorizontal: 20, shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 10, backgroundColor: 'white'}}>
       <View style={{borderBottomColor: 'black',borderBottomWidth: 1}}>
-        <Pressable onPress={() => pasteItem()}>
-          <Text>Paste</Text>
-        </Pressable>
+
       </View>
       <Pressable onPress={(e) => {
         if (!mainRef.current?.isFocused()) {
           e.preventDefault()
           mainRef.current.focus()
         }
-        setPosition(textChar[textChar.length - 1].position)
+
       }}>
-        <ScrollView ref={horizontalScroll} horizontal style={{backgroundColor: 'white', padding: 4, height}}>
+        <ScrollView style={{backgroundColor: 'green', padding: 4, height}}>
           <View>
-            {Array.from(Array(textChar[textChar.length - 1].line + 1).keys()).map((i, index) => (
-              <View key={i} style={{flexDirection: "row"}}>
-                <View style={{width: 20}}>
-                  <Text>{index + 1}</Text>
-                </View>
-                {textChar.filter((e) => {return e.line === index}).map((char) => (
-                  <Pressable focusable={false} key={char.id} style={{flexDirection: 'row'}} onPress={(e) => {
-                    e.preventDefault()
-                    setPosition(char.position);
-                    if (!mainRef.current?.isFocused()) {
-                      mainRef.current.focus();
-                    }
-                  }}>
-                    <Text selectable={false}>{char.char}</Text>
-                    { (position === char.position && mainRef.current?.isFocused()) ?
-                      <Animated.View style={[ carrotStyle, {position: 'absolute', right: 0, width: 1.5, height: 16.4, backgroundColor: 'gray'}]}/>:null
-                    }
-                  </Pressable>
-                ))}
-              </View>
+            {textArr.map((e, number) => (
+              <Line text={e} line={number}/>
             ))}
           </View>
         </ScrollView>
       </Pressable>
       <TextInput ref={mainRef} multiline onKeyPress={async (e) => {
         e.preventDefault()
-        const result = await handeKeyDown(e, position, textChar)
-        setPosition(result.position);
-        if (result.newText !== undefined) {
-          setTextChar(result.newText)
+        console.log(e.nativeEvent.key)
+        if (["Shift", "ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown", "CapsLock", "Alt", "Control", "Meta"].includes(e.nativeEvent.key)) {
+
+        } else if (e.nativeEvent.key === "Backspace") {
+          onChangeText(text.substring(0, text.length - 1))
+        } else if (e.nativeEvent.key === "Enter") {
+          onChangeText(text.substring(0, position) + "\n" + text.substring(position + 1, -1))
+        } else {
+          onChangeText(text + e.nativeEvent.key)
         }
+        //const result = await handeKeyDown(e, position)
+        //setPosition(result.position);
+        //if (result.newText !== undefined) {
+          //setTextChar(result.newText)
+        //}
       }} style={{opacity: 0, height: 0}}/>
     </View>
   )

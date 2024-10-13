@@ -11,6 +11,7 @@ import { listTechnologies } from '../../ulti/technologyFunctions'
 import { loadingStateEnum } from '../../Types'
 import UpdatePostButton from './UpdatePostButton'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import Head from 'expo-router/head'
 
 // Is Card is always turn in this view
 export default function EditPostCard({
@@ -56,6 +57,9 @@ export default function EditPostCard({
 
   return (
     <View style={{height, width}}>
+      <Head>
+        <title>Edit Post</title>
+      </Head>
       <ScrollView style={{width: width, height: height, backgroundColor: "#1c93ba"}} contentContainerStyle={{paddingTop: insets.top}} nestedScrollEnabled>
         <Modal visible={isPickingCover}>
           <SelectFile selectedFile={newPost.cover} onClose={() => {setIsPickingCover(false)}} onSelect={(e) => {setNewPost({...newPost, cover: e})}}/>

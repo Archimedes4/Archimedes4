@@ -1,5 +1,4 @@
 import withAppleSettings, {
-  ChildPane,
   Group,
   Switch,
   Title,
