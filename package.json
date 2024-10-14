@@ -10,7 +10,8 @@
     "web": "expo start --web",
     "deploy": "gh-pages -d dist",
     "pre-deploy": "expo export",
-    "build": "npx expo export"
+    "build": "npx expo export",
+    "test": "jest"
   },
   "dependencies": {
     "@config-plugins/apple-settings": "^2.0.0",
@@ -53,7 +54,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@types/jest": "^29.5.13",
     "gh-pages": "^6.0.0",
+    "jest": "^29.7.0",
     "raf": "^3.4.1"
   },
   "private": true
