@@ -1,6 +1,7 @@
 import { View, Text, Pressable } from 'react-native';
 import React, { useMemo, useState } from 'react';
 import { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
+import { getOffset } from '../ulti/editorFunctions';
 
 function Row({
   text,
@@ -89,8 +90,8 @@ export default function Line({
         {(position === (offset - 1)) ?
           <View style={{height: 15, width: 2, backgroundColor: 'red', position: 'absolute', zIndex: 2}}/>:null
         }
-        {rowArr.map((t) => (
-          <Row text={t} carrotOppacity={carrotOppacity} position={position} offset={offset} setPosition={setPosition} isBold={isBold}/>
+        {rowArr.map((t, i) => (
+          <Row text={t} carrotOppacity={carrotOppacity} position={position} offset={offset + getOffset(i, rowArr) - i} setPosition={setPosition} isBold={isBold}/>
         ))}
       </View>
     </View>

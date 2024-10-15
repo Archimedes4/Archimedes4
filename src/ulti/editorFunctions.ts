@@ -5,10 +5,6 @@ export function getOffset(index: number, arr: string[]) {
   return textBefore.length + index
 }
 
-export function getRowOffset(index: number, arr: string[]) {
-  return 0
-}
-
 export function insertText(insert: string, text: string, position: number) {
   return text.substring(0, position + 1) + insert + text.substring(position + 1)
 }
