@@ -6,9 +6,12 @@ import { NativeSyntheticEvent, Pressable, TextInput, TextInputKeyPressEventData,
 import createUUID from "../ulti/createUUID";
 import * as Clipboard from 'expo-clipboard';
 import Line from "./Line";
-import { cursorAbove, deleteText, getNumberWidth, getOffset, insertText } from "../ulti/editorFunctions";
+import { cursorAbove, cursorBelow, deleteText, getNumberWidth, getOffset, insertText } from "../ulti/editorFunctions";
 import { useSharedValue, withTiming } from "react-native-reanimated";
 
+const ALLOWED_KEYS = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+  "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+];
 
 export default function TextEditor({text, onChangeText, height}:{text: string, onChangeText: (item: string) => void; height: number}) {
   const [position, setPosition] = useState<number>(-1);
@@ -93,9 +96,7 @@ export default function TextEditor({text, onChangeText, height}:{text: string, o
         } else if (key === "ArrowUp") {
           setPosition(cursorAbove(text, position))
         } else if (key === "ArrowDown") {
-          if (position < text.length - 1) {
-            setPosition(position + 1)
-          }
+          setPosition(cursorBelow(text, position))
         } else if (["Shift", "CapsLock", "Alt", "Control", "Meta", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12"].includes(e.nativeEvent.key)) {
 
         } else if (e.nativeEvent.key === "Backspace") {
@@ -106,7 +107,7 @@ export default function TextEditor({text, onChangeText, height}:{text: string, o
         } else if (e.nativeEvent.key === "Enter") {
           onChangeText(insertText("\n", text, position))
           setPosition(position + 1)
-        } else {
+        } else if (ALLOWED_KEYS.includes(key)) {
           onChangeText(insertText(key, text, position))
           setPosition(position + 1)
         }

@@ -1,4 +1,4 @@
-import {deleteText, getOffset, getTextLength, insertText} from "../src/ulti/editorFunctions"
+import {cursorAbove, deleteText, getLineNum, getLinePosition, getOffset, getTextLength, insertText} from "../src/ulti/editorFunctions"
 
 test('should get the correct offset', () => { 
   expect(getOffset(0, ["hello", "this is ", "a test"])).toBe(0)
@@ -24,4 +24,21 @@ test('should delete text correctly', () => {
   expect(deleteText("hello", 5)).toBe("hell")
   expect(deleteText("hello", 4)).toBe("helo")
   expect(deleteText("hello", 3)).toBe("helo")
+})
+
+test('gets the correct line number', () => {
+  expect(getLineNum("hello\nworld", -1)).toBe(0)
+  expect(getLineNum("hello\nworld", 0)).toBe(0)
+  expect(getLineNum("hello\nworld", 4)).toBe(0)
+  expect(getLineNum("hello\nworld", 5)).toBe(1)
+  expect(getLineNum("hello\n\nworld", 5)).toBe(1)
+  expect(getLineNum("hello\n\nworld", 6)).toBe(2)
+  expect(getLineNum("hello\n\nworld", 7)).toBe(2)
+})
+
+test('Finds the correct line position', () => {
+  expect(getLinePosition("So\nDoes", 4)).toBe(2)
+  expect(getLinePosition("So\nDoes", 3)).toBe(1)
+  expect(getLinePosition("So\nDoes", 2)).toBe(0)
+  expect(getLinePosition("hello\nworld", -1)).toBe(-1)
 })
