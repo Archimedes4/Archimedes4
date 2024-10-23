@@ -1,4 +1,4 @@
-import {cursorAbove, deleteText, getLineNum, getLinePosition, getOffset, getTextLength, insertText} from "../src/ulti/editorFunctions"
+import {cursorAbove, cursorBelow, deleteText, getLineNum, getLinePosition, getOffset, getTextLength, insertText} from "../src/ulti/editorFunctions"
 
 test('should get the correct offset', () => { 
   expect(getOffset(0, ["hello", "this is ", "a test"])).toBe(0)
@@ -40,5 +40,23 @@ test('Finds the correct line position', () => {
   expect(getLinePosition("So\nDoes", 4)).toBe(2)
   expect(getLinePosition("So\nDoes", 3)).toBe(1)
   expect(getLinePosition("So\nDoes", 2)).toBe(0)
-  expect(getLinePosition("hello\nworld", -1)).toBe(-1)
+  expect(getLinePosition("hello\nworld", -1)).toBe(0)
+  expect(getLinePosition("hello\nworld", 0)).toBe(1)
+  expect(getLinePosition("hello\nworld", 1)).toBe(2)
+  expect(getLinePosition("So\nDoes", 1)).toBe(2)
+  expect(getLinePosition("So\nDoes", 3)).toBe(1)
+  expect(getLinePosition("This\n\n\nSo", 8)).toBe(2)
+})
+
+test('Cursor above find the current position', () => {
+  expect(cursorAbove("So\nDoes", 4)).toBe(1)
+  expect(cursorAbove("So\nDoes", 3)).toBe(0)
+  expect(cursorAbove("This\n\n\nSo", 8)).toBe(5)
+})
+
+test('Cursor below find the current position', () => {
+  expect(cursorBelow("So\nDoes", 4)).toBe(4)
+  expect(cursorBelow("So\nDoes", 3)).toBe(3)
+  expect(cursorBelow("This\n\n\nSo", 8)).toBe(8)
+  expect(cursorBelow("This thing really does not work\nSo lets test this becuase there are many problem", 30)).toBe(62)
 })

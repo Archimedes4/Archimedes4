@@ -1,30 +1,41 @@
 import { View, Text, Pressable } from 'react-native';
 import React, { useMemo, useState } from 'react';
-import { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
+import Animated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import { getOffset } from '../ulti/editorFunctions';
+
+function Caret({
+  caretOppacity,
+  left
+}:{
+  caretOppacity: SharedValue<number>;
+  left?: boolean
+}) {
+  const caretStyle = useAnimatedStyle(() => {
+    return {
+      opacity: caretOppacity.value
+    }
+  })
+  return (
+    <Animated.View style={[{height: 18, width: 1, position: 'absolute', right: (left === true) ? undefined:-1, left: (left === true) ? 1:undefined, backgroundColor: 'gray'}, caretStyle]}/>
+  )
+}
 
 function Row({
   text,
-  carrotOppacity,
+  caretOppacity,
   position,
   offset,
   setPosition,
   isBold
 }: {
   text: string;
-  carrotOppacity: SharedValue<number>;
+  caretOppacity: SharedValue<number>;
   position: number;
   offset: number;
   setPosition: (position: number) => void;
   isBold: boolean
 }) {
   const textArr = useMemo(() => {return text.split("")}, [text])
-
-  const carrotStyle = useAnimatedStyle(() => {
-    return {
-      opacity: carrotOppacity.value
-    }
-  })
   
   return (
     <View style={{flexDirection: 'row'}}>
@@ -36,7 +47,7 @@ function Row({
         >
           <Text style={{fontWeight: isBold ? 'bold':'normal'}}>{e}</Text>
           {(position === (offset + number)) ?
-            <View style={{height: 15, width: 1, backgroundColor: 'red', position: 'absolute', right: 0}}/>:null
+            <Caret caretOppacity={caretOppacity}/>:null
           }
         </Pressable>
       ))}
@@ -48,7 +59,7 @@ export default function Line({
   text,
   line,
   position,
-  carrotOppacity,
+  caretOppacity,
   offset,
   setPosition,
   numberWidth
@@ -56,7 +67,7 @@ export default function Line({
   text: string;
   line: number;
   position: number;
-  carrotOppacity: SharedValue<number>;
+  caretOppacity: SharedValue<number>;
   offset: number;
   setPosition: (position: number) => void;
   numberWidth: number;
@@ -84,14 +95,14 @@ export default function Line({
   }, [text, width])
 
   return (
-    <View style={{flexDirection: 'row', backgroundColor: 'gray'}} onLayout={(e) => {setWidth(e.nativeEvent.layout.width)}}>
+    <View style={{flexDirection: 'row'}} onLayout={(e) => {setWidth(e.nativeEvent.layout.width)}}>
       <Text style={{width: numberWidth}}>{line + ": " }</Text>
       <View>
         {(position === (offset - 1)) ?
-          <View style={{height: 15, width: 2, backgroundColor: 'red', position: 'absolute', zIndex: 2}}/>:null
+          <Caret caretOppacity={caretOppacity} left/>:null
         }
         {rowArr.map((t, i) => (
-          <Row text={t} carrotOppacity={carrotOppacity} position={position} offset={offset + getOffset(i, rowArr) - i} setPosition={setPosition} isBold={isBold}/>
+          <Row text={t} caretOppacity={caretOppacity} position={position} offset={offset + getOffset(i, rowArr) - i} setPosition={setPosition} isBold={isBold}/>
         ))}
       </View>
     </View>

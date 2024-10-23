@@ -1,6 +1,9 @@
-// This function takes a line index (0 is the first line) and an array of strings with a length >= index
-// @see getLineNum
-// This function returns the length of all the text before it
+/**
+ * 
+ * This function takes a line index (0 is the first line) and an array of strings with a length >= index
+ * @see getLineNum
+ * This function returns the length of all the text before it
+ */
 export function getOffset(index: number, arr: string[]) {
   let textBefore = arr.slice(0, index).join("")
   return textBefore.length + index
@@ -55,9 +58,13 @@ export function getLineNum(text: string, position: number): number {
  * Zero is the start of the line
  */
 export function getLinePosition(text: string, position: number): number {
+  const lineNum = getLineNum(text, position)
   const lines = text.split("\n")
-  const lineNum = getOffset(getLineNum(text, position), lines) - getLineNum(text, position)
-  return position - lineNum
+  const linePos = Math.max(0, getOffset(getLineNum(text, position), lines))
+  if (lineNum === 0) {
+    return position + 1
+  }
+  return (position + 1) - linePos
 }
 
 /**
@@ -73,12 +80,10 @@ export function cursorAbove(text: string, position: number): number {
     // Already on the first line
     return position
   }
-  const aboveOffset = getOffset(lineNum - 1, text.split("\n"))
+  const aboveOffset = getOffset(lineNum - 1, text.split("\n")) - 1
   const lineOffset = getOffset(lineNum, text.split("\n"))
   const linePos = getLinePosition(text, position)
-//  console.log(lineOffset)
-  const aboveLength = getLinePosition(text, lineOffset - 1)
-//  console.log(aboveOffset, linePos, aboveLength)
+  const aboveLength = getLinePosition(text, lineOffset - 2)
   // Get the next line
   if (aboveLength >= linePos) {
     return aboveOffset + linePos
@@ -87,13 +92,17 @@ export function cursorAbove(text: string, position: number): number {
 }
 
 export function cursorBelow(text: string, position: number): number {
-  if (position >= text.length) {
+  const lineNum = getLineNum(text, position)
+  const linePos = getLinePosition(text, position)
+  const belowOffset = getOffset(lineNum + 1, text.split("\n")) - 1
+  const twoBelowOffset = getOffset(lineNum + 2, text.split("\n"))
+  const belowLength = getLinePosition(text, twoBelowOffset)
+
+  // On the last line
+  if (lineNum === text.split("\n").length - 1) {
     return position
   }
-  const linePos = getLinePosition(text, position)
-  const lineNum = getLineNum(text, position)
-  const belowOffset = getOffset(lineNum + 1, text.split("\n"))
-  const belowLength = getLinePosition(text, belowOffset)
+
   if (belowLength >= linePos) {
     return belowOffset + linePos
   }
