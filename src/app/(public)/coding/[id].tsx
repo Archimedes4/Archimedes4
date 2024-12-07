@@ -7,6 +7,7 @@ import { loadingStateEnum } from '../../../Types';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import Header from '../../../components/Header';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function ViewPost() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
@@ -14,6 +15,7 @@ export default function ViewPost() {
   const [postState, setPostState] = useState<loadingStateEnum>(loadingStateEnum.loading)
   const colorScheme = useColorScheme()
   const {id} = useGlobalSearchParams()
+  const insets = useSafeAreaInsets()
   
   async function loadPost() {
     if (typeof id === "string") {
@@ -40,7 +42,7 @@ export default function ViewPost() {
     )
   }
   return (
-    <View style={{width: width, height: height, backgroundColor: (colorScheme ===  "light") ? "white":"#0d1117"}}>
+    <View style={{width: width, height: height, backgroundColor: (colorScheme ===  "light") ? "white":"#0d1117", top: insets.top}}>
       <Header />
       <MarkdownCross markdown={selectedPost.content} assests={selectedPost.assests}/>
     </View>

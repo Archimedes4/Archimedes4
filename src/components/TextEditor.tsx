@@ -47,18 +47,11 @@ export default function TextEditor({text, onChangeText, height}:{text: string, o
       padding: 10,
       backgroundColor: 'white'
     }}>
-      <View style={{borderBottomColor: 'black',borderBottomWidth: 1, flexDirection: 'row'}}>
-        <Text style={{fontSize: 20, fontWeight: 'bold'}}>Text Editor {position}</Text>
-        <Pressable style={{marginLeft: 15}} onPress={() => console.log(JSON.stringify(text))}>
-          <Text>Print</Text>
-        </Pressable>
-      </View>
       <Pressable onPress={(e) => {
         if (!mainRef.current?.isFocused()) {
           e.preventDefault()
           mainRef.current.focus()
         }
-
       }}>
         <ScrollView style={{padding: 4, height}}>
           <View>
@@ -77,52 +70,52 @@ export default function TextEditor({text, onChangeText, height}:{text: string, o
               />
             ))}
           </View>
+          <TextInput ref={mainRef} multiline onKeyPress={async (e) => {
+            e.preventDefault()
+            console.log(e.nativeEvent)
+            const key = e.nativeEvent.key
+            // @ts-expect-error
+            if (e.nativeEvent.metaKey === true && key === "v") {
+              const clip = await Clipboard.getStringAsync()
+              onChangeText(insertText(clip, text, position))
+              setPosition(position + clip.length)
+            } else if (key === "ArrowRight") {
+              if (position < text.length - 1) {
+                setPosition(position + 1)
+              }
+            } else if (key === "ArrowLeft") {
+              if (position > -1) {
+                setPosition(position - 1)
+              }
+            } else if (key === "ArrowUp") {
+              setPosition(cursorAbove(text, position))
+            } else if (key === "ArrowDown") {
+              setPosition(cursorBelow(text, position))
+            } else if (["Shift", "CapsLock", "Alt", "Control", "Meta", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12"].includes(e.nativeEvent.key)) {
+
+            } else if (e.nativeEvent.key === "Backspace") {
+              onChangeText(deleteText(text, position + 1))
+              if (position > -1) {
+                setPosition(position - 1)
+              }
+            } else if (e.nativeEvent.key === "Enter") {
+              onChangeText(insertText("\n", text, position))
+              setPosition(position + 1)
+            } else if (ALLOWED_KEYS.includes(key)) {
+              onChangeText(insertText(key, text, position))
+              setPosition(position + 1)
+            } else if (e.nativeEvent.key === "Tab") {
+              onChangeText(insertText("  ", text, position))
+              setPosition(position + 2)
+            }
+            //const result = await handeKeyDown(e, position)
+            //setPosition(result.position);
+            //if (result.newText !== undefined) {
+              //setTextChar(result.newText)
+            //}
+          }} style={{opacity: 0, height: 0, position: 'absolute'}}/>
         </ScrollView>
       </Pressable>
-      <TextInput ref={mainRef} multiline onKeyPress={async (e) => {
-        e.preventDefault()
-        console.log(e.nativeEvent)
-        const key = e.nativeEvent.key
-        // @ts-expect-error
-        if (e.nativeEvent.metaKey === true && key === "v") {
-          const clip = await Clipboard.getStringAsync()
-          onChangeText(insertText(clip, text, position))
-          setPosition(position + clip.length)
-        } else if (key === "ArrowRight") {
-          if (position < text.length - 1) {
-            setPosition(position + 1)
-          }
-        } else if (key === "ArrowLeft") {
-          if (position > -1) {
-            setPosition(position - 1)
-          }
-        } else if (key === "ArrowUp") {
-          setPosition(cursorAbove(text, position))
-        } else if (key === "ArrowDown") {
-          setPosition(cursorBelow(text, position))
-        } else if (["Shift", "CapsLock", "Alt", "Control", "Meta", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12"].includes(e.nativeEvent.key)) {
-
-        } else if (e.nativeEvent.key === "Backspace") {
-          onChangeText(deleteText(text, position + 1))
-          if (position > -1) {
-            setPosition(position - 1)
-          }
-        } else if (e.nativeEvent.key === "Enter") {
-          onChangeText(insertText("\n", text, position))
-          setPosition(position + 1)
-        } else if (ALLOWED_KEYS.includes(key)) {
-          onChangeText(insertText(key, text, position))
-          setPosition(position + 1)
-        } else if (e.nativeEvent.key === "Tab") {
-          onChangeText(insertText("  ", text, position))
-          setPosition(position + 2)
-        }
-        //const result = await handeKeyDown(e, position)
-        //setPosition(result.position);
-        //if (result.newText !== undefined) {
-          //setTextChar(result.newText)
-        //}
-      }} style={{opacity: 0, height: 0}}/>
     </View>
   )
 }

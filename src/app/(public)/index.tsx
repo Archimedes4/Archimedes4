@@ -16,6 +16,7 @@ import Header from '../../components/Header';
 import NameComponent from '../../components/NameComponent';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Colors } from '../../Types';
 
 function getChildrenSize(width: number, height: number): number {
   if (width < height) {
@@ -149,9 +150,9 @@ export default function Index() {
     return (
       <GestureDetector gesture={gesture}>
         <View
-          style={{width, height, backgroundColor: "#1c93ba"}}
+          style={{width, height, backgroundColor: Colors.primary}}
         >
-          <Animated.View style={[{width: width, height: height, zIndex: 5, backgroundColor: "#1c93ba"}, innerStyle]}>
+          <Animated.View style={[{width: width, height: height, zIndex: 5, backgroundColor: Colors.primary}, innerStyle]}>
             <StatusBar style="auto" />
             <Animated.View style={[{zIndex: 12, width: width, position: 'absolute', marginTop: insets.top}, headerStyle]}>
               <Header />
@@ -165,11 +166,11 @@ export default function Index() {
   }
 
   return (
-    <View style={{width, height, backgroundColor: "#1c93ba"}}>
+    <View style={{width, height, backgroundColor: Colors.primary}}>
       <Animated.ScrollView scrollEventThrottle={16} style={{width: width, height: height, zIndex: 6}} onScroll={scrollHandler} contentContainerStyle={{
         height: width * 1.5 + height + bodyHeight
       }} stickyHeaderIndices={[0]}>
-        <Animated.View style={[{width: width, height: height, zIndex: 8, backgroundColor: "#1c93ba", position: 'absolute'}, innerStyle]}>
+        <Animated.View style={[{width: width, height: height, zIndex: 8, backgroundColor: Colors.primary, position: 'absolute'}, innerStyle]}>
           <StatusBar style="auto" />
           <Animated.View style={[{zIndex: 12, width: width, position: 'absolute'}, headerStyle]}>
             <Header />

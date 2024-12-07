@@ -8,6 +8,7 @@ import Header from '../../../components/Header'
 import { listPosts } from '../../../redux/reducers/postsReducer'
 import { router } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import createUUID from '../../../ulti/createUUID'
 
 export default function Coding() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
@@ -34,15 +35,16 @@ export default function Coding() {
         <>
           { (postState === loadingStateEnum.success) ?
             <FlatList 
+              key={(width < 576) ? ("1" + createUUID()):("2" + createUUID())}
               data={posts}
-              numColumns={2}
+              numColumns={(width < 576) ? 1:2}
               renderItem={(item) => {
                 if (item.item.hidden) {
                   return null
                 }
                 return (        
                   <View style={{margin: 10, marginBottom: 20}} key={item.item.id}>
-                    <PostBlock width={(width - 40)/2} item={item} onSelect={() => router.push(`/coding/${item.item.id}`)}/>
+                    <PostBlock width={(width - 40)/((width < 576) ? 1:2)} item={item} onSelect={() => router.push(`/coding/${item.item.id}`)}/>
                   </View>
                 )
               }}

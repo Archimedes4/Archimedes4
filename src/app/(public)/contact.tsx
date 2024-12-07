@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Linking, TextInput, ScrollView, Platform } from 'react-native'
+import { View, Text, Pressable, Linking, TextInput, ScrollView, Platform, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
 import Header from '../../components/Header'
 import { useSelector } from 'react-redux';
@@ -36,7 +36,11 @@ export default function Contact() {
         <Header />
         <View style={{shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, marginLeft: 10, marginRight: 10, marginBottom: 10, backgroundColor: "white"}}>
           <Text style={{fontSize: 20, marginLeft: 10, marginTop: 10}}>Write a message</Text>
-          <TextInput multiline value={message} onChangeText={setMessage} style={{marginLeft: 10, marginRight: 10, marginTop: 3, height: height - 300, minHeight: 110, borderRadius: 5, borderWidth: 1, padding: 5}}/>
+          <TextInput
+            multiline
+            value={message}
+            onChangeText={setMessage}
+            style={{marginLeft: 10, marginRight: 10, marginTop: 3, height: (message === "") ? height - 300:height - 357, minHeight: 110, borderRadius: 5, borderWidth: 1, padding: 5}}/>
           <Text style={{marginLeft: 10, marginVertical: 5}}>Your Contact</Text>
           <TextInput
             value={email}
@@ -67,8 +71,24 @@ export default function Contact() {
               onPress={() => {loadSendMessage()}}
               style={{backgroundColor: isSendHover ? "#d3d3d3":"white", shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 10, marginHorizontal: 5, marginBottom: 10, marginTop: 10, flexDirection: 'row', justifyContent: 'center'}}
             >
-              <SendIcon width={25} height={25}/>
-              <Text style={{fontSize: 18, fontWeight: 'bold', marginTop: 'auto', marginBottom: 'auto', marginLeft: 5}}>SEND</Text>
+              {(sendState === loadingStateEnum.loading) ?
+                <>
+                  <ActivityIndicator color={"black"}/>
+                  <Text style={{fontSize: 18, fontWeight: 'bold', marginTop: 'auto', marginBottom: 'auto', marginLeft: 5}}>Loading..</Text>
+                </>:null
+              }
+              {(sendState !== loadingStateEnum.loading && sendState !== loadingStateEnum.success) ?
+                <>
+                  <SendIcon width={25} height={25}/>
+                  <Text style={{fontSize: 18, fontWeight: 'bold', marginTop: 'auto', marginBottom: 'auto', marginLeft: 5}}>SEND</Text>
+                </>:null
+              }
+              {(sendState === loadingStateEnum.success) ?
+                <>
+                  <SendIcon width={25} height={25}/>
+                  <Text style={{fontSize: 18, fontWeight: 'bold', marginTop: 'auto', marginBottom: 'auto', marginLeft: 5}}>SENT</Text>
+                </>:null
+              }
             </Pressable>:null
           }
         </View>
@@ -94,7 +114,11 @@ export default function Contact() {
             </View>
           </Pressable>
         </View>
-        <Text style={{ marginTop: 'auto', marginLeft: 15, marginRight: 15, marginBottom: 10, color: "white", }}>If you are looking for my insta, X, etc... You won't find it, I don't use social media</Text>
+        <View>
+          <Pressable onPress={() => Linking.openURL("https://www.linkedin.com/in/andrew-mainella-332668249/")}>
+            
+          </Pressable>
+        </View>
       </ScrollView>
     </View>
   )

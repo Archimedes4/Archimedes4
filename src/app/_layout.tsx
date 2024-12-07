@@ -3,7 +3,7 @@
   Andrew Mainella
   30 November 2023
 */
-import { Dimensions, Platform, Pressable, View, useWindowDimensions, Text } from 'react-native';
+import { Dimensions, Platform, Pressable, View, useWindowDimensions, Text, Linking } from 'react-native';
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { initializeApp } from "firebase/app";
 import { Provider, useDispatch } from 'react-redux';
@@ -19,8 +19,9 @@ import { getStorage } from 'firebase/storage';
 import { getFirestore } from 'firebase/firestore';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ActivityIcon, CodingIcon, ContactIcon, GithubIcon, HomeIcon } from '../components/Icons';
+import { ActivityIcon, CodingIcon, ContactIcon, GithubIcon, HomeIcon, SettingIcon } from '../components/Icons';
 import useNotificationHandler from '../hooks/useNotificationHandler';
+import { useIsShowingAdmin } from '../hooks/useIsShowingAdmin';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -44,6 +45,7 @@ export const db = getFirestore(app);
 
 function AppCore() {
   useNotificationHandler()
+  const isShowingAdmin =  useIsShowingAdmin()
   const {width, height} = useWindowDimensions();
   const isCollapsed = useMemo(() => {
     if (width <= 1000) {
@@ -94,10 +96,17 @@ function AppCore() {
           <Pressable
             style={{width: width/5, height: 60 + insets.bottom}}
             onPress={() => {
-              router.push("/admin")
+              if (isShowingAdmin) {
+                router.push("/admin")
+              } else {
+                Linking.openURL('https://github.com/Archimedes4')
+              }
             }}
           >
-            <GithubIcon width={40} height={40} style={{marginHorizontal: ((width/5) - 40)/2, marginVertical: 10}}/>
+            {isShowingAdmin ?
+              <SettingIcon width={40} height={40} style={{marginHorizontal: ((width/5) - 40)/2, marginVertical: 10}}/>:
+              <GithubIcon width={40} height={40} style={{marginHorizontal: ((width/5) - 40)/2, marginVertical: 10}}/>
+            }
           </Pressable>
           <Pressable
             style={{width: width/5, height: 60 + insets.bottom}}

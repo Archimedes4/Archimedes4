@@ -41,7 +41,9 @@ export default function AdminMessages() {
       <Pressable onPress={() => router.push("/admin")} style={{margin: 15}}>
         <Text>Back</Text>
       </Pressable>
-      <HeaderText text='Admin Messages'/>
+      <View style={{height: height * 0.1}}>
+        <HeaderText text='Admin Messages'/>
+      </View>
       <FlatList
         data={messages}
         renderItem={(message) => (

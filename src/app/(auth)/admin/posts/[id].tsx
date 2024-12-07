@@ -165,11 +165,13 @@ export default function EditPost() {
             <TextEditor text={newPost.content} onChangeText={(e) => {setNewPost({...newPost, content: e})}} height={height}/>
           }
           <Text style={{marginLeft: 20, color: "white"}}>Assests</Text>
-          <FlatList
-            data={newPost.assests}
-            renderItem={(e) => (
-              <View style={{flexDirection: 'row', margin: 10, backgroundColor: 'white', borderWidth: 2, borderRadius: 30, borderColor: 'black', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, overflow: 'hidden'}}>
-                <Text style={{margin: 10}} selectable={false}>{e.item.item.name}</Text>
+          <ScrollView>
+            {newPost.assests.map((e) => (
+              <View
+                key={e.id}
+                style={{flexDirection: 'row', margin: 10, backgroundColor: 'white', borderWidth: 2, borderRadius: 30, borderColor: 'black', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, overflow: 'hidden'}}
+              >
+                <Text style={{margin: 10}} selectable={false}>{e.item.name}</Text>
                 <Pressable onPress={() => {
                   setNewPost({
                     ...newPost,
@@ -179,8 +181,8 @@ export default function EditPost() {
                   <TrashIcon width={16.4} height={16.4} style={{ marginTop: 'auto', marginBottom: 'auto', paddingLeft: 10, paddingRight: 5 }}/>
                 </Pressable>
               </View>
-            )}
-          />
+            ))}
+          </ScrollView>
           <StyledButton style={{padding: 10}} onPress={() => setIsAssest(true)} text='Add Asset'/>
           <UpdatePostButton newPost={newPost} setNewPost={setNewPost} onEditPostSuccess={() => {
             setHasUnsavedChanges(false)

@@ -65,7 +65,7 @@ export default function AdminPanel() {
   }, [])
 
   return (
-    <ScrollView style={{width: width, height: height, backgroundColor: "#1c93ba", paddingTop: insets.top, paddingBottom: (width <= 500) ? 0:insets.bottom}}>
+    <View style={{width: width, height: height, backgroundColor: "#1c93ba", paddingTop: insets.top, paddingBottom: (width <= 500) ? 0:insets.bottom}}>
       <View onLayout={(e) => setTopHeight(e.nativeEvent.layout.height)}>
         <Header />
         <HeaderText text='Admin Dashboard'/>
@@ -89,6 +89,6 @@ export default function AdminPanel() {
           </Pressable>
         </View>
       </View>
-    </ScrollView>
+    </View>
   )
 }

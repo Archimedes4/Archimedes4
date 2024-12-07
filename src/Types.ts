@@ -14,6 +14,10 @@ export enum uploadStateEnum {
   success
 }
 
+export const Colors = {
+  primary: "#1c93ba"
+}
+
 declare global {
   type storageItem = {
     id: string

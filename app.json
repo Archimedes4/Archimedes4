@@ -2,7 +2,7 @@
   "expo": {
     "name": "Andrew Mainella",
     "slug": "Andrew_Mainella",
-    "scheme": "Andrew_Mainella",
+    "scheme": "com.Archimedes4.AndrewMainella",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -10,19 +10,20 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#1c93ba"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.Archimedes4.AndrewMainella"
+      "bundleIdentifier": "com.Archimedes4.AndrewMainella",
+      "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#1c93ba"
       },
       "package": "com.Archimedes4.Andrew_Mainella"
     },
@@ -33,7 +34,8 @@
     },
     "plugins": [
       "expo-router",
-      "expo-dev-launcher"
+      "expo-dev-launcher",
+      "expo-apple-authentication"
     ],
     "extra": {
       "eas": {

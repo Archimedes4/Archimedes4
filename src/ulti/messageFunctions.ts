@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs, getFirestore, orderBy, query, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, getDocs, orderBy, query, serverTimestamp } from "firebase/firestore";
 import { loadingStateEnum } from "../Types";
 import { db } from "../app/_layout";
 

@@ -9,7 +9,7 @@ import { ActivityIcon, CodingIcon, ContactIcon, GithubIcon, HomeIcon } from './I
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
 import { useRouter } from 'expo-router'
-import useSetting from '../hooks/useSetting'
+import { useIsShowingAdmin } from '../hooks/useIsShowingAdmin'
 
 function getWidth(width: number) {
   if (width/5 <= 20) {
@@ -47,8 +47,8 @@ export default function Header() {
   const router = useRouter();
   const { width } = useSelector((state: RootState) => state.dimentions);
   const [compSize, setCompSize] = useState<number>(14);
-  const [isShowingAuth, setIsShowingAuth] = useSetting<number>("showing_login")
   const [isComped, setIsComped] = useState(false)
+  const isShowingAdmin =  useIsShowingAdmin()
 
   useEffect(() => {
     const compWidth = getWidth((width - 5))
@@ -80,12 +80,10 @@ export default function Header() {
           <ActivityIcon width={(width/5) * 0.8} height={(width/5) * 0.8}/>
         </Pressable>
         <Pressable style={{width: width/5, alignItems: 'center'}} onPress={() => {
-           if (isShowingAuth === 1) {
+          if (isShowingAdmin) {
             router.push('/admin')
-          } else if (Platform.OS === 'ios') {
-            setIsShowingAuth(1)
           } else {
-            router.push('/admin')
+            Linking.openURL('https://github.com/Archimedes4')
           }
         }}>
          <GithubIcon width={(width/5) * 0.8} height={(width/5) * 0.8} style={{margin: 'auto', marginRight: 0}}/>
@@ -109,13 +107,12 @@ export default function Header() {
         <HeaderBlock text='Activities' onPress={() => router.replace('/activities')}>
           <ActivityIcon width={compSize} height={compSize} style={{margin: 'auto', marginRight: 0}}/>
         </HeaderBlock>
-        <HeaderBlock text={(isShowingAuth === 1) ? "Login":'GitHub'} onPress={() => {
-          if (Platform.OS === 'ios' && isShowingAuth === 1) {
+        <HeaderBlock text={(isShowingAdmin) ? "Login":'GitHub'} onPress={() => {
+          if (isShowingAdmin) {
             router.push('/admin')
-          } else if (Platform.OS === 'ios') {
-            setIsShowingAuth(1)
+          } else {
+            Linking.openURL('https://github.com/Archimedes4')
           }
-          Linking.openURL('https://github.com/Archimedes4')
         }}>
           <GithubIcon width={compSize} height={compSize} style={{margin: 'auto', marginRight: 0}}/>
         </HeaderBlock>
