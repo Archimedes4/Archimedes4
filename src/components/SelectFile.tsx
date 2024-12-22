@@ -3,7 +3,7 @@ import { loadingStateEnum, uploadStateEnum } from "../Types";
 import { listStorageItems, useUploadFile } from "../ulti/storageFunctions";
 import { FlatList, Pressable, View, Text, Image, ListRenderItemInfo, ActivityIndicator, useWindowDimensions } from "react-native";
 import StyledButton from "./StyledButton";
-import { TrashIcon } from "./Icons";
+import { CloseIcon, TrashIcon } from "./Icons";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db, storage } from "../app/_layout";
 import { deleteObject, ref } from "firebase/storage";
@@ -94,10 +94,12 @@ export default function SelectFile({onClose, onSelect, selectedFile}:{onClose: (
   if (fileState === loadingStateEnum.success) {
     return ( 
       <View style={{width, height, backgroundColor: "#1c93ba", paddingBottom: insets.bottom, paddingTop: insets.top}}>
-        <Pressable onPress={() => onClose()}>
-          <Text>Close</Text>
-        </Pressable>
-        <Text style={{fontSize: height * 0.1, fontFamily: 'Bungee-Regular', color: 'white', marginHorizontal: 20, textAlign: 'center'}} adjustsFontSizeToFit numberOfLines={1}>Select File</Text>
+        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+          <Pressable onPress={() => onClose()} style={{position: 'absolute', left: 15, top: 15}}>
+            <CloseIcon width={Math.max(25, height * 0.04)} height={Math.max(25, height * 0.04)}/>
+          </Pressable>
+          <Text style={{fontSize: Math.max(25, height * 0.1), fontFamily: 'Bungee-Regular', color: 'white', marginHorizontal: 20, textAlign: 'center'}} adjustsFontSizeToFit numberOfLines={1}>Select File</Text>
+        </View>
         <FlatList
           data={files}
           renderItem={(item) => (

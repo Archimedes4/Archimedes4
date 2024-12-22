@@ -6,14 +6,14 @@
 import MarkdownCross from '../../../../components/MarkdownCross';
 import TextEditor from '../../../../components/TextEditor';
 import StyledButton from '../../../../components/StyledButton';
-import { MoreHIcon, MoreVIcon, TrashIcon } from '../../../../components/Icons';
+import { ChevronLeft, MoreHIcon, MoreVIcon, TrashIcon } from '../../../../components/Icons';
 import SelectFile from '../../../../components/SelectFile';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
 import { useEffect, useState } from 'react';
 import { loadingStateEnum } from '../../../../Types';
 import { Pressable, View, Text, Modal, ScrollView, FlatList, ActivityIndicator } from 'react-native';
-import { deletePost, getPost } from '../../../../ulti/postFunctions';
+import { getPost } from '../../../../ulti/postFunctions';
 import { getAssest } from '../../../../ulti/storageFunctions';
 import { router, useGlobalSearchParams } from 'expo-router';
 import Header from '../../../../components/Header';
@@ -134,7 +134,12 @@ export default function EditPost() {
           <Header />
           {!isNavHidden ?
             <>
-              <StyledButton onPress={() => {router.push("/admin")}} text='Back' textStyle={{margin: 10}} style={{width: width - 40, marginLeft: 'auto', marginRight: 'auto'}}/>
+              <StyledButton onPress={() => {router.push("/admin")}} style={{width: width - 40, marginLeft: 'auto', marginRight: 'auto'}}>
+                <ChevronLeft width={25} height={25} style={{margin: 10, marginVertical: 5, marginRight: 3}}/>
+                <View style={{height: 'auto', justifyContent: 'center'}}>
+                  <Text style={{marginVertical: 0}}>Back</Text>
+                </View>
+              </StyledButton>
               <View style={{width: width-40, borderRadius:50, flexDirection: 'row', overflow: 'hidden', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', padding: 'auto', margin: 10, marginHorizontal: 20}}>
                 <Pressable onPress={() => setIsCard(true)} style={{backgroundColor: isCard ? '#d3d3d3':'white', width: (width-40)/2}}>
                   <Text style={{margin: 10}}>Card</Text>
@@ -190,9 +195,6 @@ export default function EditPost() {
           }}
             hasChanged={hasUnsavedChanges}
           />
-          { newPost.id !== 'Create' ?
-            <StyledButton style={{padding: 10}} onPress={() => deletePost(newPost.id)} text='Delete Post'/>:null
-          }
         </ScrollView>
       </View>
     )

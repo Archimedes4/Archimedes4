@@ -11,7 +11,7 @@ import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useShared
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { AzureIcon, FirebaseIcon, GitIcon, JavaIcon, ProcessingIcon, PythonIcon, ReactIcon, SwiftIcon } from '../../components/Icons';
+import { AzureIcon, FirebaseIcon, GitIcon, JavaIcon, ProcessingIcon, PythonIcon, RacketIcon, ReactIcon, SwiftIcon } from '../../components/Icons';
 import Header from '../../components/Header';
 import NameComponent from '../../components/NameComponent';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -66,7 +66,7 @@ function BodyComponent({onLayoutHeight}:{onLayoutHeight: (item: number) => void}
       <View style={{height: 40, marginLeft: 20}}>
         <HelloComponet />
       </View>
-      <Text style={{color: "white", fontSize: 25, marginLeft: 20, marginRight: 20}}>my name is Andrew Mainella, I am a student, curler, coder. I am a born and raised Manitoban. I am a student at Saint Paul's High School with a passion for computer science. I hope that this website will show you what I have done!</Text>
+      <Text style={{color: "white", fontSize: 25, marginLeft: 20, marginRight: 20}}>my name is Andrew Mainella, I am a student, curler, coder. I am a born and raised Manitoban. I am a student at the University of British Columbia with a passion for computer science. I hope that this website will show you what I have done!</Text>
       <View>
         <Text adjustsFontSizeToFit style={{color: 'white', fontSize: 50, marginHorizontal: 20}} numberOfLines={1}>What I am using</Text>
         <View style={{flexDirection: "row", width: width - 40, marginLeft: 20}}>
@@ -85,8 +85,8 @@ function BodyComponent({onLayoutHeight}:{onLayoutHeight: (item: number) => void}
           <BodyBlock text='Java'>
             <JavaIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
           </BodyBlock>
-          <BodyBlock text='Processing'>
-            <ProcessingIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
+          <BodyBlock text='Racket'>
+            <RacketIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
           </BodyBlock>
           <BodyBlock text='Python'>
             <PythonIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>

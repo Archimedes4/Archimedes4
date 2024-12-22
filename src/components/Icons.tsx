@@ -303,6 +303,17 @@ export function GithubIcon({ width, height, style }: iconProps) {
   )
 }
 
+export function RacketIcon({ width, height, style }: iconProps) {
+  return (
+    <Svg viewBox="0 0 32 32" fill="#000000" width={width} height={height} style={style}>
+      <Circle cx="16" cy="16" r="14" fill="#fff"/>
+      <Path d="M27.016,24.641a14,14,0,0,0-15.8-21.8C16.9,5.822,24.413,15.549,27.016,24.641Z" fill="#3e5ba9"/>
+      <Path d="M13.995,10.93a24.3,24.3,0,0,0-7.22-5.46A14,14,0,0,0,5.463,25.217,39.56,39.56,0,0,1,13.995,10.93Z" fill="#9f1d20"/>
+      <Path d="M16.575,14.1A32.645,32.645,0,0,0,9.43,28.365a14.016,14.016,0,0,0,13.3-.089A38.642,38.642,0,0,0,16.575,14.1Z" fill="#9f1d20"/>
+    </Svg>
+  )
+}
+
 export function LogoIcon({ width, height, style }: iconProps) {
   return (
     <Svg width={width} height={height} style={style} viewBox="0 0 33 33" fill="none">

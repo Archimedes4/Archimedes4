@@ -12,7 +12,8 @@ import { loadingStateEnum } from '../../Types'
 import UpdatePostButton from './UpdatePostButton'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Head from 'expo-router/head'
-import { ChevronLeft, GlassesIcon, ImagePlusIcon } from '../Icons'
+import { ChevronLeft, GlassesIcon, ImagePlusIcon, TrashIcon } from '../Icons'
+import { deletePost } from '../../ulti/postFunctions';
 
 function EditPostImage({
   newPost,
@@ -138,38 +139,42 @@ export default function EditPostCard({
         <Modal visible={isPickingCover}>
           <SelectFile selectedFile={newPost.cover} onClose={() => {setIsPickingCover(false)}} onSelect={(e) => {setNewPost({...newPost, cover: e})}}/>
         </Modal>
-        <Header />
-        <StyledButton onPress={() => {router.push("/admin")}} style={{width: width - 40, marginLeft: 'auto', marginRight: 'auto'}}>
-          <ChevronLeft width={25} height={25} style={{margin: 10, marginRight: 3}}/>
-          <View style={{height: 'auto', justifyContent: 'center'}}>
-            <Text style={{marginVertical: 0}}>Back</Text>
+        {(width <= 1000) ?
+          <Header />:null
+        }
+        <View>
+          <StyledButton onPress={() => {router.push("/admin")}} style={{width: width - 40, marginLeft: 'auto', marginRight: 'auto'}}>
+            <ChevronLeft width={25} height={25} style={{margin: 10, marginVertical: 5, marginRight: 3}}/>
+            <View style={{height: 'auto', justifyContent: 'center'}}>
+              <Text style={{marginVertical: 0}}>Back</Text>
+            </View>
+          </StyledButton>
+          <View style={{width: width-40, borderRadius:50, flexDirection: 'row', overflow: 'hidden', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', padding: 'auto', margin: 10, marginLeft: 'auto', marginRight: 'auto'}}>
+            <Pressable onPress={() => setIsCard(true)} style={{backgroundColor: '#d3d3d3', width: width/2-20}}>
+              <Text style={{margin: 10}}>Card</Text>
+            </Pressable>
+            <Pressable onPress={() => setIsCard(false)} style={{backgroundColor: 'white', width: width/2-20}}>
+              <Text style={{margin: 10}}>Blog</Text>
+            </Pressable>
           </View>
-        </StyledButton>
-        <View style={{width: width-40, borderRadius:50, flexDirection: 'row', overflow: 'hidden', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', padding: 'auto', margin: 10, marginLeft: 'auto', marginRight: 'auto'}}>
-          <Pressable onPress={() => setIsCard(true)} style={{backgroundColor: '#d3d3d3', width: width/2-20}}>
-            <Text style={{margin: 10}}>Card</Text>
-          </Pressable>
-          <Pressable onPress={() => setIsCard(false)} style={{backgroundColor: 'white', width: width/2-20}}>
-            <Text style={{margin: 10}}>Blog</Text>
-          </Pressable>
-        </View>
-        <View style={{width: width-40, borderRadius:50, flexDirection: 'row', overflow: 'hidden', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', padding: 'auto', margin: 10, marginLeft: 'auto', marginRight: 'auto'}}>
-          <Pressable onPress={() => {
-            setNewPost({
-              ...newPost,
-              type: "Coding"
-            })
-          }} style={{backgroundColor: (newPost.type === "Coding") ? '#d3d3d3':'white', width: width/2-20}}>
-            <Text style={{margin: 10}}>Coding</Text>
-          </Pressable>
-          <Pressable onPress={() => {
-            setNewPost({
-              ...newPost,
-              type: "Activities"
-            })
-          }} style={{backgroundColor:  (newPost.type === "Activities") ? '#d3d3d3':'white', width: width/2-20}}>
-            <Text style={{margin: 10}}>Activities</Text>
-          </Pressable>
+          <View style={{width: width-40, borderRadius:50, flexDirection: 'row', overflow: 'hidden', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', padding: 'auto', margin: 10, marginLeft: 'auto', marginRight: 'auto'}}>
+            <Pressable onPress={() => {
+              setNewPost({
+                ...newPost,
+                type: "Coding"
+              })
+            }} style={{backgroundColor: (newPost.type === "Coding") ? '#d3d3d3':'white', width: width/2-20}}>
+              <Text style={{margin: 10}}>Coding</Text>
+            </Pressable>
+            <Pressable onPress={() => {
+              setNewPost({
+                ...newPost,
+                type: "Activities"
+              })
+            }} style={{backgroundColor:  (newPost.type === "Activities") ? '#d3d3d3':'white', width: width/2-20}}>
+              <Text style={{margin: 10}}>Activities</Text>
+            </Pressable>
+          </View>
         </View>
         <View style={{margin: 5}}>
           <View style={{backgroundColor: 'white', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, paddingVertical: 10, margin: 10, flexDirection: 'row'}}>
@@ -235,6 +240,12 @@ export default function EditPostCard({
             }}/>
           </View>
           <UpdatePostButton newPost={newPost} setNewPost={setNewPost} onEditPostSuccess={onEditPostSuccess} hasChanged={hasChanged}/>
+          { newPost.id !== 'Create' ?
+            <StyledButton style={{padding: 10}} onPress={() => {}}>
+              <TrashIcon width={16.4} height={16.4} style={{ marginTop: 'auto', marginBottom: 'auto', paddingRight: 5 }}/>
+              <Text>Delete Post</Text>
+            </StyledButton>:null
+          }
         </View>
       </ScrollView>
     </View>
