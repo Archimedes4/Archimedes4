@@ -18,17 +18,24 @@ function FileItem({
   setFiles
 }:{
   onSelect: (item: storageItem | undefined) => void;
-  selectedFile: undefined|storageItem
+  selectedFile: undefined|storageItem|postAsset[]
   item: ListRenderItemInfo<storageItem>
   files: storageItem[],
   setFiles: (item: storageItem[]) => void
 }) {
   const [deleteFileState, setDeleteFileState] = useState<loadingStateEnum>(loadingStateEnum.notStarted)
 
+  function isSelectedFile(item: storageItem, selectedFile: undefined|storageItem|postAsset[]) {
+    if (Array.isArray(selectedFile)) {
+      return selectedFile.some((e) => {return e.item.name === item.name})
+    }
+    return selectedFile?.name === item.name
+  }
+
   async function deleteFile(file: storageItem) {
     try {
       setDeleteFileState(loadingStateEnum.loading)
-      if (file.name === selectedFile.name) {
+      if (isSelectedFile(file, selectedFile)) {
         onSelect(undefined)
       }
       await deleteDoc(doc(db, "Files", file.id))
@@ -43,7 +50,7 @@ function FileItem({
   }
 
   return (
-    <Pressable  onPress={(e) => {onSelect(item.item)}} style={{flexDirection: 'row', margin: 10, backgroundColor: selectedFile.name === item.item.name ? "gray":'white', borderWidth: 2, borderRadius: 30, borderColor: 'black', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, overflow: 'hidden'}}>
+    <Pressable  onPress={(e) => {onSelect(item.item)}} style={{flexDirection: 'row', margin: 10, backgroundColor: isSelectedFile(item.item, selectedFile) ? "gray":'white', borderWidth: 2, borderRadius: 30, borderColor: 'black', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, overflow: 'hidden'}}>
       {item.item.loadingState === loadingStateEnum.success ?
         <Image source={{uri: item.item.url}} style={{width: 100, height: 100}}/>:null
       }
@@ -68,7 +75,7 @@ function FileItem({
   )
 }
 
-export default function SelectFile({onClose, onSelect, selectedFile}:{onClose: () => void, onSelect: (item: storageItem | undefined) => void, selectedFile: undefined|storageItem}) {
+export default function SelectFile({onClose, onSelect, selectedFile}:{onClose: () => void, onSelect: (item: storageItem | undefined) => void, selectedFile: undefined|storageItem|postAsset[]}) {
   const { height, width } = useWindowDimensions()
   const insets = useSafeAreaInsets()
 

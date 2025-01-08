@@ -12,6 +12,7 @@ import Header from "../../../../components/Header";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ChevronLeft, PencilIcon, PencilSlashIcon } from "../../../../components/Icons";
 import LoadingComponent from "../../../../components/LoadingComponent";
+import React from "react";
 
 enum technologyAdminState {
   loading,
@@ -38,16 +39,16 @@ function TechnologyName({
 }) {
   const [isEditing, setIsEditing] = useState<boolean>(false)
   return (
-    <View style={{flexDirection: 'row', marginHorizontal: 15, backgroundColor: 'white', borderRadius: 15, padding: 5}}>
+    <View style={{flexDirection: 'row', marginHorizontal: 15, backgroundColor: 'white', borderRadius: 15, padding: 10}}>
       {isEditing ?
-        <Text style={{fontSize: 30}}>{name}</Text>:
-        <TextInput value={name} onChangeText={(e) => {onNameChange}}/>
+        <TextInput value={name} onChangeText={(e) => {onNameChange(e)}} style={{width: "100%", fontSize: 25}}/>:
+        <Text style={{fontSize: 25}}>{name}</Text>
       }
       {/* TODO change logo */}
-      <Pressable onPress={() => setIsEditing(!isEditing)}>
+      <Pressable onPress={() => setIsEditing(!isEditing)} style={{marginLeft: isEditing ? 0:'auto'}}>
         {isEditing ?
-          <PencilSlashIcon width={25} height={25}/>:
-          <PencilIcon width={25} height={25}/>
+          <PencilSlashIcon width={25} height={25} style={{marginVertical: 'auto'}}/>:
+          <PencilIcon width={25} height={25} style={{marginVertical: 'auto'}}/>
         }
       </Pressable>
     </View>
@@ -70,7 +71,8 @@ function UpdateTechnologyButton({
     if (itemId === 'Create') {
       setTechState(technologyAdminState.loadingCreate)
       const result = await addTechnology(item)
-      if (result === loadingStateEnum.success) {
+      if (result.result === loadingStateEnum.success) {
+        router.push(`/admin/technologies/${result.id}`)
         setTechState(technologyAdminState.noChangeEdit)
       } else [
         setTechState(technologyAdminState.failedCreate)
@@ -181,9 +183,14 @@ function TechnologyDelete({
     const result = await deleteTechnology(id)
     if (result === loadingStateEnum.success) {
       setTechState(technologyAdminState.deleteSuccess)
+      router.push('/admin/technologies')
     } else {
       setTechState(technologyAdminState.deleteFailed)
     }
+  }
+
+  if (id === 'Create') {
+    return null
   }
 
   return (
@@ -272,13 +279,13 @@ export default function EditTechnology() {
     )
   }
   
-  if (item !== undefined && [technologyAdminState.noChangeEdit, technologyAdminState.changeEdit, technologyAdminState].includes(techState)) {
+  if (item !== undefined && [technologyAdminState.noChangeEdit, technologyAdminState.changeEdit, technologyAdminState.create].includes(techState)) {
     return (
       <View style={{width: width, height: height, backgroundColor: "#1c93ba", paddingTop: insets.top}}>
         <Header />
         <TechBackButton />
         <TechnologyName name={item.name} onNameChange={(e) => {setItem({...item, name: e})}} />
-        <View style={{flexDirection: (width < 576) ? undefined:'row'}}>
+        <View style={{flexDirection: (width < 576) ? undefined:'row', marginTop: 15}}>
           <SVGXml xml={item.content} width={100} height={100} />
           <TextInput
             style={{backgroundColor: 'white', width: (width < 576) ? (width-30):width-200, height: 100}}

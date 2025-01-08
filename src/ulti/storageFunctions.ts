@@ -1,7 +1,7 @@
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { loadingStateEnum, uploadStateEnum } from "../Types";
 import * as DocumentPicker from 'expo-document-picker';
-import { addDoc, collection, doc, getDocs, getFirestore, getDoc, query, orderBy, startAt } from "firebase/firestore";
+import { addDoc, collection, getDocs, getFirestore, getDoc, query, orderBy, startAt } from "firebase/firestore";
 import { db, storage } from "../app/_layout";
 import { useState } from "react";
 

@@ -7,16 +7,14 @@
 import React from 'react'
 import { Redirect, Slot } from 'expo-router'
 import useIsUserAuth from '../../../hooks/useIsUserAuth'
-import { ActivityIndicator, View } from 'react-native'
+import LoadingComponent from '../../../components/LoadingComponent'
 
 export default function _layout() {
   const { isLoading, isUserAuth } = useIsUserAuth()
   
   if (isLoading) {
     return (
-      <View>
-        <ActivityIndicator />
-      </View>
+      <LoadingComponent />
     )
   }
 
@@ -25,5 +23,6 @@ export default function _layout() {
       <Slot />
     )
   }
+  
   return <Redirect href='/login'/>
 }

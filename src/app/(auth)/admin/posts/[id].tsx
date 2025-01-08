@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
 import { useEffect, useState } from 'react';
 import { loadingStateEnum } from '../../../../Types';
-import { Pressable, View, Text, Modal, ScrollView, FlatList, ActivityIndicator } from 'react-native';
+import { Pressable, View, Text, Modal, ScrollView } from 'react-native';
 import { getPost } from '../../../../ulti/postFunctions';
 import { getAssest } from '../../../../ulti/storageFunctions';
 import { router, useGlobalSearchParams } from 'expo-router';
@@ -21,6 +21,8 @@ import EditPostCard from '../../../../components/EditPost/EditPostCard';
 import UpdatePostButton from '../../../../components/EditPost/UpdatePostButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { checkIfUnsaved } from '../../../../ulti/checkIfUnsaved';
+import React from 'react';
+import LoadingComponent from '../../../../components/LoadingComponent';
 
 export default function EditPost() {
   //View
@@ -107,10 +109,7 @@ export default function EditPost() {
 
   if (loadPostState === loadingStateEnum.loading) {
     return (
-      <View style={{width, height, justifyContent: 'center', alignItems: 'center', backgroundColor: "#1c93ba"}}>
-        <ActivityIndicator color={'white'} size={'large'}/>
-        <Text style={{marginTop: 5, color: 'white'}}>Loading...</Text>
-      </View>
+      <LoadingComponent />
     )
   }
 
@@ -126,7 +125,7 @@ export default function EditPost() {
       <View style={{height}}>
         <ScrollView style={{width: width, height: height, backgroundColor: "#1c93ba"}} contentContainerStyle={{paddingTop: insets.top}}>
           <Modal visible={isAssest}>
-            <SelectFile selectedFile={newPost.cover} onClose={() => {setIsAssest(false)}} onSelect={(e) => {setNewPost({...newPost, assests: [...newPost.assests, {
+            <SelectFile selectedFile={newPost.assests} onClose={() => {setIsAssest(false)}} onSelect={(e) => {setNewPost({...newPost, assests: [...newPost.assests, {
               item: e,
               id: newPost.assests.length.toString()
             }]})}}/>
@@ -169,7 +168,7 @@ export default function EditPost() {
             <MarkdownCross markdown={newPost.content} assests={newPost.assests}/>:
             <TextEditor text={newPost.content} onChangeText={(e) => {setNewPost({...newPost, content: e})}} height={height}/>
           }
-          <Text style={{marginLeft: 20, color: "white"}}>Assests</Text>
+          <Text style={{marginLeft: 20, color: "white", marginTop: 5}}>Assests</Text>
           <ScrollView>
             {newPost.assests.map((e) => (
               <View

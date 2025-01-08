@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import { confirmPasswordReset, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { confirmPasswordReset, signInWithEmailAndPassword } from "firebase/auth";
 import { loadingStateEnum } from "../Types";
 import { auth } from "../app/_layout";
 

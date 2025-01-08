@@ -1,0 +1,162 @@
+[debug] [2024-12-22T19:41:47.030Z] ----------------------------------------------------------------------
+[debug] [2024-12-22T19:41:47.031Z] Command:       /Users/andrewmainella/.nvm/versions/node/v18.20.2/bin/node /Users/andrewmainella/.nvm/versions/node/v18.20.2/bin/firebase deploy --debug
+[debug] [2024-12-22T19:41:47.031Z] CLI Version:   13.12.0
+[debug] [2024-12-22T19:41:47.031Z] Platform:      darwin
+[debug] [2024-12-22T19:41:47.031Z] Node Version:  v18.20.2
+[debug] [2024-12-22T19:41:47.032Z] Time:          Sun Dec 22 2024 13:41:47 GMT-0600 (Central Standard Time)
+[debug] [2024-12-22T19:41:47.032Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-12-22T19:41:47.057Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-12-22T19:41:47.058Z] > authorizing via signed-in user (andrewmainella@gmail.com)
+[debug] [2024-12-22T19:41:47.058Z] [iam] checking project andrewmainellaabout for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2024-12-22T19:41:47.059Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/andrewmainellaabout:testIamPermissions [none]
+[debug] [2024-12-22T19:41:47.059Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/andrewmainellaabout:testIamPermissions x-goog-quota-user=projects/andrewmainellaabout
+[debug] [2024-12-22T19:41:47.059Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/andrewmainellaabout:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2024-12-22T19:41:47.287Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/andrewmainellaabout:testIamPermissions 200
+[debug] [2024-12-22T19:41:47.288Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/andrewmainellaabout:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2024-12-22T19:41:47.289Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/andrewmainellaabout [none]
+[debug] [2024-12-22T19:41:47.498Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/andrewmainellaabout 200
+[debug] [2024-12-22T19:41:47.499Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/andrewmainellaabout {"projectId":"andrewmainellaabout","projectNumber":"1004421973192","displayName":"AndrewMainellaAbout","name":"projects/andrewmainellaabout","resources":{"hostingSite":"andrewmainellaabout","storageBucket":"andrewmainellaabout.appspot.com","locationId":"us-central"},"state":"ACTIVE","etag":"1_3b75c0fb-4174-40f1-81fd-6c5aba06f586"}
+[info] 
+[info] === Deploying to 'andrewmainellaabout'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2024-12-22T19:41:47.506Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/versions [none]
+[debug] [2024-12-22T19:41:47.506Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2024-12-22T19:41:48.093Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/versions 200
+[debug] [2024-12-22T19:41:48.094Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/versions {"name":"projects/1004421973192/sites/andrewmainellaabout/versions/ea12299c44aeee6c","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[andrewmainellaabout]: beginning deploy... 
+[info] i  hosting[andrewmainellaabout]: found 33 files in dist 
+[debug] [2024-12-22T19:41:48.117Z] [hosting] uploading with 200 concurrency
+[debug] [2024-12-22T19:41:48.122Z] [hosting] hash cache [ZGlzdA] stored for 33 files
+[debug] [2024-12-22T19:41:48.122Z] [hosting][hash queue][FINAL] {"max":2,"min":1,"avg":1,"active":0,"complete":33,"success":33,"errored":0,"retried":0,"total":33,"elapsed":3}
+[debug] [2024-12-22T19:41:48.122Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/1004421973192/sites/andrewmainellaabout/versions/ea12299c44aeee6c:populateFiles [none]
+[debug] [2024-12-22T19:41:48.122Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/1004421973192/sites/andrewmainellaabout/versions/ea12299c44aeee6c:populateFiles {"files":{"/password-reset.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/login.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/github-markdown.css":"961e241a2e90586528ba33580cd25bf47af686eb616016e16e2e3b84c459a75d","/favicon.ico":"3962fc42fcdf002e2d3487fe43782f2c0d0720390df289b0621d4abbea0018a0","/contact.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/coding.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/activities.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/_sitemap.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/[...missing].html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/+not-found.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(public).html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/coding/[id].html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/assets/assets/Smoke.aa11aa76f90bdd24d9745cfdf2d8a98c.png":"e5fd65c07fc16a8d9cf093e8362f6fe027398178c0782ac0e117242bd9d31c3b","/assets/assets/Bungee-Regular.4a1f74ab78e14477c62bf18447f5aeaf.ttf":"3dde2b9bee235c4e6d6c8ee5df4de47ea4c19faf6b9a2adb33f50bb865636a55","/admin/technologies.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/admin/messages.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/admin/index.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/admin/technologies/[id].html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/admin/posts/[id].html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/activities/[id].html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/_expo/static/js/web/entry-65da80332573387ad7f196d94798e6e5.js":"6b9d082ade2cdc497a942717c3f20b3bc4eb51e5dbe9275e36fb270e1a1a2ed5","/(public)/contact.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(public)/coding.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(public)/activities.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(public)/coding/[id].html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(public)/activities/[id].html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(auth)/password-reset.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(auth)/login.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(auth)/admin/technologies.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(auth)/admin/messages.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(auth)/admin/index.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(auth)/admin/technologies/[id].html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(auth)/admin/posts/[id].html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6"}}
+[debug] [2024-12-22T19:41:48.445Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/1004421973192/sites/andrewmainellaabout/versions/ea12299c44aeee6c:populateFiles 200
+[debug] [2024-12-22T19:41:48.445Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/1004421973192/sites/andrewmainellaabout/versions/ea12299c44aeee6c:populateFiles {"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/andrewmainellaabout/versions/ea12299c44aeee6c/files"}
+[debug] [2024-12-22T19:41:48.446Z] [hosting][populate queue][FINAL] {"max":325,"min":325,"avg":325,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":325}
+[debug] [2024-12-22T19:41:48.446Z] [hosting] uploads queued: 0
+[debug] [2024-12-22T19:41:48.446Z] [hosting][upload queue][FINAL] {"max":0,"min":9999999999,"avg":0,"active":0,"complete":0,"success":0,"errored":0,"retried":0,"total":0,"elapsed":1734896508446}
+[info] i  hosting: upload complete 
+[info] ✔  hosting[andrewmainellaabout]: file upload complete 
+[debug] [2024-12-22T19:41:48.446Z] [hosting] deploy completed after 350ms
+[debug] [2024-12-22T19:41:48.446Z] [
+  {
+    "config": {
+      "public": "dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "site": "andrewmainellaabout"
+    },
+    "version": "projects/1004421973192/sites/andrewmainellaabout/versions/ea12299c44aeee6c"
+  }
+]
+[info] i  hosting[andrewmainellaabout]: finalizing version... 
+[debug] [2024-12-22T19:41:48.448Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/versions/ea12299c44aeee6c updateMask=status%2Cconfig
+[debug] [2024-12-22T19:41:48.448Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/versions/ea12299c44aeee6c {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]}}
+[debug] [2024-12-22T19:41:48.747Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/versions/ea12299c44aeee6c 200
+[debug] [2024-12-22T19:41:48.747Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/versions/ea12299c44aeee6c {"name":"projects/1004421973192/sites/andrewmainellaabout/versions/ea12299c44aeee6c","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2024-12-22T19:41:47.940189Z","createUser":{"email":"andrewmainella@gmail.com"},"finalizeTime":"2024-12-22T19:41:48.874554Z","finalizeUser":{"email":"andrewmainella@gmail.com"}}
+[debug] [2024-12-22T19:41:48.748Z] [hosting] finalized version for andrewmainellaabout:[object Object]
+[info] ✔  hosting[andrewmainellaabout]: version finalized 
+[info] i  hosting[andrewmainellaabout]: releasing new version... 
+[debug] [2024-12-22T19:41:48.749Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/channels/live/releases versionName=projects%2F1004421973192%2Fsites%2Fandrewmainellaabout%2Fversions%2Fea12299c44aeee6c
+[debug] [2024-12-22T19:41:48.749Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/channels/live/releases {}
+[debug] [2024-12-22T19:41:49.055Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/channels/live/releases 200
+[debug] [2024-12-22T19:41:49.055Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/channels/live/releases {"name":"projects/1004421973192/sites/andrewmainellaabout/channels/live/releases/1734896508648000","version":{"name":"projects/1004421973192/sites/andrewmainellaabout/versions/ea12299c44aeee6c","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2024-12-22T19:41:47.940189Z","createUser":{"email":"andrewmainella@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLktLA4UiTtW1fnh4v6-ub0HZEUJtD5lZrmOzUQcSMoPV9_SA=mo"},"finalizeTime":"2024-12-22T19:41:48.874554Z","finalizeUser":{"email":"andrewmainella@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLktLA4UiTtW1fnh4v6-ub0HZEUJtD5lZrmOzUQcSMoPV9_SA=mo"}},"type":"DEPLOY","releaseTime":"2024-12-22T19:41:48.648Z","releaseUser":{"email":"andrewmainella@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLktLA4UiTtW1fnh4v6-ub0HZEUJtD5lZrmOzUQcSMoPV9_SA=mo"}}
+[debug] [2024-12-22T19:41:49.056Z] [hosting] release: {"name":"projects/1004421973192/sites/andrewmainellaabout/channels/live/releases/1734896508648000","version":{"name":"projects/1004421973192/sites/andrewmainellaabout/versions/ea12299c44aeee6c","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2024-12-22T19:41:47.940189Z","createUser":{"email":"andrewmainella@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLktLA4UiTtW1fnh4v6-ub0HZEUJtD5lZrmOzUQcSMoPV9_SA=mo"},"finalizeTime":"2024-12-22T19:41:48.874554Z","finalizeUser":{"email":"andrewmainella@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLktLA4UiTtW1fnh4v6-ub0HZEUJtD5lZrmOzUQcSMoPV9_SA=mo"}},"type":"DEPLOY","releaseTime":"2024-12-22T19:41:48.648Z","releaseUser":{"email":"andrewmainella@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLktLA4UiTtW1fnh4v6-ub0HZEUJtD5lZrmOzUQcSMoPV9_SA=mo"}}
+[info] ✔  hosting[andrewmainellaabout]: release complete 
+[info] 
+[info] ✔  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/andrewmainellaabout/overview
+[info] Hosting URL: https://andrewmainellaabout.web.app
+[debug] [2024-12-22T19:45:53.208Z] ----------------------------------------------------------------------
+[debug] [2024-12-22T19:45:53.208Z] Command:       /Users/andrewmainella/.nvm/versions/node/v18.20.2/bin/node /Users/andrewmainella/.nvm/versions/node/v18.20.2/bin/firebase deploy --debug
+[debug] [2024-12-22T19:45:53.209Z] CLI Version:   13.12.0
+[debug] [2024-12-22T19:45:53.209Z] Platform:      darwin
+[debug] [2024-12-22T19:45:53.209Z] Node Version:  v18.20.2
+[debug] [2024-12-22T19:45:53.210Z] Time:          Sun Dec 22 2024 13:45:53 GMT-0600 (Central Standard Time)
+[debug] [2024-12-22T19:45:53.210Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-12-22T19:45:53.237Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-12-22T19:45:53.237Z] > authorizing via signed-in user (andrewmainella@gmail.com)
+[debug] [2024-12-22T19:45:53.238Z] [iam] checking project andrewmainellaabout for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2024-12-22T19:45:53.238Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/andrewmainellaabout:testIamPermissions [none]
+[debug] [2024-12-22T19:45:53.238Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/andrewmainellaabout:testIamPermissions x-goog-quota-user=projects/andrewmainellaabout
+[debug] [2024-12-22T19:45:53.239Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/andrewmainellaabout:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2024-12-22T19:45:53.559Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/andrewmainellaabout:testIamPermissions 200
+[debug] [2024-12-22T19:45:53.560Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/andrewmainellaabout:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2024-12-22T19:45:53.561Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/andrewmainellaabout [none]
+[debug] [2024-12-22T19:45:53.761Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/andrewmainellaabout 200
+[debug] [2024-12-22T19:45:53.761Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/andrewmainellaabout {"projectId":"andrewmainellaabout","projectNumber":"1004421973192","displayName":"AndrewMainellaAbout","name":"projects/andrewmainellaabout","resources":{"hostingSite":"andrewmainellaabout","storageBucket":"andrewmainellaabout.appspot.com","locationId":"us-central"},"state":"ACTIVE","etag":"1_3b75c0fb-4174-40f1-81fd-6c5aba06f586"}
+[info] 
+[info] === Deploying to 'andrewmainellaabout'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2024-12-22T19:45:53.767Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/versions [none]
+[debug] [2024-12-22T19:45:53.768Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2024-12-22T19:45:55.281Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/versions 200
+[debug] [2024-12-22T19:45:55.281Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/versions {"name":"projects/1004421973192/sites/andrewmainellaabout/versions/234cbfd382017d45","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[andrewmainellaabout]: beginning deploy... 
+[info] i  hosting[andrewmainellaabout]: found 33 files in dist 
+[debug] [2024-12-22T19:45:55.305Z] [hosting] uploading with 200 concurrency
+[debug] [2024-12-22T19:45:55.308Z] [hosting] hash cache [ZGlzdA] stored for 33 files
+[debug] [2024-12-22T19:45:55.309Z] [hosting][hash queue][FINAL] {"max":1,"min":1,"avg":1,"active":0,"complete":33,"success":33,"errored":0,"retried":0,"total":33,"elapsed":3}
+[debug] [2024-12-22T19:45:55.309Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/1004421973192/sites/andrewmainellaabout/versions/234cbfd382017d45:populateFiles [none]
+[debug] [2024-12-22T19:45:55.309Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/1004421973192/sites/andrewmainellaabout/versions/234cbfd382017d45:populateFiles {"files":{"/password-reset.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/login.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/github-markdown.css":"961e241a2e90586528ba33580cd25bf47af686eb616016e16e2e3b84c459a75d","/favicon.ico":"3962fc42fcdf002e2d3487fe43782f2c0d0720390df289b0621d4abbea0018a0","/contact.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/coding.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/activities.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/_sitemap.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/[...missing].html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/+not-found.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(public).html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/coding/[id].html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/assets/assets/Smoke.aa11aa76f90bdd24d9745cfdf2d8a98c.png":"e5fd65c07fc16a8d9cf093e8362f6fe027398178c0782ac0e117242bd9d31c3b","/assets/assets/Bungee-Regular.4a1f74ab78e14477c62bf18447f5aeaf.ttf":"3dde2b9bee235c4e6d6c8ee5df4de47ea4c19faf6b9a2adb33f50bb865636a55","/admin/technologies.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/admin/messages.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/admin/index.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/admin/technologies/[id].html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/admin/posts/[id].html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/activities/[id].html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/_expo/static/js/web/entry-65da80332573387ad7f196d94798e6e5.js":"6b9d082ade2cdc497a942717c3f20b3bc4eb51e5dbe9275e36fb270e1a1a2ed5","/(public)/contact.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(public)/coding.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(public)/activities.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(public)/coding/[id].html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(public)/activities/[id].html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(auth)/password-reset.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(auth)/login.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(auth)/admin/technologies.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(auth)/admin/messages.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(auth)/admin/index.html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(auth)/admin/technologies/[id].html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6","/(auth)/admin/posts/[id].html":"da8961766799f0f7f8172dad7fcd8bf33f041e664d88675ec595f0fbb37294e6"}}
+[debug] [2024-12-22T19:45:56.303Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/1004421973192/sites/andrewmainellaabout/versions/234cbfd382017d45:populateFiles 200
+[debug] [2024-12-22T19:45:56.303Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/1004421973192/sites/andrewmainellaabout/versions/234cbfd382017d45:populateFiles {"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/andrewmainellaabout/versions/234cbfd382017d45/files"}
+[debug] [2024-12-22T19:45:56.304Z] [hosting][populate queue][FINAL] {"max":996,"min":996,"avg":996,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":996}
+[debug] [2024-12-22T19:45:56.304Z] [hosting] uploads queued: 0
+[debug] [2024-12-22T19:45:56.304Z] [hosting][upload queue][FINAL] {"max":0,"min":9999999999,"avg":0,"active":0,"complete":0,"success":0,"errored":0,"retried":0,"total":0,"elapsed":1734896756304}
+[info] i  hosting: upload complete 
+[info] ✔  hosting[andrewmainellaabout]: file upload complete 
+[debug] [2024-12-22T19:45:56.304Z] [hosting] deploy completed after 1020ms
+[debug] [2024-12-22T19:45:56.305Z] [
+  {
+    "config": {
+      "public": "dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/(public).html"
+        }
+      ],
+      "site": "andrewmainellaabout"
+    },
+    "version": "projects/1004421973192/sites/andrewmainellaabout/versions/234cbfd382017d45"
+  }
+]
+[info] i  hosting[andrewmainellaabout]: finalizing version... 
+[debug] [2024-12-22T19:45:56.307Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/versions/234cbfd382017d45 updateMask=status%2Cconfig
+[debug] [2024-12-22T19:45:56.307Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/versions/234cbfd382017d45 {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/(public).html"}]}}
+[debug] [2024-12-22T19:45:57.332Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/versions/234cbfd382017d45 200
+[debug] [2024-12-22T19:45:57.333Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/versions/234cbfd382017d45 {"name":"projects/1004421973192/sites/andrewmainellaabout/versions/234cbfd382017d45","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/(public).html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2024-12-22T19:45:54.631944Z","createUser":{"email":"andrewmainella@gmail.com"},"finalizeTime":"2024-12-22T19:45:57.384785Z","finalizeUser":{"email":"andrewmainella@gmail.com"}}
+[debug] [2024-12-22T19:45:57.333Z] [hosting] finalized version for andrewmainellaabout:[object Object]
+[info] ✔  hosting[andrewmainellaabout]: version finalized 
+[info] i  hosting[andrewmainellaabout]: releasing new version... 
+[debug] [2024-12-22T19:45:57.334Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/channels/live/releases versionName=projects%2F1004421973192%2Fsites%2Fandrewmainellaabout%2Fversions%2F234cbfd382017d45
+[debug] [2024-12-22T19:45:57.334Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/channels/live/releases {}
+[debug] [2024-12-22T19:45:58.335Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/channels/live/releases 200
+[debug] [2024-12-22T19:45:58.336Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/andrewmainellaabout/channels/live/releases {"name":"projects/1004421973192/sites/andrewmainellaabout/channels/live/releases/1734896757731000","version":{"name":"projects/1004421973192/sites/andrewmainellaabout/versions/234cbfd382017d45","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/(public).html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2024-12-22T19:45:54.631944Z","createUser":{"email":"andrewmainella@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLktLA4UiTtW1fnh4v6-ub0HZEUJtD5lZrmOzUQcSMoPV9_SA=mo"},"finalizeTime":"2024-12-22T19:45:57.384785Z","finalizeUser":{"email":"andrewmainella@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLktLA4UiTtW1fnh4v6-ub0HZEUJtD5lZrmOzUQcSMoPV9_SA=mo"}},"type":"DEPLOY","releaseTime":"2024-12-22T19:45:57.731Z","releaseUser":{"email":"andrewmainella@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLktLA4UiTtW1fnh4v6-ub0HZEUJtD5lZrmOzUQcSMoPV9_SA=mo"}}
+[debug] [2024-12-22T19:45:58.336Z] [hosting] release: {"name":"projects/1004421973192/sites/andrewmainellaabout/channels/live/releases/1734896757731000","version":{"name":"projects/1004421973192/sites/andrewmainellaabout/versions/234cbfd382017d45","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/(public).html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2024-12-22T19:45:54.631944Z","createUser":{"email":"andrewmainella@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLktLA4UiTtW1fnh4v6-ub0HZEUJtD5lZrmOzUQcSMoPV9_SA=mo"},"finalizeTime":"2024-12-22T19:45:57.384785Z","finalizeUser":{"email":"andrewmainella@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLktLA4UiTtW1fnh4v6-ub0HZEUJtD5lZrmOzUQcSMoPV9_SA=mo"}},"type":"DEPLOY","releaseTime":"2024-12-22T19:45:57.731Z","releaseUser":{"email":"andrewmainella@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLktLA4UiTtW1fnh4v6-ub0HZEUJtD5lZrmOzUQcSMoPV9_SA=mo"}}
+[info] ✔  hosting[andrewmainellaabout]: release complete 
+[info] 
+[info] ✔  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/andrewmainellaabout/overview
+[info] Hosting URL: https://andrewmainellaabout.web.app

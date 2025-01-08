@@ -11,18 +11,28 @@ export async function deleteTechnology(id: string): Promise<loadingStateEnum> {
   }
 }
 
-export async function addTechnology(item: technology): Promise<loadingStateEnum> {
+export async function addTechnology(item: technology): Promise<{
+  result: loadingStateEnum.success,
+  id: String
+} | {
+  result: loadingStateEnum.failed
+}> {
   try {
-    await addDoc(collection(db, 'Technologies'), {
+    const result = await addDoc(collection(db, 'Technologies'), {
       content: item.content,
       name: item.name,
       displayTechnology: item.displayTechnology,
       firstUsed: serverTimestamp(),
       lastUsed: serverTimestamp(),
     })
-    return loadingStateEnum.success;
+    return {
+      result: loadingStateEnum.success,
+      id: result.id
+    }
   } catch {
-    return loadingStateEnum.failed;
+    return {
+      result: loadingStateEnum.failed
+    }
   }
 }
 

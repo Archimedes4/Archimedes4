@@ -3,7 +3,7 @@
   Andrew Mainella
 
 */
-import { View, Text, Pressable, FlatList, ScrollView, ListRenderItemInfo } from 'react-native'
+import { View, Text, Pressable, FlatList, ListRenderItemInfo } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
