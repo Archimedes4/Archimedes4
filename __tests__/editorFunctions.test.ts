@@ -34,6 +34,7 @@ test('gets the correct line number', () => {
   expect(getLineNum("hello\n\nworld", 5)).toBe(1)
   expect(getLineNum("hello\n\nworld", 6)).toBe(2)
   expect(getLineNum("hello\n\nworld", 7)).toBe(2)
+  expect(getLineNum("\n\n\n", 0)).toBe(1)
 })
 
 test('Finds the correct line position', () => {
@@ -51,6 +52,10 @@ test('Finds the correct line position', () => {
 test('Cursor above find the current position', () => {
   expect(cursorAbove("So\nDoes", 4)).toBe(1)
   expect(cursorAbove("So\nDoes", 3)).toBe(0)
+  expect(cursorAbove("\n\n\n", -1)).toBe(-1)
+  expect(cursorAbove("\n\n\n", 0)).toBe(-1)
+  expect(cursorAbove("\n\n\n", 1)).toBe(0)
+  expect(cursorAbove("\n\n\n", 2)).toBe(1)
   expect(cursorAbove("This\n\n\nSo", 8)).toBe(5)
 })
 

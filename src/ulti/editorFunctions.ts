@@ -44,7 +44,7 @@ export function getNumberWidth(lines: number): number {
  * @returns Base 0 line number
  */
 export function getLineNum(text: string, position: number): number {
-  if (position <= 0) {
+  if (position === -1) {
     return 0
   }
   return text.substring(0, position + 1).split("\n").length - 1

@@ -5,9 +5,11 @@ import { getOffset } from '../ulti/editorFunctions';
 
 function Caret({
   caretOppacity,
-  left
+  left,
+  isFocused
 }:{
   caretOppacity: SharedValue<number>;
+  isFocused: boolean;
   left?: boolean
 }) {
   const caretStyle = useAnimatedStyle(() => {
@@ -15,6 +17,11 @@ function Caret({
       opacity: caretOppacity.value
     }
   })
+
+  if (!isFocused) {
+    return null
+  }
+
   return (
     <Animated.View style={[{height: 18, width: 1, position: 'absolute', right: (left === true) ? undefined:-1, left: (left === true) ? 1:undefined, backgroundColor: 'gray'}, caretStyle]}/>
   )
@@ -26,14 +33,16 @@ function Row({
   position,
   offset,
   setPosition,
-  isBold
+  isBold,
+  isFocused
 }: {
   text: string;
   caretOppacity: SharedValue<number>;
   position: number;
   offset: number;
   setPosition: (position: number) => void;
-  isBold: boolean
+  isBold: boolean;
+  isFocused: boolean;
 }) {
   const textArr = useMemo(() => {return text.split("")}, [text])
   
@@ -47,7 +56,7 @@ function Row({
         >
           <Text style={{fontWeight: isBold ? 'bold':'normal'}}>{e}</Text>
           {(position === (offset + number)) ?
-            <Caret caretOppacity={caretOppacity}/>:null
+            <Caret caretOppacity={caretOppacity} isFocused={isFocused}/>:null
           }
         </Pressable>
       ))}
@@ -62,7 +71,8 @@ export default function Line({
   caretOppacity,
   offset,
   setPosition,
-  numberWidth
+  numberWidth,
+  isFocused
 }:{
   text: string;
   line: number;
@@ -71,6 +81,7 @@ export default function Line({
   offset: number;
   setPosition: (position: number) => void;
   numberWidth: number;
+  isFocused: boolean;
 }) {
   const [width, setWidth] = useState<number>(0)
   const isBold = useMemo(() => {
@@ -99,10 +110,10 @@ export default function Line({
       <Text style={{width: numberWidth}}>{line + ": " }</Text>
       <View>
         {(position === (offset - 1)) ?
-          <Caret caretOppacity={caretOppacity} left/>:null
+          <Caret caretOppacity={caretOppacity} isFocused={isFocused} left/>:null
         }
         {rowArr.map((t, i) => (
-          <Row text={t} caretOppacity={caretOppacity} position={position} offset={offset + getOffset(i, rowArr) - i} setPosition={setPosition} isBold={isBold}/>
+          <Row text={t} caretOppacity={caretOppacity} position={position} offset={offset + getOffset(i, rowArr) - i} setPosition={setPosition} isBold={isBold} isFocused={isFocused}/>
         ))}
       </View>
     </View>

@@ -9,7 +9,6 @@ import { db, storage } from "../app/_layout";
 import { deleteObject, ref } from "firebase/storage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-
 function FileItem({
   onSelect,
   selectedFile,

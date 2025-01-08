@@ -1,5 +1,5 @@
-import { Text, Pressable, TextStyle } from 'react-native'
 import React, { useState } from 'react'
+import { Text, Pressable, TextStyle } from 'react-native'
 
 declare global {
   type StyledButtonPropsText = {

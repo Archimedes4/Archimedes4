@@ -2,8 +2,7 @@
   Andrew Mainella
 */
 import { useEffect, useMemo, useRef, useState } from "react";
-import { NativeSyntheticEvent, Pressable, TextInput, TextInputKeyPressEventData, Text, View, ScrollView, Keyboard, Platform } from "react-native";
-import createUUID from "../ulti/createUUID";
+import { Pressable, TextInput, View, ScrollView} from "react-native";
 import * as Clipboard from 'expo-clipboard';
 import Line from "./Line";
 import { cursorAbove, cursorBelow, deleteText, getNumberWidth, getOffset, insertText } from "../ulti/editorFunctions";
@@ -19,6 +18,7 @@ export default function TextEditor({text, onChangeText, height}:{text: string, o
   const caretOppacity = useSharedValue(1);
   const mainRef = useRef<TextInput>();
   const textArr = useMemo(() => {return text.split("\n")}, [text]);
+  const [isFocused, setIsFocused] = useState<boolean>(false);
 
   function updateOpacity() {
     caretOppacity.value = withSequence(withTiming(0, {
@@ -57,6 +57,7 @@ export default function TextEditor({text, onChangeText, height}:{text: string, o
           <View>
             {textArr.map((e, number) => (
               <Line
+                key={`Line_${number}`}
                 text={e}
                 line={number}
                 position={position}
@@ -67,6 +68,7 @@ export default function TextEditor({text, onChangeText, height}:{text: string, o
                   mainRef.current.focus()
                 }}
                 numberWidth={getNumberWidth(textArr.length)}
+                isFocused={isFocused}
               />
             ))}
           </View>
@@ -113,7 +115,9 @@ export default function TextEditor({text, onChangeText, height}:{text: string, o
             //if (result.newText !== undefined) {
               //setTextChar(result.newText)
             //}
-          }} style={{opacity: 0, height: 0, position: 'absolute'}}/>
+          }} style={{opacity: 0, height: 0, position: 'absolute'}}
+          onBlur={() => {setIsFocused(false)}}
+          onFocus={() => {setIsFocused(true)}}/>
         </ScrollView>
       </Pressable>
     </View>
