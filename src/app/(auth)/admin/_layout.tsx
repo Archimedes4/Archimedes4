@@ -6,8 +6,8 @@
 */
 import React from 'react'
 import { Redirect, Slot } from 'expo-router'
-import useIsUserAuth from '../../../hooks/useIsUserAuth'
-import LoadingComponent from '../../../components/LoadingComponent'
+import LoadingComponent from '@components/LoadingComponent'
+import useIsUserAuth from '@hooks/useIsUserAuth'
 
 export default function _layout() {
   const { isLoading, isUserAuth } = useIsUserAuth()

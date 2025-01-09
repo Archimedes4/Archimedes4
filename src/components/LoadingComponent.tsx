@@ -1,7 +1,7 @@
-import { View, Text, ActivityIndicator } from 'react-native'
 import React from 'react'
-import { RootState } from '../redux/store';
+import { View, Text, ActivityIndicator } from 'react-native'
 import { useSelector } from 'react-redux';
+import { RootState } from '@redux/store';
 
 export default function LoadingComponent() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);

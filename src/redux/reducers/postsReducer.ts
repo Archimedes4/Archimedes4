@@ -1,7 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { loadingStateEnum } from '../../Types';
-import { listPosts as listPostsApi, getPost as getPostApi } from '../../ulti/postFunctions';
-import { getValueFromRedux } from '../../ulti/getValueFromRedux';
+import { loadingStateEnum } from '@types';
+import { listPosts as listPostsApi, getPost as getPostApi } from '@functions/postFunctions';
+import { getValueFromRedux } from '@functions/getValueFromRedux';
 import store from '../store';
 
 const listPostsThunk = createAsyncThunk(

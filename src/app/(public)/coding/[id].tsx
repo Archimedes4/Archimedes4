@@ -1,13 +1,13 @@
-import { View, Text, Platform, useColorScheme } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import MarkdownCross from '../../../components/MarkdownCross';
 import { useGlobalSearchParams } from 'expo-router';
-import { getPost } from '../../../redux/reducers/postsReducer';
-import { loadingStateEnum } from '../../../Types';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
-import Header from '../../../components/Header';
+import React, { useEffect, useState } from 'react'
+import { View, Text, Platform, useColorScheme } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSelector } from 'react-redux';
+import MarkdownCross from '@components/MarkdownCross';
+import Header from '@components/Header';
+import { getPost } from '@redux/reducers/postsReducer';
+import { RootState } from '@redux/store';
+import { loadingStateEnum } from '@types';
 
 export default function ViewPost() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);

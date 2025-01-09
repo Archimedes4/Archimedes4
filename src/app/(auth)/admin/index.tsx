@@ -1,18 +1,18 @@
 /*
-  Ultimate Tic Tac Toe
+  Archimedes4 pulled from Ultimate Tic Tac Toe
   Andrew Mainella
 
 */
-import { View, Text, Pressable, FlatList, ListRenderItemInfo } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
-import { loadingStateEnum } from '../../../Types';
-import { listPosts } from '../../../ulti/postFunctions';
-import Header from '../../../components/Header';
 import { router } from 'expo-router';
+import React, { useEffect, useState } from 'react'
+import { View, Text, Pressable, FlatList, ListRenderItemInfo } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import HeaderText from '../../../components/HeaderText';
+import { useSelector } from 'react-redux';
+import Header from '@components/Header';
+import HeaderText from '@components/HeaderText';
+import { listPosts } from '@functions/postFunctions';
+import { RootState } from '@redux/store';
+import { loadingStateEnum } from '@types';
 
 function AdminPostBlock({post}:{post: ListRenderItemInfo<post>}) {
   const [isHover, setIsHover] = useState<boolean>(false);
@@ -24,7 +24,6 @@ function AdminPostBlock({post}:{post: ListRenderItemInfo<post>}) {
 }
 
 export default function AdminPanel() {
-  //View
   const { height, width } = useSelector((state: RootState) => state.dimentions);
   const [posts, setPosts] = useState<post[]>([]);
   const [isMessageHover, setIsMessageHover] = useState<boolean>(false);

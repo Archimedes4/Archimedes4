@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import { loadingStateEnum, uploadStateEnum } from "../Types";
-import { listStorageItems, useUploadFile } from "../ulti/storageFunctions";
-import { FlatList, Pressable, View, Text, Image, ListRenderItemInfo, ActivityIndicator, useWindowDimensions } from "react-native";
-import StyledButton from "./StyledButton";
-import { CloseIcon, TrashIcon } from "./Icons";
 import { deleteDoc, doc } from "firebase/firestore";
-import { db, storage } from "../app/_layout";
 import { deleteObject, ref } from "firebase/storage";
+import { useEffect, useState } from "react";
+import { FlatList, Pressable, View, Text, Image, ListRenderItemInfo, ActivityIndicator, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import StyledButton from "@components/StyledButton";
+import { CloseIcon, TrashIcon } from "@components/Icons";
+import { db, storage } from "../app/_layout";
+import { listStorageItems, useUploadFile } from "@functions/storageFunctions";
+import { loadingStateEnum, uploadStateEnum } from "@types";
 
 function FileItem({
   onSelect,

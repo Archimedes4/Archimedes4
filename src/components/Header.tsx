@@ -3,13 +3,13 @@
   Andrew Mainella
   13 September 2024
 */
-import { View, Text, Pressable, Linking, Platform } from 'react-native'
-import React, { ReactNode, useEffect, useState } from 'react'
-import { ActivityIcon, CodingIcon, ContactIcon, GithubIcon, HomeIcon } from './Icons'
-import { useSelector } from 'react-redux'
-import { RootState } from '../redux/store'
 import { useRouter } from 'expo-router'
-import { useIsShowingAdmin } from '../hooks/useIsShowingAdmin'
+import React, { ReactNode, useEffect, useState } from 'react'
+import { View, Text, Pressable, Linking } from 'react-native'
+import { useSelector } from 'react-redux'
+import { ActivityIcon, CodingIcon, ContactIcon, GithubIcon, HomeIcon } from '@components/Icons'
+import { useIsShowingAdmin } from '@hooks/useIsShowingAdmin'
+import { RootState } from '@redux/store'
 
 function getWidth(width: number) {
   if (width/5 <= 20) {

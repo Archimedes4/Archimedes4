@@ -1,7 +1,7 @@
-import { Text } from 'react-native'
 import React from 'react'
+import { Text } from 'react-native'
 import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
+import { RootState } from '@redux/store';
 
 export default function HeaderText({text}:{text: string}) {
   const {height} = useSelector((state: RootState) => state.dimentions);

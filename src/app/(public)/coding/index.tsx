@@ -1,14 +1,14 @@
-import { View, Text, FlatList, ActivityIndicator } from 'react-native'
-import React, { useEffect } from 'react'
-import { loadingStateEnum } from '../../../Types'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../../redux/store'
-import PostBlock from '../../../components/PostBlock'
-import Header from '../../../components/Header'
-import { listPosts } from '../../../redux/reducers/postsReducer'
-import { router } from 'expo-router'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import createUUID from '../../../ulti/createUUID'
+import { router } from 'expo-router';
+import React, { useEffect } from 'react';
+import { View, Text, FlatList, ActivityIndicator } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSelector } from 'react-redux';
+import { RootState } from '@redux/store';
+import PostBlock from '@components/PostBlock';
+import Header from '@components/Header';
+import { listPosts } from '@redux/reducers/postsReducer';
+import createUUID from '@functions/createUUID';
+import { loadingStateEnum } from '@types';
 
 export default function Coding() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);

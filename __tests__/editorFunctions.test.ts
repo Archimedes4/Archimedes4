@@ -1,4 +1,4 @@
-import {cursorAbove, cursorBelow, deleteText, getLineNum, getLinePosition, getOffset, getTextLength, insertText} from "../src/ulti/editorFunctions"
+import {cursorAbove, cursorBelow, deleteText, getLineNum, getLinePosition, getOffset, getTextLength, insertText} from "../src/functions/editorFunctions"
 
 test('should get the correct offset', () => { 
   expect(getOffset(0, ["hello", "this is ", "a test"])).toBe(0)

@@ -3,26 +3,25 @@
   Andrew Mainella
   July 19 2024
 */
-import MarkdownCross from '../../../../components/MarkdownCross';
-import TextEditor from '../../../../components/TextEditor';
-import StyledButton from '../../../../components/StyledButton';
-import { ChevronLeft, MoreHIcon, MoreVIcon, TrashIcon } from '../../../../components/Icons';
-import SelectFile from '../../../../components/SelectFile';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../redux/store';
-import { useEffect, useState } from 'react';
-import { loadingStateEnum } from '../../../../Types';
+import MarkdownCross from '@components/MarkdownCross';
+import TextEditor from '@components/TextEditor';
+import StyledButton from '@components/StyledButton';
+import { ChevronLeft, MoreHIcon, MoreVIcon, TrashIcon } from '@components/Icons';
+import SelectFile from '@components/SelectFile';
+import { RootState } from '@redux/store';
+import { loadingStateEnum } from '@types';
 import { Pressable, View, Text, Modal, ScrollView } from 'react-native';
-import { getPost } from '../../../../ulti/postFunctions';
-import { getAssest } from '../../../../ulti/storageFunctions';
+import { getPost } from '@functions/postFunctions';
+import { getAssest } from '@functions/storageFunctions';
 import { router, useGlobalSearchParams } from 'expo-router';
-import Header from '../../../../components/Header';
-import EditPostCard from '../../../../components/EditPost/EditPostCard';
-import UpdatePostButton from '../../../../components/EditPost/UpdatePostButton';
+import Header from '@components/Header';
+import EditPostCard from '@components/EditPost/EditPostCard';
+import UpdatePostButton from '@components/EditPost/UpdatePostButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { checkIfUnsaved } from '../../../../ulti/checkIfUnsaved';
-import React from 'react';
-import LoadingComponent from '../../../../components/LoadingComponent';
+import { checkIfUnsaved } from '@functions/checkIfUnsaved';
+import LoadingComponent from '@components/LoadingComponent';
 
 export default function EditPost() {
   //View
@@ -166,7 +165,9 @@ export default function EditPost() {
           </View>
           {isPreview ?
             <MarkdownCross markdown={newPost.content} assests={newPost.assests}/>:
-            <TextEditor text={newPost.content} onChangeText={(e) => {setNewPost({...newPost, content: e})}} height={height}/>
+            <TextEditor text={newPost.content} onChangeText={(e) => {
+              console.log(e)
+              setNewPost({...newPost, content: e})}} height={height}/>
           }
           <Text style={{marginLeft: 20, color: "white", marginTop: 5}}>Assests</Text>
           <ScrollView>

@@ -1,3 +1,7 @@
+/*
+  Andrew Mainella
+  Most of the icons are taken from https://www.svgrepo.com/
+*/
 import { ViewStyle } from "react-native";
 import Svg, { Circle, Defs, G, LinearGradient, Path, Polygon, Rect, Stop } from "react-native-svg";
 

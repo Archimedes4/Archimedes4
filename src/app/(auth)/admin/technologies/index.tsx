@@ -1,14 +1,14 @@
-import { View, Text, Pressable, FlatList, ListRenderItemInfo, TextInput } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import SVGXml from '../../../../components/SVGXml';
-import Header from '../../../../components/Header';
-import { loadingStateEnum } from '../../../../Types';
-import { addTechnology, listTechnologies, updateTechnology } from '../../../../ulti/technologyFunctions';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../../redux/store';
 import { router } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Pressable, FlatList, ListRenderItemInfo } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import HeaderText from '../../../../components/HeaderText';
+import { useSelector } from 'react-redux';
+import SVGXml from '@components/SVGXml';
+import Header from '@components/Header';
+import HeaderText from '@components/HeaderText';
+import { listTechnologies } from '@functions/technologyFunctions';
+import { RootState } from '@redux/store';
+import { loadingStateEnum } from '@types';
 
 function TechnologyBlock({item}:{item: ListRenderItemInfo<technology>}) {
   const [isHover, setIsHover] = useState<boolean>(false);
@@ -28,7 +28,7 @@ export default function AdminTechnologies() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
   const [technologyState, setTechnologyState] = useState<loadingStateEnum>(loadingStateEnum.notStarted);
   const [technologies, setTechnologies] = useState<technology[]>([]);
-  const insets = useSafeAreaInsets()
+  const insets = useSafeAreaInsets();
 
   async function loadTechnologies() {
     setTechnologyState(loadingStateEnum.loading);
@@ -62,7 +62,7 @@ export default function AdminTechnologies() {
       <FlatList 
         data={technologies}
         renderItem={(item) => (
-          <TechnologyBlock item={item}/>
+          <TechnologyBlock key={item.item.id} item={item}/>
         )}
       />
     </View>

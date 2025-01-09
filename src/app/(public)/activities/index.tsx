@@ -1,17 +1,17 @@
 /*
   Andrew Mainella
 */
-import { View, Text, FlatList } from 'react-native'
-import React, { useEffect } from 'react'
-import Header from '../../../components/Header'
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
-import { loadingStateEnum } from '../../../Types';
-import PostBlock from '../../../components/PostBlock';
-import { listPosts } from '../../../redux/reducers/postsReducer';
 import { router } from 'expo-router';
+import React, { useEffect } from 'react'
+import { View, Text, FlatList } from 'react-native'
 import { ActivityIndicator } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSelector } from 'react-redux';
+import Header from '@components/Header'
+import PostBlock from '@components/PostBlock';
+import { RootState } from '@redux/store';
+import { listPosts } from '@redux/reducers/postsReducer';
+import { loadingStateEnum } from '@types';
 
 export default function Activities() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);

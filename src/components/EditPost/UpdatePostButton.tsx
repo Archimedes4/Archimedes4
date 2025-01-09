@@ -1,7 +1,7 @@
+import React, { useState } from 'react'
 import { View, Text, Pressable, ActivityIndicator } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { loadingStateEnum } from '../../Types';
-import { addPost, updatePost } from '../../ulti/postFunctions';
+import { addPost, updatePost } from '@functions/postFunctions';
+import { loadingStateEnum } from '@types';
 
 export default function UpdatePostButton({
   newPost,
@@ -15,7 +15,6 @@ export default function UpdatePostButton({
 }) {
   const [isHover, setIsHover] = useState<boolean>(false);
   const [currentState, setCurrentState] = useState<loadingStateEnum>(loadingStateEnum.notStarted)
-  const [savedPost, setSavedPost] = useState<post>()
 
   async function onPress() {
     setCurrentState(loadingStateEnum.loading)
@@ -39,23 +38,8 @@ export default function UpdatePostButton({
           setCurrentState(loadingStateEnum.failed)
         }
       }
-      setSavedPost(newPost)
-     // setHasChanged(false)
     }
   }
-
-  useEffect(() => {
-    setSavedPost(newPost)
-  }, [])
-
-  useEffect(() => {
-    if (newPost.id !== "Create" && JSON.stringify(savedPost) === JSON.stringify(newPost)) {
-      //setHasChanged(false)
-    } else {
-      // TODO Get saved post even if this component unmounts
-      //setHasChanged(true)
-    }
-  }, [savedPost, newPost])
 
   if (hasChanged === false) {
     return (

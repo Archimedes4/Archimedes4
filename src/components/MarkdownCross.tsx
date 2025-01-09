@@ -1,11 +1,10 @@
-import { View, Text, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import { Platform } from 'react-native'
 import { WebView } from 'react-native-webview';
-import * as commonmark from "commonmark";
-import { getMarkdownFromAssets } from '../ulti/storageFunctions';
-import { convertToMarkdown } from '../ulti/createMarkdown';
 import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
+import { getMarkdownFromAssets } from '@functions/storageFunctions';
+import { convertToMarkdown } from '@functions/createMarkdown';
+import { RootState } from '@redux/store';
 
 export default function MarkdownCross({markdown, assests}:{markdown: string, assests: postAsset[];}) {
   const { height, width } = useSelector((state: RootState) => state.dimentions);

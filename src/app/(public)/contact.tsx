@@ -1,11 +1,11 @@
 import { View, Text, Pressable, Linking, TextInput, ScrollView, Platform, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
-import Header from '../../components/Header'
+import Header from '@components/Header'
 import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import { sendMessage } from '../../ulti/messageFunctions';
-import { loadingStateEnum } from '../../Types';
-import { GithubIcon, MailIcon, SendIcon } from '../../components/Icons';
+import { RootState } from '@redux/store';
+import { sendMessage } from '@functions/messageFunctions';
+import { loadingStateEnum } from '@types';
+import { GithubIcon, MailIcon, SendIcon } from '@components/Icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function Contact() {

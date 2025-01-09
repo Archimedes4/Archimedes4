@@ -1,19 +1,18 @@
-import { View, Text, ScrollView, Modal, Pressable, TextInput, FlatList, Switch, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import SelectFile from '../SelectFile'
-import Header from '../Header'
-import StyledButton from '../StyledButton'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../redux/store'
 import { useRouter } from 'expo-router'
-import SVGXml from '../SVGXml'
-import { listTechnologies } from '../../ulti/technologyFunctions'
-import { loadingStateEnum } from '../../Types'
+import React, { useEffect, useState } from 'react'
+import { View, Text, ScrollView, Modal, Pressable, TextInput, Switch, Image } from 'react-native'
+import { useSelector } from 'react-redux'
+import SelectFile from '@components/SelectFile'
+import Header from '@components/Header'
+import StyledButton from '@components/StyledButton'
+import { RootState } from '@redux/store'
+import SVGXml from '@components/SVGXml'
+import { listTechnologies } from '@functions/technologyFunctions'
+import { loadingStateEnum } from '@types'
 import UpdatePostButton from './UpdatePostButton'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Head from 'expo-router/head'
-import { ChevronLeft, GlassesIcon, ImagePlusIcon, TrashIcon } from '../Icons'
-import { deletePost } from '../../ulti/postFunctions';
+import { ChevronLeft, GlassesIcon, ImagePlusIcon, TrashIcon } from '@components/Icons'
 
 function EditPostImage({
   newPost,
@@ -31,10 +30,6 @@ function EditPostImage({
       setCoverImageHeight(imgHeight/imgWidth * viewWidth);
     });
   }
-
-  useEffect(() => {
-
-  })
 
   return (
     <>

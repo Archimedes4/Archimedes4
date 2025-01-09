@@ -1,9 +1,9 @@
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
-import { loadingStateEnum, uploadStateEnum } from "../Types";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import * as DocumentPicker from 'expo-document-picker';
-import { addDoc, collection, getDocs, getFirestore, getDoc, query, orderBy, startAt } from "firebase/firestore";
-import { db, storage } from "../app/_layout";
+import { addDoc, collection, getDocs, query, orderBy} from "firebase/firestore";
 import { useState } from "react";
+import { db, storage } from "../app/_layout";
+import { loadingStateEnum, uploadStateEnum } from "@types";
 
 export async function listStorageItems(): Promise<{result: loadingStateEnum.failed}|{result: loadingStateEnum.success, data: storageItem[]}> {
   //TODO error handel paginate

@@ -1,15 +1,15 @@
-import { View, Text, TextInput, Pressable, ActivityIndicator, Platform, useWindowDimensions } from 'react-native';
-import React, { useState } from 'react';
-import { signIn } from '../../ulti/authenticationFunctions';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import { loadingStateEnum } from '../../Types';
-import StyledButton from '../../components/StyledButton';
-import AppleAuthenticationButton from '../../components/AppleAuthenticationButton';
-import useIsUserAuth from '../../hooks/useIsUserAuth';
 import { Redirect, router } from 'expo-router';
-import { LogoIcon } from '../../components/Icons';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Pressable, ActivityIndicator, Platform, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSelector } from 'react-redux';
+import StyledButton from '@components/StyledButton';
+import AppleAuthenticationButton from '@components/AppleAuthenticationButton';
+import { LogoIcon } from '@components/Icons';
+import { signIn } from '@functions/authenticationFunctions';
+import useIsUserAuth from '@hooks/useIsUserAuth';
+import { RootState } from '@redux/store';
+import { loadingStateEnum } from '@types';
 
 function getColor(hover: boolean, focus: boolean) {
   if (focus) {

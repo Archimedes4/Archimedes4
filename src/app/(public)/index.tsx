@@ -5,18 +5,18 @@
   Home.tsx
   The main home page
 */
-import { View, Text, Pressable, Platform } from 'react-native'
-import React, { ReactNode, useEffect, useState } from 'react'
-import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { StatusBar } from 'expo-status-bar';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import { AzureIcon, FirebaseIcon, GitIcon, JavaIcon, ProcessingIcon, PythonIcon, RacketIcon, ReactIcon, SwiftIcon } from '../../components/Icons';
-import Header from '../../components/Header';
-import NameComponent from '../../components/NameComponent';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { View, Text, Pressable, Platform } from 'react-native';
+import Animated, { Easing, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Colors } from '../../Types';
+import { useSelector } from 'react-redux';
+import { RootState } from '@redux/store';
+import { AzureIcon, FirebaseIcon, GitIcon, JavaIcon, PythonIcon, RacketIcon, ReactIcon, SwiftIcon } from '@components/Icons';
+import Header from '@components/Header';
+import NameComponent from '@components/NameComponent';
+import { Colors } from '@types';
 
 function getChildrenSize(width: number, height: number): number {
   if (width < height) {

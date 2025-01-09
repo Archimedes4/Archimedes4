@@ -3,7 +3,7 @@ import * as AppleAuthentication from 'expo-apple-authentication';
 import { OAuthProvider, signInWithCredential } from 'firebase/auth';
 import { useWindowDimensions } from 'react-native';
 import { auth } from '../../app/_layout';
-import updateUserProperties from '../../ulti/updateUserProperties';
+import updateUserProperties from '@functions/updateUserProperties';
 
 export default function AppleAuthenticationButton() {
   const {width} = useWindowDimensions()

@@ -1,18 +1,17 @@
-import { useEffect, useState } from "react";
-import { addTechnology, deleteTechnology, getTechnology, updateTechnology } from "../../../../ulti/technologyFunctions";
-import { loadingStateEnum } from "../../../../Types";
-import { View, Text, TextInput, Pressable } from "react-native";
-import SVGXml from "../../../../components/SVGXml";
-import StyledButton from "../../../../components/StyledButton";
-import { DatePickerModal } from "react-native-paper-dates";
 import { router, useGlobalSearchParams } from "expo-router";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../redux/store";
-import Header from "../../../../components/Header";
+import React, { useEffect, useState } from "react";
+import { View, Text, TextInput, Pressable } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ChevronLeft, PencilIcon, PencilSlashIcon } from "../../../../components/Icons";
-import LoadingComponent from "../../../../components/LoadingComponent";
-import React from "react";
+import { DatePickerModal } from "react-native-paper-dates";
+import { useSelector } from "react-redux";
+import { addTechnology, deleteTechnology, getTechnology, updateTechnology } from "@functions/technologyFunctions";
+import SVGXml from "@components/SVGXml";
+import StyledButton from "@components/StyledButton";
+import Header from "@components/Header";
+import { ChevronLeft, PencilIcon, PencilSlashIcon } from "@components/Icons";
+import LoadingComponent from "@components/LoadingComponent";
+import { RootState } from "@redux/store";
+import { loadingStateEnum } from "@types";
 
 enum technologyAdminState {
   loading,

@@ -1,5 +1,14 @@
 {
-  "compilerOptions": {},
+  "compilerOptions": {
+    "paths": {
+      "@components/*": ["./src/components/*"],
+      "@functions/*": ["./src/functions/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@redux/*": ["./src/redux/*"],
+      "@types": ["./src/types.ts"],
+      "assets/*": ["./assets/*"],
+    },
+  },
   "include": ["src/**/*", "assets/*", "public/*", "tests/**/*"],
-  "extends": "expo/tsconfig.base"
+  "extends": "expo/tsconfig.base",
 }

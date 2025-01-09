@@ -3,16 +3,16 @@
   Andrew Mainella
   June 30 2024
 */
-import { View, Text, Pressable, FlatList } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import Header from '../../../components/Header'
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
-import { loadingStateEnum } from '../../../Types';
-import { listMessages } from '../../../ulti/messageFunctions';
 import { router } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Pressable, FlatList } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import HeaderText from '../../../components/HeaderText';
+import { useSelector } from 'react-redux';
+import Header from '@components/Header';
+import HeaderText from '@components/HeaderText';
+import { listMessages } from '@functions/messageFunctions';
+import { RootState } from '@redux/store';
+import { loadingStateEnum } from '@types';
 
 export default function AdminMessages() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
@@ -54,7 +54,7 @@ export default function AdminMessages() {
         )}
         style={{marginTop: 15}}
         ListFooterComponent={() => (
-          <View  style={{height: insets.bottom}}/>
+          <View style={{height: insets.bottom}}/>
         )}
       />
     </View>

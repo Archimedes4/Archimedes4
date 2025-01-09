@@ -1,8 +1,8 @@
-import { View, Text, TextInput } from 'react-native'
-import React, { useState } from 'react'
-import StyledButton from '../../components/StyledButton'
-import { resetPassword } from '../../ulti/authenticationFunctions'
 import { useGlobalSearchParams } from 'expo-router'
+import React, { useState } from 'react'
+import { View, Text, TextInput } from 'react-native'
+import StyledButton from '@components/StyledButton'
+import { resetPassword } from '@functions/authenticationFunctions'
 
 export default function passwordReset() {
   const [newPassword, setNewPassword] = useState<string>("")

@@ -3,12 +3,10 @@
   Andrew Mainella
   30 November 2023
 */
-import { Dimensions, Platform, Pressable, View, useWindowDimensions, Text, Linking } from 'react-native';
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Dimensions, Pressable, View, useWindowDimensions, Linking } from 'react-native';
 import { initializeApp } from "firebase/app";
-import { Provider, useDispatch } from 'react-redux';
-import { dimentionsSlice } from '../redux/reducers/dimentionsReducer';
-import store from '../redux/store';
+import { Provider } from 'react-redux';
 import { Slot, router } from "expo-router";
 import 'raf/polyfill';
 import { getAuth } from 'firebase/auth';
@@ -19,9 +17,11 @@ import { getStorage } from 'firebase/storage';
 import { getFirestore } from 'firebase/firestore';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ActivityIcon, CodingIcon, ContactIcon, GithubIcon, HomeIcon, SettingIcon } from '../components/Icons';
-import useNotificationHandler from '../hooks/useNotificationHandler';
-import { useIsShowingAdmin } from '../hooks/useIsShowingAdmin';
+import { ActivityIcon, CodingIcon, ContactIcon, GithubIcon, HomeIcon, SettingIcon } from '@components/Icons';
+import useNotificationHandler from '@hooks/useNotificationHandler';
+import { useIsShowingAdmin } from '@hooks/useIsShowingAdmin';
+import { dimentionsSlice } from '@redux/reducers/dimentionsReducer';
+import store from '@redux/store';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -130,7 +130,7 @@ export default function App() {
 
 
   const [fontsLoaded] = useFonts({
-    'Bungee-Regular': require('../../assets/Bungee-Regular.ttf'),
+    'Bungee-Regular': require('assets/Bungee-Regular.ttf'),
   });
 
   const onLayoutRootView = useCallback(async () => {

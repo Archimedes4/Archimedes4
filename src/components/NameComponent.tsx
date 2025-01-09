@@ -1,13 +1,12 @@
 //Smoke out
 //Name in
 //scroll rest of distance.
-
-import Animated, { SharedValue, useAnimatedStyle } from "react-native-reanimated";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import * as SplashScreen from 'expo-splash-screen';
 import { useState } from "react";
 import { Text, View } from "react-native";
-import * as SplashScreen from 'expo-splash-screen';
+import Animated, { SharedValue, useAnimatedStyle } from "react-native-reanimated";
+import { useSelector } from "react-redux";
+import { RootState } from "@redux/store";
 
 function getNameProgress(progress: number, width: number) {
   'worklet'
@@ -85,7 +84,7 @@ export default function NameComponent({progress}:{progress: SharedValue<number>}
     <View style={{height: height}}>
       <Text onLayout={(e) => {setFirstNameWidth(e.nativeEvent.layout.width)}} style={{opacity: 0, position: 'absolute', fontSize: getFontSize(width, height), fontFamily: 'Bungee-Regular'}}>Andrew</Text>
       <Text onLayout={(e) => {setLastNameWidth(e.nativeEvent.layout.width)}} style={{opacity: 0, position: 'absolute', fontSize: getFontSize(width, height), fontFamily: 'Bungee-Regular'}}>Mainella</Text>
-      <Animated.Image source={require('../../assets/Smoke.png')} style={[{position: 'absolute', width: width * 2, marginLeft: -width/2, height: height, zIndex: 10}, smokeStyle]} height={100}/>
+      <Animated.Image source={require('assets/Smoke.png')} style={[{position: 'absolute', width: width * 2, marginLeft: -width/2, height: height, zIndex: 10}, smokeStyle]} height={100}/>
       <Animated.View style={[{top: height/2 - getFontSize(width, height)}, leftStyle]}>
         <Text style={{fontSize: getFontSize(width, height), position: 'absolute', color: 'white', fontFamily: 'Bungee-Regular'}}>Andrew </Text>
       </Animated.View>

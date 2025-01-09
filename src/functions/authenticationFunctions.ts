@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import { confirmPasswordReset, signInWithEmailAndPassword } from "firebase/auth";
-import { loadingStateEnum } from "../Types";
 import { auth } from "../app/_layout";
+import { loadingStateEnum } from "@types";
 
 export async function signIn(email: string, password: string): Promise<loadingStateEnum> {
   try {
