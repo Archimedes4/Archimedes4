@@ -1,6 +1,6 @@
 import { addDoc, collection, getDocs, orderBy, query, serverTimestamp } from "firebase/firestore";
-import { loadingStateEnum } from "@types";
 import { db } from "../app/_layout";
+import { loadingStateEnum } from "@types";
 
 export async function sendMessage(email: string, content: string): Promise<loadingStateEnum> {
   try {
@@ -16,7 +16,7 @@ export async function sendMessage(email: string, content: string): Promise<loadi
 }
 
 export async function listMessages(): Promise<{result: loadingStateEnum.success, data: message[]}|{result: loadingStateEnum.failed}> {
-  //TODO error handel paginate
+  //TODO handel paginate
   try {
     let resultData: message[] = []
     const q = query(collection(db, "Messages"), orderBy('time'));

@@ -1,5 +1,5 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { Dimensions } from 'react-native';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 // xSmall,	 <576px  ->0
 // small,    ≥576px  ->1
@@ -7,9 +7,9 @@ import { Dimensions } from 'react-native';
 // large,    ≥992px  ->3
 // xLarge    ≥1200px ->4
 
-
 const windowDimensions = Dimensions.get('window');
 
+// These are the relative values accounting for the footer.
 const initalState: {
   width: number;
   height: number;

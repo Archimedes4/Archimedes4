@@ -1,8 +1,7 @@
+import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
 import { useEffect, useRef } from "react"
-import * as Notifications from 'expo-notifications';
 import { AppState, Platform } from "react-native";
-
 
 Notifications.setNotificationHandler({
   handleNotification: async (e) => {

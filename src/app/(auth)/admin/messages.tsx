@@ -5,12 +5,13 @@
 */
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { View, Text, Pressable, FlatList } from 'react-native';
+import { View, Text, Pressable, FlatList, ActivityIndicator } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import Header from '@components/Header';
 import HeaderText from '@components/HeaderText';
 import { listMessages } from '@functions/messageFunctions';
+import updateMessageLastRead from '@functions/updateMessageLastRead';
 import { RootState } from '@redux/store';
 import { loadingStateEnum } from '@types';
 
@@ -26,6 +27,7 @@ export default function AdminMessages() {
     if (result.result === loadingStateEnum.success) {
       setMessages(result.data);
       setMessageState(loadingStateEnum.success);
+      updateMessageLastRead();
     } else {
       setMessageState(loadingStateEnum.failed);
     }
@@ -44,19 +46,32 @@ export default function AdminMessages() {
       <View style={{height: height * 0.1}}>
         <HeaderText text='Admin Messages'/>
       </View>
-      <FlatList
-        data={messages}
-        renderItem={(message) => (
-          <View style={{width: width - 30, marginHorizontal: 15, marginBottom: 15, padding: 5, borderWidth: 1, borderRadius: 4, backgroundColor: 'white'}}>
-            <Text>{message.item.email !== '' ? message.item.email:'No Sender Provided'}</Text>
-            <Text>{message.item.content}</Text>
-          </View>
+      {(messageState === loadingStateEnum.loading) && (
+        <View>
+          <ActivityIndicator />
+          <Text>Loading...</Text>
+        </View>
+      )}
+      {(messageState === loadingStateEnum.failed) && (
+        <View>
+          <Text>Something went wrong loading the messages!</Text>
+        </View>
+      )}
+      {(messageState === loadingStateEnum.success) && (
+        <FlatList
+          data={messages}
+          renderItem={(message) => (
+            <View style={{width: width - 30, marginHorizontal: 15, marginBottom: 15, padding: 5, borderWidth: 1, borderRadius: 4, backgroundColor: 'white'}}>
+              <Text>{message.item.email !== '' ? message.item.email:'No Sender Provided'}</Text>
+              <Text>{message.item.content}</Text>
+            </View>
+          )}
+          style={{marginTop: 15}}
+          ListFooterComponent={() => (
+            <View style={{height: insets.bottom}}/>
+          )}
+        />
         )}
-        style={{marginTop: 15}}
-        ListFooterComponent={() => (
-          <View style={{height: insets.bottom}}/>
-        )}
-      />
     </View>
   )
 }

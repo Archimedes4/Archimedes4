@@ -4,8 +4,8 @@
 
 */
 import { router } from 'expo-router';
-import React, { useEffect, useState } from 'react'
-import { View, Text, Pressable, FlatList, ListRenderItemInfo } from 'react-native'
+import React, { useEffect, useState } from 'react';
+import { View, Text, Pressable, FlatList, ListRenderItemInfo } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import Header from '@components/Header';

@@ -1,7 +1,7 @@
 import { arrayUnion, doc, getDoc, setDoc, Timestamp } from "firebase/firestore";
 import { auth, db } from "../app/_layout";
-import registerForPushNotificationsAsync from "./registerForNotifications";
-import { loadingStateEnum } from "../types";
+import registerForPushNotificationsAsync from "@functions/registerForNotifications";
+import { loadingStateEnum } from "@types";
 
 export default async function updateUserProperties() {
   if (auth.currentUser !== undefined) {

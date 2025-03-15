@@ -1,5 +1,5 @@
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, orderBy, query, serverTimestamp, updateDoc } from "firebase/firestore";
-import { loadingStateEnum } from "../types";
+import { loadingStateEnum } from "@types";
 import { db } from "../app/_layout";
 
 export async function deleteTechnology(id: string): Promise<loadingStateEnum> {
