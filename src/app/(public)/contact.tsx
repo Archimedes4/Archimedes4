@@ -1,5 +1,5 @@
 import { View, Text, Pressable, Linking, TextInput, ScrollView, Platform, ActivityIndicator } from 'react-native'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import Header from '@components/Header'
 import { useSelector } from 'react-redux';
 import { RootState } from '@redux/store';
@@ -18,7 +18,7 @@ export default function Contact() {
   const [isGithubHover, setIsGithubHover] = useState<boolean>(false);
   const insets = useSafeAreaInsets()
 
-  async function loadSendMessage() {
+  const loadSendMessage = useCallback(async () => {
     setSendState(loadingStateEnum.loading)
     const result = await sendMessage(email, message)
     if (result === loadingStateEnum.success) {
@@ -26,7 +26,8 @@ export default function Contact() {
     } else {
       setSendState(loadingStateEnum.failed);
     }
-  }
+  }, [email, message]);
+
   return (
     <View style={{height, backgroundColor: "#1c93ba"}}>
       <ScrollView
@@ -62,7 +63,7 @@ export default function Contact() {
                 outlineStyle: "none"
               }
             })]}/>
-          {message !== "" ?
+          {message !== "" &&
             <Pressable
               onHoverIn={() => setIsSendHover(true)}
               onHoverOut={() => {setIsSendHover(false)}}
@@ -71,25 +72,25 @@ export default function Contact() {
               onPress={() => {loadSendMessage()}}
               style={{backgroundColor: isSendHover ? "#d3d3d3":"white", shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 10, marginHorizontal: 5, marginBottom: 10, marginTop: 10, flexDirection: 'row', justifyContent: 'center'}}
             >
-              {(sendState === loadingStateEnum.loading) ?
+              {(sendState === loadingStateEnum.loading) &&
                 <>
                   <ActivityIndicator color={"black"}/>
                   <Text style={{fontSize: 18, fontWeight: 'bold', marginTop: 'auto', marginBottom: 'auto', marginLeft: 5}}>Loading..</Text>
-                </>:null
+                </>
               }
-              {(sendState !== loadingStateEnum.loading && sendState !== loadingStateEnum.success) ?
+              {(sendState !== loadingStateEnum.loading && sendState !== loadingStateEnum.success) &&
                 <>
                   <SendIcon width={25} height={25}/>
                   <Text style={{fontSize: 18, fontWeight: 'bold', marginTop: 'auto', marginBottom: 'auto', marginLeft: 5}}>SEND</Text>
-                </>:null
+                </>
               }
-              {(sendState === loadingStateEnum.success) ?
+              {(sendState === loadingStateEnum.success) &&
                 <>
                   <SendIcon width={25} height={25}/>
                   <Text style={{fontSize: 18, fontWeight: 'bold', marginTop: 'auto', marginBottom: 'auto', marginLeft: 5}}>SENT</Text>
-                </>:null
+                </>
               }
-            </Pressable>:null
+            </Pressable>
           }
         </View>
         <View style={{flexDirection: (width < 450) ? undefined:'row', marginBottom: 10}}>
@@ -115,7 +116,7 @@ export default function Contact() {
           </Pressable>
         </View>
         <View>
-          <Pressable onPress={() => Linking.openURL("https://www.linkedin.com/in/andrew-mainella-332668249/")}>
+          <Pressable onPress={() => Linking.openURL("https://www.linkedin.com/in/andrew-mainella/")}>
             
           </Pressable>
         </View>

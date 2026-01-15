@@ -13,7 +13,7 @@ const NOT_ALLOWED_KEYS = ["Shift", "CapsLock", "Alt", "Control", "Meta", "F1", "
 export default function TextEditor({text, onChangeText, height}:{text: string, onChangeText: (item: string) => void; height: number}) {
   const [position, setPosition] = useState<number>(-1);
   const caretOppacity = useSharedValue(1);
-  const mainRef = useRef<TextInput>();
+  const mainRef = useRef<TextInput>(null);
   const textArr = useMemo(() => {return text.split("\n")}, [text]);
   const [isFocused, setIsFocused] = useState<boolean>(false);
 

@@ -25,7 +25,6 @@ function HeaderBlock({text, onPress, children, last}:{text: string, onPress: () 
   const { width } = useSelector((state: RootState) => state.dimentions);
   const [fontSize, setFontSize] = useState<number>(15);
   useEffect(() => {
-    console.log(getWidth(width-5))
     const compWidth = getWidth((width - 5))
     if (compWidth < 100) {
       setFontSize(compWidth/15)

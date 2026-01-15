@@ -7,9 +7,10 @@ Notifications.setNotificationHandler({
   handleNotification: async (e) => {
     console.log(e)
     return {
-      shouldShowAlert: true,
-      shouldPlaySound: true,
-      shouldSetBadge: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
   }},
 });
 
@@ -20,7 +21,10 @@ export default function useNotificationHandler() {
 
   async function handleNotifications() {
     const result = await Notifications.getLastNotificationResponseAsync()
-    router.push(result?.notification.request.content.data.url)
+    const url = result?.notification.request.content.data.url
+    if (typeof url === 'string') {
+      router.push(url)
+    }
   }
 
   useEffect(() => {

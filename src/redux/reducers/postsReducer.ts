@@ -86,7 +86,6 @@ export const postsSlice = createSlice({
       state.postState = loadingStateEnum.loading
     }),
     builder.addCase(listPostsThunk.fulfilled, (state, payload) => {
-      console.log(payload.payload)
       state.postState = loadingStateEnum.success
       state.posts = payload.payload
       state.type = payload.meta.arg.type

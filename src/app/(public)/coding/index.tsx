@@ -35,7 +35,7 @@ export default function Coding() {
         <>
           { (postState === loadingStateEnum.success) ?
             <FlatList 
-              key={(width < 576) ? ("1" + createUUID()):("2" + createUUID())}
+              key={(width < 576) ? ("1-coding-view"):("2-coding-view")}
               data={posts}
               numColumns={(width < 576) ? 1:2}
               renderItem={(item) => {

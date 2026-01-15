@@ -13,7 +13,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import { RootState } from '@redux/store';
-import { AzureIcon, FirebaseIcon, GitIcon, JavaIcon, PythonIcon, RacketIcon, ReactIcon, SwiftIcon } from '@components/Icons';
+import { AWSIcon, AzureIcon, CIcon, ExpoIcon, FirebaseIcon, GitIcon, JavaIcon, PythonIcon, RacketIcon, ReactIcon, SwiftIcon } from '@components/Icons';
 import Header from '@components/Header';
 import NameComponent from '@components/NameComponent';
 import { Colors } from '@types';
@@ -32,7 +32,7 @@ function getBodySize(width: number, height: number): number {
   return height * 0.35;
 }
 
-function BodyBlock({text, children}:{text: string, children: ReactNode}) {
+function BodyBlock({text, children, flipped}:{text: string, children: ReactNode, flipped?: boolean}) {
   const { width, height } = useSelector((state: RootState) => state.dimentions);
   const [isHover, setIsHover] = useState<boolean>(false);
   return (
@@ -43,10 +43,10 @@ function BodyBlock({text, children}:{text: string, children: ReactNode}) {
         marginLeft: 'auto',
         marginRight: 'auto',
         borderRadius: getBodySize(width, height)/2,
-        backgroundColor: 'black',
+        backgroundColor: flipped ? "white":'black',
         transform: [{scale: isHover ? 1.05:1}],
         shadowRadius: isHover ? 10:0,
-        shadowColor: 'white'
+        shadowColor: flipped ? "black":'white'
       }}
       onHoverIn={() => setIsHover(true)}
       onHoverOut={() => setIsHover(false)}
@@ -54,7 +54,7 @@ function BodyBlock({text, children}:{text: string, children: ReactNode}) {
       <View style={{marginLeft: 'auto', marginRight: 'auto', marginTop: 'auto'}}>
         {children}
       </View>
-      <Text style={{marginTop: 5, marginLeft: 'auto', marginRight: 'auto', color: 'white', marginBottom: "auto"}}>{text}</Text>
+      <Text style={{marginTop: 5, marginLeft: 'auto', marginRight: 'auto', color: flipped ? "black":'white', marginBottom: "auto"}}>{text}</Text>
     </Pressable>
   )
 }
@@ -66,47 +66,47 @@ function BodyComponent({onLayoutHeight}:{onLayoutHeight: (item: number) => void}
       <View style={{height: 40, marginLeft: 20}}>
         <HelloComponet />
       </View>
-      <Text style={{color: "white", fontSize: 25, marginLeft: 20, marginRight: 20}}>my name is Andrew Mainella, I am a student, curler, coder. I am a born and raised Manitoban. I am a student at the University of British Columbia with a passion for computer science. I hope that this website will show you what I have done!</Text>
+      <Text style={{color: "white", fontSize: 25, marginLeft: 20, marginRight: 20}}>My name is Andrew Mainella, I am a student at the University of British Columbia with a passion for computer science. I hope that this website will show you some of my work!</Text>
       <View>
         <Text adjustsFontSizeToFit style={{color: 'white', fontSize: 50, marginHorizontal: 20}} numberOfLines={1}>What I am using</Text>
         <View style={{flexDirection: "row", width: width - 40, marginLeft: 20}}>
-          <BodyBlock text='React'>
+          <BodyBlock text='React' flipped>
             <ReactIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
           </BodyBlock>
-          <BodyBlock text='React Native'>
-            <ReactIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
+          <BodyBlock text='Expo' flipped>
+            <ExpoIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
           </BodyBlock>
-          <BodyBlock text='Azure'>
-            <AzureIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
+          <BodyBlock text='AWS' flipped>
+            <AWSIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
           </BodyBlock>
         </View>
         <Text adjustsFontSizeToFit style={{color: 'white', fontSize: 50, marginHorizontal: 20}} numberOfLines={1}>What I am learning</Text>
         <View style={{flexDirection: "row", width: width - 40, marginLeft: 20}}>
-          <BodyBlock text='Java'>
+          <BodyBlock text='Java' flipped>
             <JavaIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
           </BodyBlock>
-          <BodyBlock text='Racket'>
+          <BodyBlock text='Racket' flipped>
             <RacketIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
           </BodyBlock>
-          <BodyBlock text='Python'>
-            <PythonIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
+          <BodyBlock text='C' flipped>
+            <CIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
           </BodyBlock>
         </View>
         <Text adjustsFontSizeToFit style={{color: 'white', fontSize: 50, marginHorizontal: 20}} numberOfLines={1}>What I have used</Text>
         <View style={{flexDirection: "row", width: width - 40, marginLeft: 20, marginBottom: 10}}>
-          <BodyBlock text='Firebase'>
+          <BodyBlock text='Firebase' flipped>
             <FirebaseIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
           </BodyBlock>
-          <BodyBlock text='Swift'>
+          <BodyBlock text='Swift' flipped>
             <SwiftIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
           </BodyBlock>
-          <BodyBlock text='Git'>
+          <BodyBlock text='Git' flipped>
             <GitIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
           </BodyBlock>
         </View>
       </View>
       <View>
-        <Text style={{color: "white", marginLeft: 5, marginBottom: 5}}>Copyright &#169; 2024 Andrew Mainella</Text>
+        <Text style={{color: "white", marginLeft: 5, marginBottom: 5}}>Copyright &#169; 2026 Andrew Mainella</Text>
       </View>
     </View>
   );

@@ -79,11 +79,11 @@ export default function AdminLogin() {
           <TextInput textContentType='password' value={password} onChangeText={setPassword} onFocus={() => setPasswordFocus(true)} onBlur={() => setPasswordFocus(false)} style={{width: ((width - 20) >= 400) ? width - 20:(400 + width * 0.1), marginLeft: 'auto', marginRight: 'auto', backgroundColor: getColor(passwordHover, passwordFocus), shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 20}}/>
         </Pressable>
         <Pressable onPress={() => {onSignIn()}} onHoverIn={() => setIsLoginHover(true)} onHoverOut={() => setIsLoginHover(false)} style={{backgroundColor: isLoginHover ? "#d3d3d3":"white", shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 10, paddingLeft: width * 0.15, paddingRight: width * 0.15, marginLeft: 'auto', marginRight: "auto", marginBottom: 10}}>
-          {signInState === loadingStateEnum.loading ?
-            <ActivityIndicator />:null
+          {signInState === loadingStateEnum.loading &&
+            <ActivityIndicator />
           }
-          {signInState !== loadingStateEnum.loading ?
-            <Text style={{margin: 10, fontWeight: 'bold'}}>LOGIN</Text>:null
+          {signInState !== loadingStateEnum.loading &&
+            <Text style={{margin: 10, fontWeight: 'bold'}}>LOGIN</Text>
           }
         </Pressable>
       </View>

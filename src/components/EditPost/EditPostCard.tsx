@@ -1,18 +1,18 @@
-import { useRouter } from 'expo-router'
-import React, { useEffect, useState } from 'react'
-import { View, Text, ScrollView, Modal, Pressable, TextInput, Switch, Image } from 'react-native'
-import { useSelector } from 'react-redux'
-import SelectFile from '@components/SelectFile'
-import Header from '@components/Header'
-import StyledButton from '@components/StyledButton'
-import { RootState } from '@redux/store'
-import SVGXml from '@components/SVGXml'
-import { listTechnologies } from '@functions/technologyFunctions'
-import { loadingStateEnum } from '@types'
-import UpdatePostButton from './UpdatePostButton'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import Head from 'expo-router/head'
-import { ChevronLeft, GlassesIcon, ImagePlusIcon, TrashIcon } from '@components/Icons'
+import { useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { View, Text, ScrollView, Modal, Pressable, TextInput, Switch, Image } from 'react-native';
+import { useSelector } from 'react-redux';
+import SelectFile from '@components/SelectFile';
+import Header from '@components/Header';
+import StyledButton from '@components/StyledButton';
+import { RootState } from '@redux/store';
+import SVGXml from '@components/SVGXml';
+import { listTechnologies } from '@functions/technologyFunctions';
+import { loadingStateEnum } from '@types';
+import UpdatePostButton from './UpdatePostButton';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Head from 'expo-router/head';
+import { ChevronLeft, GlassesIcon, ImagePlusIcon, TrashIcon } from '@components/Icons';
 
 function EditPostImage({
   newPost,
@@ -134,8 +134,8 @@ export default function EditPostCard({
         <Modal visible={isPickingCover}>
           <SelectFile selectedFile={newPost.cover} onClose={() => {setIsPickingCover(false)}} onSelect={(e) => {setNewPost({...newPost, cover: e})}}/>
         </Modal>
-        {(width <= 1000) ?
-          <Header />:null
+        {(width <= 1000) &&
+          <Header />
         }
         <View>
           <StyledButton onPress={() => {router.push("/admin")}} style={{width: width - 40, marginLeft: 'auto', marginRight: 'auto'}}>
@@ -173,10 +173,10 @@ export default function EditPostCard({
         </View>
         <View style={{margin: 5}}>
           <View style={{backgroundColor: 'white', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, paddingVertical: 10, margin: 10, flexDirection: 'row'}}>
-            { (width >= 576) ?
+            { (width >= 576) &&
               <View style={{width: width * 0.3, borderRadius: 30, borderWidth: 5, margin: 10, overflow: 'hidden', marginVertical: 'auto'}}>
                 <EditPostImage newPost={newPost} setIsPickingCover={setIsPickingCover} viewWidth={(width * 0.3) - 10}/>
-              </View>:null
+              </View>
             }
             <View style={{margin: 5, marginTop: 10, width:  (width >= 576) ? (width - ((width * 0.3) + 70)):(width - 45) }}>
               <Text style={{marginLeft: 5}}>Title</Text>
@@ -189,10 +189,10 @@ export default function EditPostCard({
               <TextInput style={{marginTop: 2, marginBottom: 8, padding: 5, borderColor: 'black', borderWidth: 2, borderRadius: 15}} value={newPost.githubUrl} onChangeText={(e) => {setNewPost({...newPost, githubUrl: e})}}/>
             </View>
           </View>
-          { (width < 576) ?
+          { (width < 576) &&
             <View style={{backgroundColor: 'white', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, margin: 10, overflow: 'hidden'}}>
               <EditPostImage newPost={newPost} setIsPickingCover={setIsPickingCover} viewWidth={width - 35}/>
-            </View>:null 
+            </View>
           }
           <View style={{backgroundColor: 'white', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 'auto', margin: 10}}>
             <Text style={{margin: 5, marginTop: 10}}>Technologies</Text>
@@ -224,6 +224,7 @@ export default function EditPostCard({
                 hidden: e
               })
             }}/>
+            <Text>This is whether the post is discoverable and private.</Text>
           </View>
           <View style={{backgroundColor: 'white', shadowColor: 'black', shadowOffset: {width: 4, height: 3}, borderWidth: 3, borderColor: 'black', borderRadius: 30, padding: 10, margin: 10, flexDirection: 'row'}}>
             <Text style={{marginTop: 'auto', marginBottom: 'auto'}}>Title Hidden: </Text>
@@ -233,13 +234,14 @@ export default function EditPostCard({
                 hiddenTitle: e
               })
             }}/>
+            <Text>This is weather or not to show the title on the card.</Text>
           </View>
           <UpdatePostButton newPost={newPost} setNewPost={setNewPost} onEditPostSuccess={onEditPostSuccess} hasChanged={hasChanged}/>
-          { newPost.id !== 'Create' ?
+          { newPost.id !== 'Create' &&
             <StyledButton style={{padding: 10}} onPress={() => {}}>
               <TrashIcon width={16.4} height={16.4} style={{ marginTop: 'auto', marginBottom: 'auto', paddingRight: 5 }}/>
               <Text>Delete Post</Text>
-            </StyledButton>:null
+            </StyledButton>
           }
         </View>
       </ScrollView>

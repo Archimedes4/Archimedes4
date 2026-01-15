@@ -33,9 +33,15 @@
       "output": "static"
     },
     "plugins": [
-      "expo-router",
+      [
+        "expo-router",
+        {
+          "headOrigin":"https://andrewmainellaabout.web.app/"
+        }
+      ],
       "expo-dev-launcher",
-      "expo-apple-authentication"
+      "expo-apple-authentication",
+      "expo-font"
     ],
     "extra": {
       "eas": {

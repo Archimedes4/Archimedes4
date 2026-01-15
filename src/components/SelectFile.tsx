@@ -104,7 +104,7 @@ export default function SelectFile({onClose, onSelect, selectedFile}:{onClose: (
           <Pressable onPress={() => onClose()} style={{position: 'absolute', left: 15, top: 15}}>
             <CloseIcon width={Math.max(25, height * 0.04)} height={Math.max(25, height * 0.04)}/>
           </Pressable>
-          <Text style={{fontSize: Math.max(25, height * 0.1), fontFamily: 'Bungee-Regular', color: 'white', marginHorizontal: 20, textAlign: 'center'}} adjustsFontSizeToFit numberOfLines={1}>Select File</Text>
+          <Text style={{fontSize: Math.max(25, height * 0.1), fontFamily: 'Bungee-Regular', color: 'white', marginHorizontal: 20, textAlign: 'center', marginTop: (width < 576) ? 50:0}} adjustsFontSizeToFit numberOfLines={1}>Select File</Text>
         </View>
         <FlatList
           data={files}
