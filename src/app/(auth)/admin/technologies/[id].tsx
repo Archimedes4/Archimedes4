@@ -289,7 +289,11 @@ export default function EditTechnology() {
           <TextInput
             style={{backgroundColor: 'white', width: (width < 576) ? (width-30):width-200, height: 100}}
             value={item.content}
-            onChangeText={(e) => {setItem({...item, content: e})}}
+            onChangeText={(e) => {
+              setItem({...item, content: e});
+              if (techState === technologyAdminState.noChangeEdit) {
+                setTechState(technologyAdminState.changeEdit)
+              }}}
             multiline
           />
         </View>

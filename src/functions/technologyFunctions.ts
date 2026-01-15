@@ -39,11 +39,11 @@ export async function addTechnology(item: technology): Promise<{
 export async function updateTechnology(item: technology): Promise<loadingStateEnum> {
   try {
     await updateDoc(doc(db, 'Technologies', item.id), {
-      contact: item.content,
+      content: item.content,
       name: item.name,
       displayTechnology: item.displayTechnology,
-      firstUsed: item.firstUsed,
-      lastUsed: item.lastUsed,
+      firstUsed: serverTimestamp(),
+      lastUsed: serverTimestamp(),
     })
     return loadingStateEnum.success;
   } catch {

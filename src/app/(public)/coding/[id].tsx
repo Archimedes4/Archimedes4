@@ -1,6 +1,6 @@
 import { useGlobalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react'
-import { View, Text, Platform, useColorScheme } from 'react-native'
+import { View, Text, Platform, useColorScheme, ActivityIndicator } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import MarkdownCross from '@components/MarkdownCross';
@@ -36,7 +36,11 @@ export default function ViewPost() {
 
   if (postState === loadingStateEnum.loading) {
     return (
-      <View>
+      <View style={{width: width, height: height, backgroundColor: (colorScheme ===  "light") ? "white":"#0d1117", top: insets.top, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{position: 'absolute', top: insets.top}}>
+          <Header />
+        </View>
+        <ActivityIndicator />
         <Text>Loading</Text>
       </View>
     )
