@@ -15,7 +15,7 @@ export enum uploadStateEnum {
 }
 
 export const Colors = {
-  primary: "#1c93ba"
+  primary: "#313332"
 }
 
 declare global {

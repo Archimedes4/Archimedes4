@@ -91,19 +91,19 @@ async function getTechnologies(unique: string[]): Promise<technology[]> {
   return resultTechnologies
 }
 
-export async function listPosts(hidden: boolean, type?: "Coding" | "Activities"): Promise<{result: loadingStateEnum.failed}|{result: loadingStateEnum.success, data: post[]}> {
+export async function listPosts(hidden: boolean, type?: "project" | "blog"): Promise<{result: loadingStateEnum.failed}|{result: loadingStateEnum.success, data: post[]}> {
   try {
     //TODO error and handel paginate
     let resultData: post[] = []
     let q = query(collection(db, "Posts"))
-    if (hidden === false && type === "Coding") {
+    if (hidden === false && type === "project") {
       q = query(collection(db, "Posts"), where("hidden", "==", false), where("type", "==", "Coding"));
-    } else if (hidden === false && type === "Activities") {
-      q = query(collection(db, "Posts"), where("hidden", "==", false), where("type", "==", "Activities"));
-    } else if (type === "Coding") {
+    } else if (hidden === false && type === "blog") {
+      q = query(collection(db, "Posts"), where("hidden", "==", false), where("type", "==", "blog"));
+    } else if (type === "project") {
       q = query(collection(db, "Posts"), where("type", "==", "Coding"));
-    } else if (type === "Activities") {
-      q = query(collection(db, "Posts"), where("type", "==", "Activities"));
+    } else if (type === "blog") {
+      q = query(collection(db, "Posts"), where("type", "==", "blog"));
     } 
     const querySnapshot = await getDocs(q);
     let technologies = []

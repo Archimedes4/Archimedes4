@@ -13,7 +13,7 @@ import HeaderText from '@components/HeaderText';
 import { listMessages } from '@functions/messageFunctions';
 import updateMessageLastRead from '@functions/updateMessageLastRead';
 import { RootState } from '@redux/store';
-import { loadingStateEnum } from '@types';
+import { Colors, loadingStateEnum } from '@types';
 
 export default function AdminMessages() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
@@ -38,7 +38,7 @@ export default function AdminMessages() {
   }, [])
 
   return (
-    <View style={{width: width, height: height, backgroundColor: "#1c93ba", paddingTop: insets.top}}>
+    <View style={{width: width, height: height, backgroundColor: Colors.primary, paddingTop: insets.top}}>
       <Header/>
       <Pressable onPress={() => router.push("/admin")} style={{margin: 15}}>
         <Text>Back</Text>

@@ -164,10 +164,10 @@ export default function EditPostCard({
             <Pressable onPress={() => {
               setNewPost({
                 ...newPost,
-                type: "Activities"
+                type: "blog"
               })
-            }} style={{backgroundColor:  (newPost.type === "Activities") ? '#d3d3d3':'white', width: width/2-20}}>
-              <Text style={{margin: 10}}>Activities</Text>
+            }} style={{backgroundColor:  (newPost.type === "Blog") ? '#d3d3d3':'white', width: width/2-20}}>
+              <Text style={{margin: 10}}>Blog</Text>
             </Pressable>
           </View>
         </View>

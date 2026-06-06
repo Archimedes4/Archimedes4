@@ -1,0 +1,77 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.admin == true;
+    }
+
+    function hasOnlyKeys(allowedKeys) {
+      return request.resource.data.keys().hasOnly(allowedKeys);
+    }
+
+    function hasRequiredKeys(requiredKeys) {
+      return request.resource.data.keys().hasAll(requiredKeys);
+    }
+
+    function isValidMessage() {
+      return hasOnlyKeys(['email', 'content', 'time']) &&
+        hasRequiredKeys(['email', 'content', 'time']) &&
+        request.resource.data.email is string &&
+        request.resource.data.email.size() <= 320 &&
+        request.resource.data.content is string &&
+        request.resource.data.content.size() > 0 &&
+        request.resource.data.content.size() <= 5000 &&
+        request.resource.data.time == request.time;
+    }
+
+    function isValidUserDocument(uid) {
+      return hasOnlyKeys(['tokens', 'lastRead', 'owner']) &&
+        request.resource.data.tokens is list &&
+        request.resource.data.tokens.size() <= 20 &&
+        request.resource.data.lastRead is timestamp &&
+        (
+          !('owner' in request.resource.data) ||
+          request.resource.data.owner == resource.data.owner
+        ) &&
+        request.auth.uid == uid;
+    }
+
+    match /Posts/{postId} {
+      allow read: if isAdmin() || resource.data.hidden == false;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /Technologies/{technologyId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /Files/{fileId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /Messages/{messageId} {
+      allow create: if isValidMessage();
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /Users/{uid} {
+      allow read: if isAdmin() || (isSignedIn() && request.auth.uid == uid);
+      allow create: if isSignedIn() &&
+        request.auth.uid == uid &&
+        hasOnlyKeys(['tokens', 'lastRead']) &&
+        hasRequiredKeys(['tokens', 'lastRead']) &&
+        request.resource.data.tokens is list &&
+        request.resource.data.tokens.size() <= 20 &&
+        request.resource.data.lastRead is timestamp;
+      allow update: if isSignedIn() && isValidUserDocument(uid);
+      allow delete: if isAdmin();
+    }
+  }
+}

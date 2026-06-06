@@ -4,9 +4,10 @@ import Header from '@components/Header'
 import { useSelector } from 'react-redux';
 import { RootState } from '@redux/store';
 import { sendMessage } from '@functions/messageFunctions';
-import { loadingStateEnum } from '@types';
+import { Colors, loadingStateEnum } from '@types';
 import { GithubIcon, MailIcon, SendIcon } from '@components/Icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Color } from 'expo-router';
 
 export default function Contact() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
@@ -29,7 +30,7 @@ export default function Contact() {
   }, [email, message]);
 
   return (
-    <View style={{height, backgroundColor: "#1c93ba"}}>
+    <View style={{height, backgroundColor: Colors.primary}}>
       <ScrollView
         style={{width: width, height: height}}
         contentContainerStyle={{paddingTop: insets.top}}

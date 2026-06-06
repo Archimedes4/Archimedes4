@@ -7,7 +7,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Dimensions, Pressable, View, useWindowDimensions, Linking } from 'react-native';
 import { initializeApp } from "firebase/app";
 import { Provider } from 'react-redux';
-import { Slot, router } from "expo-router";
+import { Link, Slot, router } from "expo-router";
 import 'raf/polyfill';
 import { getAuth } from 'firebase/auth';
 import Head from "expo-router/head"
@@ -80,19 +80,18 @@ function AppCore() {
           <Pressable
             style={{width: width/5, height: 60 + insets.bottom}}
             onPress={() => {
-              router.push("/coding")
+              router.push("/projects")
             }}
           >
             <CodingIcon width={40} height={40} style={{marginHorizontal: ((width/5) - 40)/2, marginVertical: 10}}/>
           </Pressable>
-          <Pressable
-            style={{width: width/5, height: 60 + insets.bottom}}
-            onPress={() => {
-              router.push("/activities")
-            }}  
-          >
-            <ActivityIcon width={40} height={40} style={{marginHorizontal: ((width/5) - 40)/2, marginVertical: 10}}/>
-          </Pressable>
+          <Link href={"blog"} asChild>
+            <Pressable
+              style={{width: width/5, height: 60 + insets.bottom}}
+            >
+              <ActivityIcon width={40} height={40} style={{marginHorizontal: ((width/5) - 40)/2, marginVertical: 10}}/>
+            </Pressable>
+          </Link>
           <Pressable
             style={{width: width/5, height: 60 + insets.bottom}}
             onPress={() => {

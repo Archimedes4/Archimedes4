@@ -7,7 +7,7 @@ import MarkdownCross from '@components/MarkdownCross';
 import Header from '@components/Header';
 import { getPost } from '@redux/reducers/postsReducer';
 import { RootState } from '@redux/store';
-import { loadingStateEnum } from '@types';
+import { Colors, loadingStateEnum } from '@types';
 
 export default function ViewPost() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
@@ -36,7 +36,7 @@ export default function ViewPost() {
 
   if (postState === loadingStateEnum.loading) {
     return (
-      <View style={{width: width, height: height, backgroundColor: (colorScheme ===  "light") ? "white":"#0d1117", top: insets.top, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{width: width, height: height, backgroundColor: (colorScheme ===  "light") ? "white":Colors.primary, top: insets.top, justifyContent: 'center', alignItems: 'center'}}>
         <View style={{position: 'absolute', top: insets.top}}>
           <Header />
         </View>
@@ -46,7 +46,7 @@ export default function ViewPost() {
     )
   }
   return (
-    <View style={{width: width, height: height, backgroundColor: (colorScheme ===  "light") ? "white":"#0d1117", top: insets.top}}>
+    <View style={{width: width, height: height, backgroundColor: (colorScheme ===  "light") ? "white":Colors.primary, top: insets.top}}>
       <Header />
       <MarkdownCross markdown={selectedPost.content} assests={selectedPost.assests}/>
     </View>

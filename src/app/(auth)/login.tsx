@@ -22,7 +22,7 @@ function getColor(hover: boolean, focus: boolean) {
 }
 
 export default function AdminLogin() {
-  const { isUserAuth } = useIsUserAuth()
+  const { isAdmin } = useIsUserAuth()
   const { height, width } = useSelector((state: RootState) => state.dimentions);
   const dimentions = useWindowDimensions()
   const [email, setEmail] = useState<string>("");
@@ -45,7 +45,7 @@ export default function AdminLogin() {
     }
   }
 
-  if (isUserAuth === true) {
+  if (isAdmin === true) {
     return (
       <Redirect href={'/admin'}/>
     )
