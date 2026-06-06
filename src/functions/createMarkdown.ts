@@ -1,4 +1,10 @@
+/**
+ * 
+ * @param input The markdown to convert to html.
+ * @returns The html of the markdown according to github.
+ */
 export async function convertToMarkdown(input: string) {
+  try {
   const result = await fetch("https://api.github.com/markdown?mode=gfm", {
     method: "POST",
     body: JSON.stringify({text: input}),
@@ -10,5 +16,8 @@ export async function convertToMarkdown(input: string) {
   if (result.ok) {
     const data = await result.text()
     return data
+  }
+  } catch {
+
   }
 }

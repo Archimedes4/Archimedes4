@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Platform } from 'react-native'
+import React, { useEffect, useState } from 'react';
+import { Platform } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useSelector } from 'react-redux';
 import { getMarkdownFromAssets } from '@functions/storageFunctions';
@@ -8,13 +8,14 @@ import { RootState } from '@redux/store';
 
 export default function MarkdownCross({markdown, assests}:{markdown: string, assests: postAsset[];}) {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
-  const [html, setHtml] = useState<string>("")
+  const [html, setHtml] = useState<string>("");
 
   async function getMarkdown() {
     const assetResult = await getMarkdownFromAssets(assests)
     let markdownArray = markdown.split('<img src="')
     let markdownResult = markdown + assetResult
     setHtml(await convertToMarkdown(markdownResult))
+    // TODO: This code is very unsafe
   }
 
   useEffect(() => {

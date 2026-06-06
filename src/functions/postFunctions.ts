@@ -65,7 +65,13 @@ export async function deletePost(id: string) {
   await deleteDoc(doc(db, 'Posts', id))
 }
 
-async function getTechnologies(unique: string[]) {
+/**
+ * 
+ * @param unique 
+ * @throws This function throws
+ * @returns 
+ */
+async function getTechnologies(unique: string[]): Promise<technology[]> {
   let resultTechnologies: technology[] = []
 
   if (unique.length >= 1) {
@@ -85,72 +91,77 @@ async function getTechnologies(unique: string[]) {
   return resultTechnologies
 }
 
-export async function listPosts(hidden: boolean, type?: "Coding" | "Activities"): Promise<{result: loadingStateEnum.failed}|{result: loadingStateEnum.success, data: post[]}> {
-  //TODO error and handel paginate
-  let resultData: post[] = []
-  let q = query(collection(db, "Posts"))
-  if (hidden === false && type === "Coding") {
-    q = query(collection(db, "Posts"), where("hidden", "==", false), where("type", "==", "Coding"));
-  } else if (hidden === false && type === "Activities") {
-    q = query(collection(db, "Posts"), where("hidden", "==", false), where("type", "==", "Activities"));
-  } else if (type === "Coding") {
-    q = query(collection(db, "Posts"), where("type", "==", "Coding"));
-  } else if (type === "Activities") {
-    q = query(collection(db, "Posts"), where("type", "==", "Activities"));
-  } 
-  const querySnapshot = await getDocs(q);
-  let technologies = []
-  querySnapshot.forEach((doc) => {
-    const data = doc.data()
-    for (let index = 0; index < data.technologies.length; index += 1) {
-      if (!technologies.includes(data.technologies[index])) {
-        technologies.push(data.technologies[index])
+export async function listPosts(hidden: boolean, type?: "project" | "blog"): Promise<{result: loadingStateEnum.failed}|{result: loadingStateEnum.success, data: post[]}> {
+  try {
+    //TODO error and handel paginate
+    let resultData: post[] = []
+    let q = query(collection(db, "Posts"))
+    if (hidden === false && type === "project") {
+      q = query(collection(db, "Posts"), where("hidden", "==", false), where("type", "==", "Coding"));
+    } else if (hidden === false && type === "blog") {
+      q = query(collection(db, "Posts"), where("hidden", "==", false), where("type", "==", "blog"));
+    } else if (type === "project") {
+      q = query(collection(db, "Posts"), where("type", "==", "Coding"));
+    } else if (type === "blog") {
+      q = query(collection(db, "Posts"), where("type", "==", "blog"));
+    } 
+    const querySnapshot = await getDocs(q);
+    let technologies = []
+    querySnapshot.forEach((doc) => {
+      const data = doc.data()
+      for (let index = 0; index < data.technologies.length; index += 1) {
+        if (!technologies.includes(data.technologies[index])) {
+          technologies.push(data.technologies[index])
+        }
       }
-    }
-  })
-
-  const resultTechnologies = await getTechnologies(technologies)
-
-  querySnapshot.forEach((doc) => {
-    const data = doc.data()
-    let foundTechnologies: technology[] = []
-    for (let index = 0; index < data.technologies.length; index += 1) {
-      let found = resultTechnologies.find((e) => {return e.id === data.technologies[index]})
-      if (found !== undefined) {
-        foundTechnologies.push(found)
-      }
-      // This would be an error if undefined but best to ignore it rather than do anything
-    }
-
-
-    resultData.push({
-      title: data.title,
-      cover: {
-        id: "",
-        name: data.cover,
-        fileType: "",
-        loadingState: loadingStateEnum.notStarted
-      },
-      assests: [],
-      content: data.content,
-      updated: data.updated,
-      type: data.type,
-      id: doc.id,
-      status: data.status,
-      url: data.url,
-      technologies: foundTechnologies,
-      githubUrl: data.githubUrl,
-      hidden: data.hidden,
-      views: [],
-      hiddenTitle: data.hiddenTitle
     })
-  });
-  return {result: loadingStateEnum.success, data: resultData};
+
+    const resultTechnologies = await getTechnologies(technologies)
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data()
+      let foundTechnologies: technology[] = []
+      for (let index = 0; index < data.technologies.length; index += 1) {
+        let found = resultTechnologies.find((e) => {return e.id === data.technologies[index]})
+        if (found !== undefined) {
+          foundTechnologies.push(found)
+        }
+        // This would be an error if undefined but best to ignore it rather than do anything
+      }
+
+
+      resultData.push({
+        title: data.title,
+        cover: {
+          id: "",
+          name: data.cover,
+          fileType: "",
+          loadingState: loadingStateEnum.notStarted
+        },
+        assests: [],
+        content: data.content,
+        updated: data.updated,
+        type: data.type,
+        id: doc.id,
+        status: data.status,
+        url: data.url,
+        technologies: foundTechnologies,
+        githubUrl: data.githubUrl,
+        hidden: data.hidden,
+        views: [],
+        hiddenTitle: data.hiddenTitle
+      })
+    });
+    return {result: loadingStateEnum.success, data: resultData};
+  } catch {
+    return {
+      result: loadingStateEnum.failed
+    }
+  }
 }
 
 export async function getPost(id: string): Promise<{result: loadingStateEnum.failed}|{result: loadingStateEnum.success, data: post}|{result: loadingStateEnum.notFound}> {
   try {
-    const db = getFirestore();
     const document = await getDoc(doc(db, "Posts", id))
     if (document.exists()) {
       const data = document.data()

@@ -13,7 +13,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import { RootState } from '@redux/store';
-import { AWSIcon, AzureIcon, CIcon, ExpoIcon, FirebaseIcon, GitIcon, JavaIcon, PythonIcon, RacketIcon, ReactIcon, SwiftIcon } from '@components/Icons';
+import { AngularIcon, AWSIcon, CIcon, ExpoIcon, FirebaseIcon, GitIcon, JavaIcon, RacketIcon, SwiftIcon } from '@components/Icons';
 import Header from '@components/Header';
 import NameComponent from '@components/NameComponent';
 import { Colors } from '@types';
@@ -70,8 +70,8 @@ function BodyComponent({onLayoutHeight}:{onLayoutHeight: (item: number) => void}
       <View>
         <Text adjustsFontSizeToFit style={{color: 'white', fontSize: 50, marginHorizontal: 20}} numberOfLines={1}>What I am using</Text>
         <View style={{flexDirection: "row", width: width - 40, marginLeft: 20}}>
-          <BodyBlock text='React' flipped>
-            <ReactIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
+          <BodyBlock text='Angular' flipped>
+            <AngularIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
           </BodyBlock>
           <BodyBlock text='Expo' flipped>
             <ExpoIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
@@ -104,9 +104,6 @@ function BodyComponent({onLayoutHeight}:{onLayoutHeight: (item: number) => void}
             <GitIcon width={getChildrenSize(width, height)} height={getChildrenSize(width, height)}/>
           </BodyBlock>
         </View>
-      </View>
-      <View>
-        <Text style={{color: "white", marginLeft: 5, marginBottom: 5}}>Copyright &#169; 2026 Andrew Mainella</Text>
       </View>
     </View>
   );

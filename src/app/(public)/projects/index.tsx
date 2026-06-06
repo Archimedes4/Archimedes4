@@ -7,16 +7,15 @@ import { RootState } from '@redux/store';
 import PostBlock from '@components/PostBlock';
 import Header from '@components/Header';
 import { listPosts } from '@redux/reducers/postsReducer';
-import createUUID from '@functions/createUUID';
-import { loadingStateEnum } from '@types';
+import { Colors, loadingStateEnum } from '@types';
 
-export default function Coding() {
+export default function Projects() {
   const { height, width } = useSelector((state: RootState) => state.dimentions);
   const { postState, posts } = useSelector((state: RootState) => state.posts);
   const insets = useSafeAreaInsets()
 
   async function loadPosts() {
-    listPosts("Coding")
+    listPosts("project")
   }
 
   useEffect(() => {
@@ -24,9 +23,9 @@ export default function Coding() {
   }, [])
 
   return (
-    <View style={{width: width, height: height, backgroundColor: "#1c93ba", paddingTop: insets.top}}>
+    <View style={{width: width, height: height, backgroundColor: Colors.primary, paddingTop: insets.top}}>
       <Header />
-      <Text style={{fontSize: height * 0.1, fontFamily: 'Bungee-Regular', color: 'white', marginHorizontal: 20, textAlign: 'center'}}>Coding</Text>
+      <Text style={{fontSize: height * 0.1, fontFamily: 'Bungee-Regular', color: 'white', marginHorizontal: 20, textAlign: 'center'}}>Projects</Text>
       { (postState === loadingStateEnum.loading) ?
         <View style={{flex: 1, alignItems: 'center', alignContent: 'center', justifyContent: 'center'}}>
           <ActivityIndicator size={"large"}/>

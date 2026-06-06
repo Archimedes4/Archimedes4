@@ -1,4 +1,7 @@
 {
+  "firestore": {
+    "rules": "firestore.rules"
+  },
   "hosting": {
     "public": "dist",
     "ignore": [
@@ -10,5 +13,8 @@
       "source": "**",
       "destination": "/(public).html"
     }]
+  },
+  "storage": {
+    "rules": "storage.rules"
   }
 }

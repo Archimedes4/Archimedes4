@@ -5,9 +5,7 @@ import { loadingStateEnum } from "@types";
 
 export default async function updateUserProperties() {
   if (auth.currentUser !== undefined) {
-    console.log("here")
     const token = await registerForPushNotificationsAsync()
-    console.log(token)
     if (token.result !== loadingStateEnum.success) {
       return
     }
@@ -17,14 +15,12 @@ export default async function updateUserProperties() {
     const original = await getDoc(docRef)
     if (original.exists()) {
       await setDoc(docRef, {
-        owner: true,
         tokens: arrayUnion(token.token)
       }, {
         merge: true
       })
     } else {
       await setDoc(docRef, {
-        owner: true,
         tokens: [token.token],
         lastRead: Timestamp.fromMillis(0)
       }, {
@@ -32,5 +28,4 @@ export default async function updateUserProperties() {
       })
     }
   }
-  console.log("here one")
 }

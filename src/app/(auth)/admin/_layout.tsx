@@ -10,7 +10,7 @@ import LoadingComponent from '@components/LoadingComponent';
 import useIsUserAuth from '@hooks/useIsUserAuth';
 
 export default function _layout() {
-  const { isLoading, isUserAuth } = useIsUserAuth()
+  const { isLoading, isAdmin } = useIsUserAuth()
   
   if (isLoading) {
     return (
@@ -18,7 +18,7 @@ export default function _layout() {
     );
   }
 
-  if (isUserAuth) {
+  if (isAdmin) {
     return (
       <Slot />
     );

@@ -8,7 +8,7 @@ const listPostsThunk = createAsyncThunk(
   'posts/listPosts',
   async (
     input: {
-      type?: "Coding"|"Activities"
+      type?: "project"|"blog"
     },
     { rejectWithValue },
   ) => {
@@ -20,7 +20,7 @@ const listPostsThunk = createAsyncThunk(
   },
 );
 
-export function listPosts(type?: "Coding"|"Activities") {
+export function listPosts(type?: "project"|"blog") {
   return getValueFromRedux<post[]>(
     listPostsThunk({
      type 
@@ -55,7 +55,7 @@ export async function getPost(id: string) {
 const initalState: {
   postState: loadingStateEnum;
   posts: post[],
-  type?: "Coding"|"Activities"
+  type?: "project"|"blog"
 } = {
   postState: loadingStateEnum.notStarted,
   posts: []

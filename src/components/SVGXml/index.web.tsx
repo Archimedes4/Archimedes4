@@ -11,7 +11,7 @@ export default function SVGXml({
   height: number;
 }) {
   return (
-    <View style={{ height, width }}>
+    <View style={{ height, width, marginLeft: 10 }}>
       <div dangerouslySetInnerHTML={{ __html: xml }} />
     </View>
   );

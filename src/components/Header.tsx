@@ -96,14 +96,14 @@ export default function Header() {
 
   return (
     <View style={{marginLeft: 'auto', marginRight: 'auto', paddingTop: 10, paddingBottom: 10}}>
-      <View style={{flexDirection: "row", backgroundColor: "#93acb5", width: getWidth((width - 15))*5+getWidth((width - 15))/20 , borderRadius: 15, paddingTop: 5, paddingBottom: 5}}>
+      <View style={{flexDirection: "row", backgroundColor: "#515757", width: getWidth((width - 15))*5+getWidth((width - 15))/20 , borderRadius: 15, paddingTop: 5, paddingBottom: 5}}>
         <HeaderBlock text='Home' onPress={() => router.replace('/')}>
           <HomeIcon width={compSize} height={compSize} style={{margin: 'auto', marginRight: 0}}/>
         </HeaderBlock>
-        <HeaderBlock text='Coding' onPress={() => router.replace('/coding')}>
+        <HeaderBlock text='Projects' onPress={() => router.replace('/projects')}>
           <CodingIcon width={compSize} height={compSize} style={{margin: 'auto', marginRight: 0}}/>
         </HeaderBlock>
-        <HeaderBlock text='Activities' onPress={() => router.replace('/activities')}>
+        <HeaderBlock text='Blog' onPress={() => router.replace('/blog')}>
           <ActivityIcon width={compSize} height={compSize} style={{margin: 'auto', marginRight: 0}}/>
         </HeaderBlock>
         <HeaderBlock text={(isShowingAdmin) ? "Login":'GitHub'} onPress={() => {
